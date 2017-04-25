@@ -1,0 +1,82 @@
+<div ng-controller="TechnologyFormController as controller" class="container-fluid">
+    <div class="message">
+        <md-button class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.save()" style="text-align:left">
+            <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar
+        </md-button>
+        <md-button class="md-raised md-primary pull-right" aria-label="Cancelar" ng-click="controller.back()" style="text-align:left">
+            Cancelar
+        </md-button>
+        <h3>Formato Tecnología</h3>
+        <md-nav-bar md-selected-nav-item="controller.currentNavItem"
+                    nav-bar-aria-label="navigation links">
+            <md-nav-item ng-repeat="format in controller.formats"  md-nav-click="goto(format.name)" name="{{format.name}}">
+                {{format.name}}
+            </md-nav-item>
+        </md-nav-bar>
+        <div class="ext-content">
+            <div ng-repeat="questionGroup in controller.formatObjects[controller.currentNavItem].questionGroups">
+                <h3>{{questionGroup.tag}}</h3>
+                <div ng-repeat="answer in controller.answers[questionGroup.name]">
+                    <div class="form-group" ng-repeat="question in questionGroup.questions">
+                        <div ng-switch on="question.type">
+                            <div ng-switch-when="text">
+                                <label>{{question.tag}}</label>
+                                <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" ng-model="answer[question.name]" class="form-control" type="text" placeholder="{{question.tag}}">
+                            </div>
+                            <div ng-switch-when="email">
+                                <label>{{question.tag}}</label>
+                                <input ng-model="answer[question.name]" class="form-control" type="text" placeholder="{{question.tag}}">
+                            </div>
+                            <div ng-switch-when="select">
+                                <label>{{question.tag}}</label>
+                                <select ng-model="answer[question.name]" class="form-control">
+                                    <option ng-repeat="option in question.options" >{{option}}</option>
+                                </select>
+                            </div>
+                            <div ng-switch-when="date">
+                                <label>{{question.tag}}</label>
+                                <md-datepicker ng-model="answer[question.name]" md-placeholder="Enter date"></md-datepicker>
+                            </div>
+                            <div ng-switch-when="reference">
+                                <label>{{question.tag}}</label>
+                                <select ng-model="answer[question.name]" class="form-control">
+                                    <option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}" >{{pair.values}}</option>
+                                </select>
+                            </div>
+                            <div ng-switch-when="long-text">
+                                <label>{{question.tag}}</label>
+                                <textarea ng-model="answer[question.name]" class="form-control">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <md-divider ng-if="!$last"></md-divider>
+                </div>
+                <div>
+                    <md-button class="md-raised md-primary" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.addAnswers(questionGroup.name)" style="text-align:left">
+                        <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{questionGroup.tag}}
+                    </md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="message">
+        <div>
+            <label>Documentos</label>
+            <div ng-repeat="document in controller.answers.documents">
+                <a href="{{document.url}}">{{document.name}}</a>
+            </div>
+            <form ng-submit="controller.uploadFile()">
+                <select ng-model="controller.fileCategory" class="form-control">
+                    <option value="brochure">Brochure</option>
+                    <option value="other">Otro</option>
+                </select>
+                <input type="file" name="file" class="inputimg" id="document">
+                <br />
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-block">Adjuntar documento</button>
+                </span>
+            </form>
+        </div>
+    </div>
+</div>

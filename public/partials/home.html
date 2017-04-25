@@ -1,0 +1,22 @@
+<div ng-controller="HomeController as controller" class="container-fluid" >
+    <h2>SIGETEC </h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div><b style="font-size: 16pt; color: red;">{{controller.lastMonthTechnologies}}</b> tecnologias registradas en el ultimo mes.</div>
+            <div><b style="font-size: 16pt; color: red;">{{controller.totalTechnologies}}</b> tecnologias registradas en total.</div>
+            <div><b style="font-size: 16pt; color: red;">{{controller.totalPatents}}</b> tecnologias patentadas.</div>
+            <h4>Ultimas tecnologias registradas</h4>
+            <md-list flex>
+                <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies" ng-click="null">
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{technology.name}}</h3>
+                        <p>{{technology.description}}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+        <div class="col-md-6">
+            <nvd3 class="bar-chart" options="controller.options" data="controller.data"></nvd3>
+        </div>
+    </div>
+</div>
