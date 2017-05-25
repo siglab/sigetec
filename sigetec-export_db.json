@@ -5,6 +5,7 @@
     "questionGroups" : [ {
       "name" : "basic",
       "questions" : [ {
+        "help" : "Escriba el nombre preliminar de la invención",
         "name" : "name",
         "required" : "",
         "tag" : "Nombre preliminar de la invencion, desarrollo o resultado",
@@ -16,9 +17,17 @@
         "type" : "text"
       }, {
         "name" : "program",
-        "required" : "",
-        "tag" : "Programa",
-        "type" : "text"
+        "reference" : "program",
+        "required" : true,
+        "tag" : "Facultad",
+        "type" : "reference"
+      }, {
+        "help" : "Tipo invención",
+        "name" : "technology-type",
+        "reference" : "technology-type",
+        "required" : "true",
+        "tag" : "Tipo de invención",
+        "type" : "reference"
       } ],
       "tag" : "Información Basica",
       "type" : "single"
@@ -759,13 +768,29 @@
   } ],
   "references" : {
     "definition" : {
-      "genero" : [ "Masculino", "Femenino" ]
+      "genero" : [ {
+        "key" : "M",
+        "value" : "Masculino"
+      }, {
+        "key" : "F",
+        "value" : "Femenino"
+      } ],
+      "program" : [ {
+        "key" : "AI",
+        "value" : "Artes integradas"
+      }, {
+        "key" : "ciencias",
+        "value" : "Ciencias"
+      }, {
+        "key" : "ingenieria",
+        "value" : "Ingenieria"
+      } ]
     }
   },
   "roles" : {
     "definition" : [ {
       "rolName" : "admin",
-      "users" : [ "gelkio@gmail.com" ]
+      "users" : [ "gelkio@gmail.com", "stefaniavalenciabecerra@gmail.com", "fortiz@institutoprospectiva.org", "vanessa.zamora@correounivalle.edu.co", "julian.rodriguez@correounivalle.edu.co" ]
     } ]
   },
   "technologies" : {
@@ -773,21 +798,74 @@
       "createdAt" : 1491517742612,
       "createdBy" : "gelkio@gmail.com",
       "description" : "Prueba",
-      "name" : "Tecnologia de prueba",
+      "name" : "Tecnologia de modificada por Julien",
       "principal-researcher-email" : "gelkio@gmail.com",
-      "program" : "Ingenieria",
+      "program" : "ingenieria",
       "technologyId" : "5ec64d1c-f0d2-4a67-9955-77cc42c307bf",
-      "updatedAt" : 1492470112852,
+      "updatedAt" : 1494865734571,
       "updatesBy" : "gelkio@gmail.com"
+    },
+    "-KkBw47RwOPAbMvRyLPn" : {
+      "createdAt" : 1494865695328,
+      "createdBy" : "gelkio@gmail.com",
+      "description" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+      "name" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+      "principal-researcher-email" : "carmen.forero@correounivalle.edu.co",
+      "program" : "ciencias",
+      "technologyId" : "5aae9a77-6548-45d2-8257-8e8685bd8fd3",
+      "updatedAt" : 1495672723494,
+      "updatesBy" : "julian.rodriguez@correounivalle.edu.co"
+    },
+    "-KkBx0UmbB2SFuJR0e-V" : {
+      "createdAt" : 1494865942574,
+      "createdBy" : "gelkio@gmail.com",
+      "description" : "Dispositivo de almacenamiento celular - BIODACI",
+      "name" : "BIODACI",
+      "principal-researcher-email" : "carolinaortega35@gmail.com",
+      "program" : "ingenieria",
+      "technologyId" : "791af1b8-63b4-43de-b842-28ce66af0e3d"
+    },
+    "-KkH3IomOvIFIx2XfGDv" : {
+      "createdAt" : 1494952154227,
+      "createdBy" : "vanessa.zamora@correounivalle.edu.co",
+      "description" : "Es un proceso novedoso que permite disolver calcio (con tamaños de partículas microscópicas) en un medio acuoso, que puede usarse para el enriquecimiento de bebidas y alimentos nutracéuticos. La invención facilita el aprovechamiento del calcio en el organismo y evita la sedimentación de las partículas durante la vida útil del producto, de manera que al ingerirse no presenta ningún tipo de sabor, olor ni textura perceptible para el consumidor.",
+      "name" : "Proceso para la preparación de suspensiones de sales de calcio y método para la incorporación de calcio en bebidas alimenticias nutraceuticas y farmacéuticas",
+      "program" : "ingenieria",
+      "technologyId" : "b1b62adf-2e88-45a0-8e55-0940ee5326ab"
     }
   },
   "technologies-detail" : {
+    "5aae9a77-6548-45d2-8257-8e8685bd8fd3" : {
+      "answers" : {
+        "basic" : [ {
+          "description" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+          "name" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+          "program" : "ciencias"
+        } ],
+        "group-keywords" : [ {
+          "english-keywords" : "CO2 Capture, Chemical looping combustion",
+          "spanish-keywords" : "Captura de CO2, Combustion con transportadores solidos de oxigeno"
+        } ],
+        "group-principal-researcher" : [ {
+          "identification" : "51802180",
+          "nivel-formacion" : "Doctorado",
+          "nombre-apellidos" : "Carmen Rosa Forero Amortegui",
+          "phone" : "3017027220",
+          "principal-researcher-email" : "carmen.forero@correounivalle.edu.co"
+        } ],
+        "research-group" : [ {
+          "faculty" : "Ingenieria",
+          "name" : "Ciencia y tecnologia del carbon",
+          "research-line" : "Combustion"
+        } ]
+      }
+    },
     "5ec64d1c-f0d2-4a67-9955-77cc42c307bf" : {
       "answers" : {
         "basic" : [ {
           "description" : "Prueba",
-          "name" : "Tecnologia de prueba",
-          "program" : "Ingenieria"
+          "name" : "Tecnologia de modificada por Julien",
+          "program" : "ingenieria"
         } ],
         "discharge-contract" : [ {
           "discharge-date" : 1498453200000
@@ -795,6 +873,42 @@
         "group-principal-researcher" : [ {
           "nombre-apellidos" : "Gelver Vargas",
           "principal-researcher-email" : "gelkio@gmail.com"
+        } ]
+      }
+    },
+    "791af1b8-63b4-43de-b842-28ce66af0e3d" : {
+      "answers" : {
+        "basic" : [ {
+          "description" : "Dispositivo de almacenamiento celular - BIODACI",
+          "name" : "BIODACI",
+          "program" : "ingenieria"
+        } ],
+        "group-principal-researcher" : [ {
+          "identification" : "1085266302",
+          "nivel-formacion" : "Ingeniera",
+          "nombre-apellidos" : "Carolina Ortega portilla",
+          "phone" : "3212122",
+          "principal-researcher-email" : "carolinaortega35@gmail.com"
+        } ],
+        "research-group" : [ {
+          "faculty" : "Ingenieria",
+          "name" : "Recubrimientos duros y aplicaciones industriales - RDAI",
+          "program" : "Ingenieria de materiales",
+          "research-line" : "Biocompatibilidad"
+        } ]
+      }
+    },
+    "b1b62adf-2e88-45a0-8e55-0940ee5326ab" : {
+      "answers" : {
+        "basic" : [ {
+          "description" : "Es un proceso novedoso que permite disolver calcio (con tamaños de partículas microscópicas) en un medio acuoso, que puede usarse para el enriquecimiento de bebidas y alimentos nutracéuticos. La invención facilita el aprovechamiento del calcio en el organismo y evita la sedimentación de las partículas durante la vida útil del producto, de manera que al ingerirse no presenta ningún tipo de sabor, olor ni textura perceptible para el consumidor.",
+          "name" : "Proceso para la preparación de suspensiones de sales de calcio y método para la incorporación de calcio en bebidas alimenticias nutraceuticas y farmacéuticas",
+          "program" : "ingenieria"
+        } ],
+        "documents" : [ {
+          "name" : "MODELO DE NEGOCIO SALES DE CALCIO-Ruben-1.pdf",
+          "ref" : "documents/1494949855297",
+          "url" : "https://firebasestorage.googleapis.com/v0/b/sigetec-6cb58.appspot.com/o/documents%2F1494949855297?alt=media&token=8e71b6a6-bb6e-46a1-b0d6-d232f4c05444"
         } ]
       }
     }

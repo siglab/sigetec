@@ -16,9 +16,7 @@ dashboardController.controller('DashboardController',
 function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArray, $mdDialog, $mdToast, $window){
     var context = this;
     
-    var technologiesReference = firebase.database().ref().child("technologies").orderByChild('createdAt');
     var rolesReference = firebase.database().ref().child("roles/definition");
-    var technologies = $firebaseArray(technologiesReference);
     var roles = $firebaseArray(rolesReference);
     
     context.noTechnologies = false;
@@ -51,39 +49,56 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
             angular.forEach(rol.users, function(user, userKey){
                 if(user == $rootScope.userEmail){
                     $rootScope.userRole = rol.rolName;
+                    context.getAllowedTechnologies(rol.rolName);
                 }
             });
         });
     });
-                                 
-    technologies.$loaded().then(function(){
-        context.technologies = technologies;
+    
+    context.getAllowedTechnologies = function(rolName){
         
-        if(technologies.length > 0){
-            context.noTechnologies = true;    
+        var technologiesReference = undefined;
+        if(rolName == "admin"){
+            technologiesReference = firebase.database().ref().child("technologies")
+                                                            .orderByChild('createdAt');
+        }else{
+            technologiesReference = firebase.database().ref().child("technologies")
+                                                            .orderByChild('createdBy')
+                                                            .equalsTo($rootScope.userEmail);
         }
-        var tecnologyList = {};
-        angular.forEach(technologies, function(technology, key){
-            if(tecnologyList[technology.program] != undefined){
-                tecnologyList[technology.program]++;
-            }else{
-                tecnologyList[technology.program] = 1;
-            }
-        });
         
-        var technologyArray = [];
-        angular.forEach(tecnologyList, function(technologyCount, key){
-            technologyArray.push({"label": key, "value": technologyCount});
-        });
+        //var technologiesReference = firebase.database().ref().child("technologies").orderByChild('createdAt');
+        var technologies = $firebaseArray(technologiesReference);
         
-        context.chartData = [
-            {
-                "key": "Tecnologias",
-                "color": "#d62728",
-                "values": technologyArray
+        technologies.$loaded().then(function(){
+            context.technologies = technologies;
+
+            if(technologies.length > 0){
+                context.noTechnologies = true;
             }
-        ];
-    });
+            var tecnologyList = {};
+            angular.forEach(technologies, function(technology, key){
+                if(tecnologyList[technology.program] != undefined){
+                    tecnologyList[technology.program]++;
+                }else{
+                    tecnologyList[technology.program] = 1;
+                }
+            });
+
+            var technologyArray = [];
+            angular.forEach(tecnologyList, function(technologyCount, key){
+                technologyArray.push({"label": key, "value": technologyCount});
+            });
+
+            context.chartData = [
+                {
+                    "key": "Tecnologias",
+                    "color": "#919396",
+                    "values": technologyArray
+                }
+            ];
+        });
+    }
                                
     context.importantDates = [{date: "2017-04-01", title: "Vencimiento de registro", technologyName: "Test" }];
                                

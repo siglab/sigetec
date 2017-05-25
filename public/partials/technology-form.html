@@ -19,33 +19,42 @@
                 <div ng-repeat="answer in controller.answers[questionGroup.name]">
                     <div class="form-group" ng-repeat="question in questionGroup.questions">
                         <div ng-switch on="question.type">
-                            <div ng-switch-when="text">
                                 <label>{{question.tag}}</label>
-                                <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" ng-model="answer[question.name]" class="form-control" type="text" placeholder="{{question.tag}}">
+                                <md-tooltip md-direction="bottom">{{question.help}}</md-tooltip>
+                            <div ng-switch-when="text">
+                                <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                       ng-model="answer[question.name]" 
+                                       ng-required="controller.formatObjects[controller.currentNavItem].required" 
+                                       class="form-control" type="text" placeholder="{{question.tag}}">
                             </div>
                             <div ng-switch-when="email">
-                                <label>{{question.tag}}</label>
-                                <input ng-model="answer[question.name]" class="form-control" type="text" placeholder="{{question.tag}}">
+                                <input ng-model="answer[question.name]"
+                                       ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                       class="form-control" type="text" placeholder="{{question.tag}}">
                             </div>
                             <div ng-switch-when="select">
-                                <label>{{question.tag}}</label>
-                                <select ng-model="answer[question.name]" class="form-control">
+                                <select ng-model="answer[question.name]"
+                                        ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                        class="form-control">
                                     <option ng-repeat="option in question.options" >{{option}}</option>
                                 </select>
                             </div>
                             <div ng-switch-when="date">
-                                <label>{{question.tag}}</label>
-                                <md-datepicker ng-model="answer[question.name]" md-placeholder="Enter date"></md-datepicker>
+                                <md-datepicker ng-model="answer[question.name]"
+                                               ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                               md-placeholder="Enter date"></md-datepicker>
                             </div>
                             <div ng-switch-when="reference">
-                                <label>{{question.tag}}</label>
-                                <select ng-model="answer[question.name]" class="form-control">
-                                    <option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}" >{{pair.values}}</option>
+                                <select ng-model="answer[question.name]"
+                                        ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                        class="form-control">
+                                    <option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}" >{{pair.value}}</option>
                                 </select>
                             </div>
                             <div ng-switch-when="long-text">
-                                <label>{{question.tag}}</label>
-                                <textarea ng-model="answer[question.name]" class="form-control">
+                                <textarea ng-model="answer[question.name]"
+                                          ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                          class="form-control">
                                 </textarea>
                             </div>
                         </div>

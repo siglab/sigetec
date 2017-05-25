@@ -24,8 +24,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
     context.currentNavItem = "Información Basica";
     context.answers = {"documents": []};
     context.formatObjects = {};
-    
-    console.log("User rol: "+$rootScope.userRole)
                           
     var basicData = [
         { questionGroup : "basic",
@@ -39,11 +37,15 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
     ];
                                
     var formatsReference = firebase.database().ref().child("formats");
-    var referencesReference = firebase.database().ref().child("references");
+    var referencesReference = firebase.database().ref().child("references/definition");
     
     var formats = $firebaseArray(formatsReference);
     var references = $firebaseObject(referencesReference);
 
+    references.$loaded().then(function(){
+        context.references = references;
+    });
+    
     formats.$loaded().then(function(){
         context.formats = formats;
         angular.forEach(formats, function(format){
@@ -57,7 +59,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
                 context.answers[questionGroup.name] = [{}];
             });
         });
-        console.log(context.formatObjects);
 
         if($routeParams.technologyId){
             var technologyRequestedReference = firebase.database()
@@ -83,7 +84,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
                         });
                         context.answers[name] = answersWithDate;
                     });
-                    console.log(context.answers);
                 });
             });
         }
@@ -105,14 +105,11 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
                     'contentType': fileToLoad.type
                 };
                 documentsReference.put(fileToLoad, metadata).then(function(snapshot){
-                    console.log('Uploaded', snapshot.totalBytes, 'bytes.');
-                    console.log(snapshot.metadata);
                     var url = snapshot.metadata.downloadURLs[0];
                     context.answers.documents.push({"url": url, 
                                                     "name": fileToLoad.name,
                                                     "ref": ref});
                     $scope.$digest();
-                    console.log('File available at', url);
                 }).catch(function(error) {
                     // [START onfailure]
                     console.error('Upload failed:', error);
@@ -146,9 +143,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
             technology.$loaded().then(function(){
                 technology.updatedAt = today;
                 technology.updatesBy = $rootScope.userEmail;
-                angular.forEach(basicData, function(question, key){
-                    technology[question.questionName] = context.answers[question.questionGroup][0][question.questionName];
-                });
+                
+                context.setBasicData(technology, basicData);
+                
                 technology.$save();
                 context.saveDetail(technology.technologyId);
             });
@@ -158,16 +155,16 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
             technology.technologyId = uuid2.newuuid();
             technology.createdAt = today;
             technology.createdBy = $rootScope.userEmail;
-            angular.forEach(basicData, function(question, key){
-                technology[question.questionName] = context.answers[question.questionGroup][0][question.questionName];
-            });
+            
+            context.setBasicData(technology, basicData);
+            
             var technologiesReference = firebase.database().ref().child("technologies");
             var technologies = $firebaseArray(technologiesReference);
             technologies.$add(technology).then(function(reference){
                 context.saveDetail(technology.technologyId);
             }, function(error){
-
-            });    
+                console.log(error);
+            });
         }
                
         alert("La tecnologia fue almacenada correctamente.");
@@ -176,19 +173,36 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
     context.saveDetail = function( key ){
         var technologiesDetailReference = firebase.database().ref().child("technologies-detail/"+key);
         var technologiesDetail = $firebaseObject(technologiesDetailReference);
-        technologiesDetail.answers = context.answers.slice();
-        
+        technologiesDetail.answers = angular.copy(context.answers);
+        var validationError = false;
+
         angular.forEach(technologiesDetail.answers , function(questionGroup, qgKey){
            angular.forEach(questionGroup, function(group, gKey){
                 angular.forEach(group, function(answer, aKey){
                     if(Object.prototype.toString.call(answer) === '[object Date]'){
                         technologiesDetail.answers[qgKey][gKey][aKey] = answer.getTime();
                     }
+                    if(answer.$invalid){
+                        validationError = true;
+                    }
                 });
            });
         });
         
-        technologiesDetail.$save();
+        if(!validationError){
+            technologiesDetail.$save();
+        }else{
+            console.log("Validation Error");
+        }
+    }
+    
+    context.setBasicData = function(technology, basicData){
+        angular.forEach(basicData, function(question, key){
+            var answer = context.answers[question.questionGroup][0][question.questionName];
+            if(answer != undefined){
+                technology[question.questionName] = answer;
+            }               
+        });
     }
                                
     context.back = function(){

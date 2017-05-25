@@ -17,101 +17,123 @@ homeController.controller('HomeController',
 function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $mdToast, $window, $http){
     var context = this;
     
-    //var technologiesReference = firebase.database().ref().child("technologies");
-    //var technologies = $firebaseObject(technologiesReference);
+    
                                
-    context.totalTechnologies = 1;
-    context.lastMonthTechnologies = 1;
-    context.totalPatents = 0;
+    context.visualizeAs = "graph";
+    context.detail = {};
                                
-    context.options = {
+    var color = d3.scale.category20()
+    $scope.options = {
         chart: {
-            type: 'multiBarHorizontalChart',
-            height: 450,
-            x: function(d){return d.label;},
-            y: function(d){return d.value;},
-            showControls: false,
-            showValues: true,
-            duration: 500,
-            xAxis: {
-                showMaxMin: false
+            type: 'forceDirectedGraph',
+            height: 500,
+            width: (function(){ return nv.utils.windowSize().width })(),
+            margin:{top: 20, right: 20, bottom: 20, left: 20},
+            color: function(d){
+                return color(d.group)
             },
-            yAxis: {
-                axisLabel: '',
-                tickFormat: function(d){
-                    return d3.format(',.0f')(d);
-                }
+            nodeExtras: function(node) {
+                node && node
+                  .append("text")
+                  .attr("dx", -7)
+                  .attr("dy", ".35em")
+                  .text(function(d) { return "· · · "+d.name })
+                  .on("click", function(d){ context.detail = d; $scope.$digest(); })
+                  .style('font-size', '10px');
             }
         }
     };
     
-    context.frequencies = {};
-    var request = $http({
-                    method: 'GET',
-                    url: "http://afv.mobi/sigetec/sigetec_firebase_request.php"
-                });
+    var nodes = [];
+    var links = [];
+    var sector = [];
+    var faculty = [];
+    context.technologiesArray = [];
+    var request = $http({ method: 'GET',
+                            url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
+                        });
     request.then(function(response){
-        context.technologies = response.data;
         angular.forEach(response.data, function(technology){
-            if(context.frequencies[technology.program] != undefined){
-                context.frequencies[technology.program] ++;
-            }else{
-                context.frequencies[technology.program] = 1;
+            context.technologiesArray.push(technology);
+            var techIndex = context.isInArray(nodes, technology.technologic_sector);
+            if(techIndex < 0){
+                techIndex = nodes.length;
+                nodes.push({"name": technology.technologic_sector, "group":1});
             }
+            var facultyIndex = context.isInArray(nodes, technology.program);
+            if( facultyIndex < 0){
+                facultyIndex = nodes.length;
+                nodes.push({"name": technology.faculty, "group":2});
+            }
+            var technologyIndex = nodes.length;
+            nodes.push({"name": technology.name, 
+                        "group":2, 
+                        "$id":technology.$id, 
+                        "description": technology.name});
+            links.push({"source":techIndex,"target":technologyIndex,"value":1});
+            links.push({"source":facultyIndex,"target":technologyIndex,"value":1});
         });
+        
+        $scope.data = {
+            "nodes":nodes,
+            "links":links
+        };
     });
-    console.log(context.frequencies);
-    
-    context.values = [];
-    
-    for(var label in context.frequencies) {
-        console.log(label);
-        var frequency = context.frequencies[label];
-        context.values.push({"label": label, "value": frequency});
+                                                             
+    context.isInArray = function(array, value){
+        for(var i=0; i<array.length; i++){
+            if(array[i].name == value){
+                return i;
+            }
+        }
+        return -1;
     }
     
-    console.log(context.values);
+    context.showTechnologiesList = function(sector){
+        context.sector = sector;
+        $mdDialog.show({
+          controller: DialogController,
+          templateUrl: 'partials/technologies-list.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose:true,
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        })
+        .then(function(answer) {
+          $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+          $scope.status = 'You cancelled the dialog.';
+        }); 
+    } 
     
-    context.data = [
-        {
-            "key": "Tecnologias",
-            "color": "#d62728",
-            "values": [
-                {
-                    "label" : "Ingeniería" ,
-                    "value" : 5
-                } ,
-                {
-                    "label" : "Artes" ,
-                    "value" : 2
-                } ,
-                {
-                    "label" : "Educación" ,
-                    "value" : 1
-                } 
-            ]
-        }
-    ];
-    
-    context.technologies = [{name:"Tecnologia de prueba", description: "Prueba de una tecnología."}];
-    /*                           
-    technologies.$loaded().then(function(){
-        context.technologies = technologies; 
-        
-        context.pieData = [];
-        var faculties = {};
-        var technologiesCount = 0;
-        angular.forEach(technologies, function(key, value){
-            technologiesCount++;
-            if(faculties[value.faculty] == undefined){
-                faculties[value.faculty] = 1;
-                context.pieData.push({ key : value.faculty, y : 1 });
-            }else{
-                faculties[value.faculty] += 1;
+    function DialogController($scope, $mdDialog) {
+        $scope.sector = context.sector;
+        $scope.technologies = [];
+        angular.forEach(context.technologiesArray, function(technology){
+            if(technology.technologic_sector != undefined && technology.technologic_sector === context.sector){
+                $scope.technologies.push(technology);
             }
         });
         
-        context.totalTechnologies = technologiesCount;
-    });
-    */
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.onClickTechnology = function(technology) {
+            $mdDialog.hide();
+            $location.path("detail/form-technologies/technologies/"+technology.$id); 
+        };     
+    }
+                               
+    context.showDetail = function(technology){
+        $location.path("detail/form-technologies/technologies/"+technology.$id); 
+    }
+    
+    context.visualizeChange = function(option){
+        context.visualizeAs = option;
+    }
+    
 }]);
