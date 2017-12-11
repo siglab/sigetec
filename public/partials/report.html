@@ -1,0 +1,25 @@
+<div ng-controller="ReportController as controller" class="container-fluid">
+    <h2>Documentos Otri</h2>
+    <div class="message">
+        <div>
+            <div ng-repeat="document in controller.reports" class="row" style="padding: 5px;">
+                <div class="col-md-4">{{document.type}}</div>
+                <div class="col-md-4"><a href="{{document.url}}">{{document.name}}</a></div>
+                <div class="col-md-4"><span class="btn btn-danger" ng-click="controller.deleteFile(document)">Eliminar</span></div>
+            </div>
+            <br/>
+            <label>Subir nuevo informe</label>
+            <form ng-submit="controller.uploadFile()">
+                <select ng-model="controller.fileCategory" class="form-control">
+                    <option value="informe">Informe</option>
+                    <option value="other">Otro</option>
+                </select>
+                <input type="file" name="file" class="inputimg" id="document">
+                <br />
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary">Adjuntar documento</button>
+                </span>
+            </form>
+        </div>
+    </div>
+</div>

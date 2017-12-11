@@ -27,6 +27,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     context.save = function(){
         var definition = angular.fromJson(context.definition);
         roles.definition = definition;
+        console.log(roles.definition);
         roles.$save();
     };
                                

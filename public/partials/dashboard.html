@@ -1,6 +1,9 @@
 <div ng-controller="DashboardController as controller" class="container-fluid" >
-    <div ng-hide="controller.noTechnologies" class="alert alert-info">
+    <div ng-show="controller.noTechnologies" class="alert alert-info">
         <p>No tiene ninguna tecnologia registrada. Por favor haga click en el boton crear tecnologia para iniciar.</p>
+    </div>
+    <div ng-hide="infoMessage != ''" class="alert alert-info">
+        <p>{{infoMessage}}</p>
     </div>
     <md-button class="md-raised md-primary" aria-label="Crear tecnologia" ng-click="controller.newTechnology()" style="text-align:left">
         <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Crear tecnologia
@@ -8,6 +11,30 @@
     <br />
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="100" layout="column">
+            <md-card md-theme="{{ 'default' }}" md-theme-watch>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline" ng-show="controller.showWorkerDashboard">Tecnologias</span>
+                        <span class="md-headline" ng-show="controller.showResearcherDashboard">Mis Tecnologias</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content layout="row" layout-align="space-between">
+                    <md-list flex>
+                        <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:5" ng-click="controller.editTechnology(technology)">
+                            <div style="border-left: solid 2pt #333; padding-left: 3pt;" class="md-list-item-text" layout="column">
+                                <h3>{{technology.name | limitTo: 120}}</h3>
+                                <p><i>Creada por {{technology.createdBy}} el {{technology.createdAt}}, asignada a {{technology.assignedTo}}</i></p>
+                                <p>{{technology.description | limitTo: 130}}</p>
+                            </div>
+                            <span class="md-secondary badge">{{technology.status}}</span>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+        </div>
+    </md-content>
+    <md-content class="md-padding" layout-xs="column" layout="row" ng-show="controller.showWorkerDashboard">
+        <div flex-xs flex-gt-xs="60" layout="column" >
           <md-card md-theme="default" md-theme-watch>
             <md-card-title>
               <md-card-title-text>
@@ -19,43 +46,25 @@
             </md-card-content>
           </md-card>
         </div>
-        <div flex-xs flex-gt-xs="100" layout="column">
-            <md-card md-theme="{{ 'default' }}" md-theme-watch>
+        <div flex-xs layout="column">
+            <md-card md-theme="default" md-theme-watch>
                 <md-card-title>
                     <md-card-title-text>
-                        <span class="md-headline">Ultimas Tecnologias Registradas</span>
+                        <span class="md-headline">Proximas Fechas Importantes</span>
                     </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="row" layout-align="space-between">
-            <md-list flex>
-                <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:5" ng-click="controller.editTechnology(technology)">
-                    <div style="border-left: solid 2pt #333; padding-left: 3pt;" class="md-list-item-text" layout="column">
-                        <h3>{{technology.name}}</h3>
-                        <i>por {{technology.createdBy}} el {{technology.createdAt}}</i>
-                        <p>{{technology.description}}</p>
-                    </div>
-                </md-list-item>
-            </md-list>
-        </md-card-content>
-      </md-card>
-      <md-card md-theme="default" md-theme-watch>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Proximas Fechas Importantes</span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="row" layout-align="space-between">
-            <md-list flex>
-                <md-list-item class="md-3-line" ng-repeat="importantDate in controller.importantDates" ng-click="null">
-                    <div class="md-list-item-text" layout="column">
-                        <i>{{importantDate.date}}</i>
-                        <h3>{{importantDate.title}}</h3>
-                        <p>{{importantDate.technologyName}}</p>
-                    </div>
-                </md-list-item>
-            </md-list>
-        </md-card-content>
-      </md-card>
-    </div>
+                </md-card-title>
+                <md-card-content layout="row" layout-align="space-between">
+                    <md-list flex>
+                        <md-list-item class="md-3-line" ng-repeat="importantDate in controller.importantDates" ng-click="null">
+                            <div class="md-list-item-text" layout="column">
+                                <i>{{importantDate.date}}</i>
+                                <h3>{{importantDate.title}}</h3>
+                                <p>{{importantDate.technologyName}}</p>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+        </div>
   </md-content>
 </div>

@@ -1,26 +1,60 @@
 <div ng-controller="TechnologyFormController as controller" class="container-fluid">
+    <div class="row">
+        <div class="col-md-8"><h2>{{controller.answers['basic'][0].name}}</h2></div>
+        <div class="col-md-4"><div class="pull-right">
+            <span class="badge" style="margin-top: 20px; font-size: 12pt; padding: 5pt;">{{controller.technologyStatus}}</span>
+        </div></div>
+    </div>
     <div class="message">
-        <md-button class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.save()" style="text-align:left">
-            <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar
-        </md-button>
-        <md-button class="md-raised md-primary pull-right" aria-label="Cancelar" ng-click="controller.back()" style="text-align:left">
-            Cancelar
-        </md-button>
-        <h3>Formato Tecnología</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Formato Tecnología</h3>
+            </div>
+            <div class="col-md-7">
+                <div class="pull-rigth">
+                    <md-button ng-repeat="status in controller.allowedStatus" class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.changeStatus(status)" style="text-align:left">
+                        {{status}}
+                    </md-button>
+                    <!--md-button ng-hide="controller.showCreate" class="md-raised pull-right" aria-label="Cancelar" ng-click="controller.back()" style="text-align:left">
+                        Cancelar
+                    </md-button-->
+                </div>
+            </div>
+            <div class="col-md-1">
+                <md-menu ng-show="userRole != 'researcher'">
+                    <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+                        <md-icon md-menu-origin md-svg-icon="img/icons/more.svg"></md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button ng-click="controller.showShareDialog()">Compartir</md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-show="context.showReturn">
+                            <md-button ng-click="controller.return()">Return</md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-show="context.showAssign">
+                            <md-button ng-click="controller.showAssignDialog()">asignar</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </div>
         <md-nav-bar md-selected-nav-item="controller.currentNavItem"
                     nav-bar-aria-label="navigation links">
-            <md-nav-item ng-repeat="format in controller.formats"  md-nav-click="goto(format.name)" name="{{format.name}}">
+            <md-nav-item ng-repeat="format in controller.formats" md-nav-click="goto(format.name)" name="{{format.name}}" ng-show="format.showTab">
                 {{format.name}}
             </md-nav-item>
         </md-nav-bar>
         <div class="ext-content">
-            <div ng-repeat="questionGroup in controller.formatObjects[controller.currentNavItem].questionGroups">
+            <div ng-repeat="(groupKey, questionGroup) in controller.formatObjects[controller.currentNavItem].questionGroups">
                 <h3>{{questionGroup.tag}}</h3>
-                <div ng-repeat="answer in controller.answers[questionGroup.name]">
+                <div ng-repeat="(answerKey, answer) in controller.answers[questionGroup.name]">
                     <div class="form-group" ng-repeat="question in questionGroup.questions">
                         <div ng-switch on="question.type">
                                 <label>{{question.tag}}</label>
-                                <md-tooltip md-direction="bottom">{{question.help}}</md-tooltip>
+                                <span angular-popover direction="right" template="{{question.help}}" style="position: relative; cursor: pointer">
+                                    <b> <img src="img/help.svg" /> </b>
+                                </span>
                             <div ng-switch-when="text">
                                 <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
                                        ng-model="answer[question.name]" 
@@ -31,6 +65,15 @@
                                 <input ng-model="answer[question.name]"
                                        ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
                                        class="form-control" type="text" placeholder="{{question.tag}}">
+                            </div>
+                            <div ng-switch-when="checkbox">
+                                <div class="alert alert-warning" role="alert">{{question.relatedText}}</div>
+                                <div class="row">
+                                    <div class="col-md-1"><input ng-model="answer[question.name]"
+                                       ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                       class="form-control" type="checkbox"></div>
+                                    <div class="col-md-8">{{question.tag}}</div>
+                                </div>
                             </div>
                             <div ng-switch-when="select">
                                 <select ng-model="answer[question.name]"
@@ -48,7 +91,7 @@
                                 <select ng-model="answer[question.name]"
                                         ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
                                         class="form-control">
-                                    <option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}" >{{pair.value}}</option>
+                                    <option ng-repeat="pair in controller.references[question.reference]" value="{{pair.value}}" >{{pair.key}}</option>
                                 </select>
                             </div>
                             <div ng-switch-when="long-text">
@@ -57,7 +100,16 @@
                                           class="form-control">
                                 </textarea>
                             </div>
+                            <div ng-switch-when="tags">
+                                <md-chips ng-model="answer[question.name]" name="question.name" md-removable="true">
+                                </md-chips>
+                            </div>
                         </div>
+                    </div>
+                    <div>
+                        <md-button ng-show="questionGroup.type == 'array' && answerKey != 0" class="md-raised md-primary pull-rigth" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.removeAnswers(questionGroup.name, answerKey)" style="text-align:left">
+                            <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{questionGroup.tag}}
+                        </md-button>
                     </div>
                     <md-divider ng-if="!$last"></md-divider>
                 </div>
@@ -69,6 +121,18 @@
             </div>
         </div>
     </div>
+    <div style="text-align: center">
+        <md-button ng-show="controller.showCreate" class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.create()" style="text-align:left">
+             <md-icon md-svg-icon="img/icons/save.svg"></md-icon>Guardar y enviar
+        </md-button>
+        <md-button ng-hide="controller.showCreate" class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.save()" style="text-align:left">
+            <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar
+        </md-button>
+        <md-button ng-show="controller.showRegister" class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.register()" style="text-align:left">
+             Registrar
+        </md-button>
+    </div>
+    <br/>
     <div class="message">
         <div>
             <label>Documentos</label>

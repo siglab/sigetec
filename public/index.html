@@ -6,20 +6,22 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
         <!-- Angular Material style sheet -->
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css" >
+        <link rel="stylesheet" href="css/angular-popover.css" >
         <link rel="stylesheet" href="css/main.css" >
         <!-- JQuery -->
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <!-- Angular -->
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-resource.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-messages.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-resource.min.js"></script>
         <!-- Angular Material Library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
         <!-- Bootstrap -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="js/lib/angular-popover.min.js"></script>
         <!-- Firebase -->
         <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
         <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
@@ -48,18 +50,21 @@
         <script src="js/controllers/HomeController.js"></script>
         <script src="js/controllers/RolesController.js"></script>
         <script src="js/controllers/ReferencesController.js"></script>
+        <script src="js/controllers/FormatsController.js"></script>
+        <script src="js/controllers/TechnologiesController.js"></script>
+        <script src="js/controllers/ReportController.js"></script>
         <script src="js/app.js"></script>
     </head>
     <body>
         <div ng-controller="MainController as controller">
             <md-toolbar class="md-hue-2">
                 <div class="md-toolbar-tools">
-                    <md-button class="md-icon-button" aria-label="Settings" ng-click="controller.toggleSidebar()">
+                    <md-button ng-show="isLoggedin" class="md-icon-button" aria-label="Settings" ng-click="controller.toggleSidebar()">
                         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
                     </md-button>
-                    <h2 flex md-truncate><a href="/#/dashboard">Sigetec</a></h2>
+                    <h2 flex md-truncate><a href="/#!/dashboard">Sigetec</a></h2>
                     <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left">
-                        {{controller.userName}} <md-icon md-svg-icon="img/icons/login.svg"></md-icon>
+                        {{userName}} <md-icon md-svg-icon="img/icons/login.svg"></md-icon>
                     </md-button>
                 </div>
             </md-toolbar>
@@ -70,22 +75,45 @@
                             <h1 class="md-toolbar-tools">SIGETEC</h1>
                         </md-toolbar>
                         <md-content layout-margin>
-                            <md-list-item class="md-2-line" ng-click="controller.showRoles()">
+                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showRoles()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Roles</h3>
                                     <p>Administracion de roles</p>
                                 </div>
                             </md-list-item>
-                            <md-list-item class="md-2-line" ng-click="controller.showReferences()">
+                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showFormats()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Formatos</h3>
+                                    <p>Administracion de Formatos</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showReferences()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Valores de referencia</h3>
                                     <p>Administracion de listados de valores</p>
                                 </div>
                             </md-list-item>
-                            <md-list-item class="md-2-line" ng-click="controller.showTechnologies()">
+                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showTechnologies()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Tecnologias</h3>
                                     <p>Listado de tecnologias.</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showReports()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Informes</h3>
+                                    <p>Listado de informes.</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item class="md-2-line" ng-click="controller.showDashboard()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Dashboard</h3>
+                                    <p>Tablero de control.</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item class="md-2-line" ng-click="controller.closeSession()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Cerrar sesion.</h3>
                                 </div>
                             </md-list-item>
                         </md-content>

@@ -5,16 +5,33 @@ var sigetecApp = angular.module('SigetecApp', ['ngRoute',
                                                'RolesController',
                                                'ReferencesController',
                                                'TechnologyFormController',
+                                               'FormatsController',
+                                               'TechnologiesController',
+                                               'ReportController',
                                                'firebase']);
 
 sigetecApp.run(["$rootScope", "$location", function($rootScope, $location) {
-    if (!$rootScope.isLoggedin) {
+    console.log("login"+firebase.auth().currentUser);
+    if ($rootScope.isLoggedin == undefined || !$rootScope.isLoggedin) {
         $location.path("/home");
     }
     $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
-        // We can catch the error thrown when the $requireSignIn promise is rejected
-        // and redirect the user back to the home page
-        if (error === "AUTH_REQUIRED") {
+        console.log("error auth");
+        $location.path("/home");
+    });
+    $rootScope.$on("$routeChangeSuccess", function(event, next, previous, error) {
+        var currentUser = firebase.auth().currentUser;
+        console.log(currentUser);
+        if(currentUser != null){
+            $rootScope.isLoggedin = true;
+            $rootScope.userEmail = firebase.auth().currentUser.email;
+            $rootScope.userName = firebase.auth().currentUser.displayName;
+            if($location.path() == "/home"){
+                $location.path("/dashboard");
+            }
+            
+        }else if ($rootScope.isLoggedin == undefined || !$rootScope.isLoggedin) {
+            $rootScope.userName = "Ingresar";
             $location.path("/home");
         }
     });
@@ -45,6 +62,18 @@ sigetecApp.config(['$routeProvider',
         }).when('/references', {
            templateUrl: 'partials/references.html',
            controller : 'ReferencesController',
+           resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
+       }).when('/formats', {
+           templateUrl: 'partials/formats.html',
+           controller : 'FormatsController',
+           resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
+       }).when('/technologies', {
+           templateUrl: 'partials/technologies.html',
+           controller : 'TechnologiesController',
+           resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
+       }).when('/reports', {
+           templateUrl: 'partials/report.html',
+           controller : 'ReportController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).otherwise({
            redirectTo : '/home' 

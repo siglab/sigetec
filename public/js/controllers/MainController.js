@@ -20,7 +20,7 @@ mainController.controller('MainController',
                            'GoogleSignin',
                            '$mdSidenav',
                            '$firebaseAuth',
-                           function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window, GoogleSignin, $mdSidenav, $firebaseAuth){
+function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window, GoogleSignin, $mdSidenav, $firebaseAuth){
     var context = this;
     
     context.isLoggedin = false;
@@ -32,6 +32,11 @@ mainController.controller('MainController',
                                
     $rootScope.auth = $firebaseAuth();
                                
+    var currentUser = firebase.auth().currentUser;
+    if(currentUser != null){
+        context.userName = currentUser.displayName;
+    }
+                               
     context.login = function () {
         var provider = new firebase.auth.GoogleAuthProvider();
         provider.addScope("https://www.googleapis.com/auth/plus.login");
@@ -42,6 +47,7 @@ mainController.controller('MainController',
         $rootScope.auth.$signInWithPopup(provider).then(function(result) {
             console.log("Signed in as:", result);
             context.userName = result.user.displayName;
+            $rootScope.userName = result.user.displayName;
             context.isLoggedin = true;
             $rootScope.isLoggedin = true;
             $rootScope.userEmail = result.user.email;
@@ -69,6 +75,7 @@ mainController.controller('MainController',
         context.patentsSelected = false;
         context.technologiesSelected = true;
         $location.path('technologies');
+        context.toggleSidebar();
     }
     
     context.showRoles = function(){
@@ -81,8 +88,35 @@ mainController.controller('MainController',
         context.toggleSidebar();
     }
     
+    context.showFormats = function(){
+        $location.path('formats');
+        context.toggleSidebar();
+    }
+    
+    context.showReports = function(){
+        $location.path('reports');
+        context.toggleSidebar();
+    }
+    
+    context.showDashboard = function(){
+        $location.path('dashboard');
+        context.toggleSidebar();
+    }
+    
     context.toggleSidebar = function(){
         $mdSidenav('mainMenu').toggle();
+    }
+    
+    context.closeSession = function(){
+        firebase.auth().signOut().then(function(){
+            $rootScope.userName = "Ingresar";
+            $rootScope.isLoggedin = false;
+            $location.path('home');
+            context.toggleSidebar();
+        }).catch(function(){
+            console.log("Error signing out.")
+        });
+        
     }
     
 }]);

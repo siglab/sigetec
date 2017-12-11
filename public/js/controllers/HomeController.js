@@ -55,15 +55,16 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     request.then(function(response){
         angular.forEach(response.data, function(technology){
             context.technologiesArray.push(technology);
-            var techIndex = context.isInArray(nodes, technology.technologic_sector);
+
+            var techIndex = context.isInArray(nodes, technology["technology-type"]);
             if(techIndex < 0){
                 techIndex = nodes.length;
-                nodes.push({"name": technology.technologic_sector, "group":1});
+                nodes.push({"name": technology["technology-type"], "group":1});
             }
             var facultyIndex = context.isInArray(nodes, technology.program);
             if( facultyIndex < 0){
                 facultyIndex = nodes.length;
-                nodes.push({"name": technology.faculty, "group":2});
+                nodes.push({"name": technology.program, "group":2});
             }
             var technologyIndex = nodes.length;
             nodes.push({"name": technology.name, 
