@@ -78,11 +78,11 @@ a {
 }
 
 md-toolbar.md-default-theme.md-hue-2:not(.md-menu-toolbar), md-toolbar.md-hue-2:not(.md-menu-toolbar) {
-    background-color: #eb1e00;
+    background-color: #D51B23;
 }
 
 md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
-    background-color: #eb1e00;
+    background-color: #D51B23;
 }
 
 .navbar-default .navbar-nav>li>a {
@@ -129,4 +129,11 @@ h3{
 .angular-popover-template {
     padding: 5pt;
     margin: 5pt;
+}
+
+.logo-img-responsive {
+    height: auto;
+    width: auto;
+    max-height: 64px;
+    max-width: 250px;
 }

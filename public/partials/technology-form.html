@@ -96,7 +96,9 @@
                             </div>
                             <div ng-switch-when="long-text">
                                 <textarea ng-model="answer[question.name]"
-                                          ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                          ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                          ng-keyup="resizeTextArea($event)" 
+                                          ng-keydown="resizeTextArea($event)"
                                           class="form-control">
                                 </textarea>
                             </div>

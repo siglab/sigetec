@@ -62,7 +62,9 @@
                     <md-button ng-show="isLoggedin" class="md-icon-button" aria-label="Settings" ng-click="controller.toggleSidebar()">
                         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
                     </md-button>
-                    <h2 flex md-truncate><a href="/#!/dashboard">Sigetec</a></h2>
+                    <h2 flex md-truncate>
+                        <img src="img/SIGETEC_Logo.jpg" class="logo-img-responsive hidden-sm hidden-xs">
+                    </h2>
                     <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left">
                         {{userName}} <md-icon md-svg-icon="img/icons/login.svg"></md-icon>
                     </md-button>

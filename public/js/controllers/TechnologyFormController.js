@@ -19,7 +19,7 @@ technologyFormController.controller('TechnologyFormController',
                            '$firebaseAuth',
                            '$routeParams',
                            'uuid2',
-function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2){
+function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, $event, uuid2){
     var context = this;
       
     $scope.authObj = $rootScope.auth;
@@ -412,5 +412,23 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     
     context.openMenu = function() {
       $mdMenu.open();
-    };
+    }
+
+    $scope.resizeTextArea = function($event){
+        console.log('target height: ' + $event.target.height);
+        console.log('scroll height: ' + $event.target.scrollHeight);
+        var areaContent = $event.target.value;
+        areaContent.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/,'');
+        if (areaContent == '' || areaContent == ' ') {
+            $event.target.style.rows = 2;
+            $event.target.style.height = "auto";
+        }else{
+            if ($event.target.scrollHeight >= 66) {
+                $event.target.style.height = $event.target.scrollHeight + "px";
+            }else{
+                $event.target.style.rows = 2;
+                $event.target.style.height = "auto";  
+            };            
+        }
+    }
 }]);
