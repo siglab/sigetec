@@ -63,18 +63,26 @@
                         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
                     </md-button>
                     <h2 flex md-truncate>
-                        <img src="img/SIGETEC_Logo.jpg" class="logo-img-responsive hidden-sm hidden-xs">
+                    <img src="img/SIGETEC_Logo.jpg" class="logo-img-responsive hidden-sm hidden-xs" alt="SIGETEC">
                     </h2>
-                    <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left">
+                    <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left; margin-right: 1%">
                         {{userName}} <md-icon md-svg-icon="img/icons/login.svg"></md-icon>
                     </md-button>
+                    <div style="height: 64px; background-color: white;">
+                        <a href="http://www.univalle.edu.co/">
+                            <img class="logo-img-responsive hidden-sm hidden-xs" alt="Universidad del Valle" src="img/logo-univalle.png" style="margin: 3%; max-width: 325px;">
+                        </a>
+                    </div>
                 </div>
             </md-toolbar>
             <div layout="column" style="height: 100%;" ng-cloak>
                 <section layout="row" flex>
                     <md-sidenav class="md-sidenav-left" md-component-id="mainMenu" md-whiteframe="4">
                         <md-toolbar class="md-theme-indigo">
-                            <h1 class="md-toolbar-tools">SIGETEC</h1>
+                            <!-- <h1 class="md-toolbar-tools">SIGETEC</h1> -->
+                            <h1 class="md-toolbar-tools">
+                                <img src="img/SIGETEC_Logo.jpg" class="logo-img-responsive hidden-sm hidden-xs" alt="SIGETEC" style="margin: 10%">
+                            </h1>
                         </md-toolbar>
                         <md-content layout-margin>
                             <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showRoles()">

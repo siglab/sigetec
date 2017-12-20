@@ -415,8 +415,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
 
     $scope.resizeTextArea = function($event){
-        console.log('target height: ' + $event.target.height);
-        console.log('scroll height: ' + $event.target.scrollHeight);
         var areaContent = $event.target.value;
         areaContent.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/,'');
         if (areaContent == '' || areaContent == ' ') {
