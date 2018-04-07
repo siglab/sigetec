@@ -19,9 +19,10 @@ technologyFormController.controller('TechnologyFormController',
                            '$firebaseAuth',
                            '$routeParams',
                            'uuid2',
-function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, $event, uuid2){
+function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2){
     var context = this;
-      
+    console.log('UUID Generators'); 
+    console.log(uuid2);  
     $scope.authObj = $rootScope.auth;
     context.allowedStatus = $rootScope.allowedStatus;
     context.availableUsers = $rootScope.availableUsers;
@@ -62,7 +63,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         { questionGroup : "group-principal-researcher",
           questionName : "principal-researcher-email" },
         { questionGroup : "basic",
-          questionName : "technology-type" }
+          questionName : "technology-type" },
+        { questionGroup : "patent-granted",
+          questionName : "granted-date" }
     ];
                                
     var formatsReference = firebase.database().ref().child("formats/structure");
@@ -78,8 +81,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     formats.$loaded().then(function(){
         context.formats = formats;
         angular.forEach(formats, function(format){
-            console.log(format);
-            if(format.allowedRole === "all" || format.allowedRole.includes($rootScope.userRole)){
+            if(format.allowedRole != undefined && 
+               (format.allowedRole === "all" || format.allowedRole.includes($rootScope.userRole))){
                 format.readonly = false;
                 format.showTab = true;
             }else{
@@ -148,7 +151,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 context.showCreate = true;
             }
         }
-        console.log(context.formatObjects);
     });
                                
     context.addAnswers = function(questionGroupName){
@@ -322,8 +324,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     technology.assignedTo = context.assignedTo;
                 }
 
+                console.log(context.answers);
                 context.setBasicData(technology, basicData);
-
+                console.log(technology);
                 technology.$save().then(function(reference){
                     technologyId = $routeParams.technologyId;
                     context.saveDetail(technology.technologyId);
@@ -394,8 +397,14 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.setBasicData = function(technology, basicData){
         angular.forEach(basicData, function(question, key){
             var answer = context.answers[question.questionGroup][0][question.questionName];
+            console.log(context.answers[question.questionGroup]);
+            console.log(question.questionGroup+' : '+question.questionName+'=>'+answer);
             if(answer != undefined){
-                technology[question.questionName] = answer;
+                if(Object.prototype.toString.call(answer) === '[object Date]'){
+                    technology[question.questionName] = answer.getTime();
+                }else{
+                    technology[question.questionName] = answer;
+                }
             }               
         });
     }

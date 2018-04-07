@@ -16,11 +16,10 @@ homeController.controller('HomeController',
                            '$http',
 function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $mdToast, $window, $http){
     var context = this;
-    
-    
                                
     context.visualizeAs = "graph";
     context.detail = {};
+    context.showLegend = false;
                                
     var color = d3.scale.category20()
     $scope.options = {
@@ -38,7 +37,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
                   .attr("dx", -7)
                   .attr("dy", ".35em")
                   .text(function(d) { return "· · · "+d.name })
-                  .on("click", function(d){ context.detail = d; $scope.$digest(); })
+                  .on("click", function(d){ context.detail = d; context.showLegend = true; $scope.$digest(); })
                   .style('font-size', '10px');
             }
         }
@@ -64,13 +63,21 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             var facultyIndex = context.isInArray(nodes, technology.program);
             if( facultyIndex < 0){
                 facultyIndex = nodes.length;
-                nodes.push({"name": technology.program, "group":2});
+                nodes.push({"name": technology.program, "group":3});
             }
             var technologyIndex = nodes.length;
-            nodes.push({"name": technology.name, 
-                        "group":2, 
+            if(technology['granted-date'] == undefined){
+                nodes.push({"name": technology.name, 
+                        "group":6, 
                         "$id":technology.$id, 
-                        "description": technology.name});
+                        "description": technology.description});
+            }else{
+                nodes.push({"name": technology.name, 
+                        "group":5, 
+                        "$id":technology.$id, 
+                        "description": technology.description});
+            }
+            
             links.push({"source":techIndex,"target":technologyIndex,"value":1});
             links.push({"source":facultyIndex,"target":technologyIndex,"value":1});
         });

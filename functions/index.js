@@ -2,7 +2,7 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 const nodemailer = require('nodemailer');
 // Configure the email transport using the default SMTP transport and a GMail account.
 // For Gmail, enable these:
@@ -15,9 +15,9 @@ const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
 
 exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyId}')
-    .onWrite(event => {
+    .onWrite((change, context) => {
       // Grab the current value of what was written to the Realtime Database.
-      const technology = event.data.val();
+      const technology = change.after.val()();
       admin.database().ref('/roles/definition').once("value").then(snapshot => {
           snapshot.forEach(function(data) {
               var rol = data.val();

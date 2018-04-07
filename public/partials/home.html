@@ -7,12 +7,18 @@
         </ul>
     </div>
     <div ng-show="controller.visualizeAs == 'graph'">
+        <div style="margin: 5px;"> 
+            <span class="badge" style="background-color: rgb(174, 199, 232);">&nbsp;</span> Facultad &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="badge" style="background-color: rgb(31, 119, 180);">&nbsp;</span> Tipo &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="badge" style="background-color: rgb(255, 127, 14);">&nbsp;</span> Tecnologia &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="badge" style="background-color: rgb(255, 187, 120);">&nbsp;</span> Patente &nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
         <div class="row">
             <div class="col-md-9 col-xs-12">
                 <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>
             </div>
-            <div style="z-index: 1000;" class="col-md-3 col-xs-12">
-                <h3>{{controller.detail.name}}</h3>
+            <div ng-show="controller.showLegend" style="z-index: 1000; background-color: #eee; margin-top: 10px; border: solid 1px #ccc;" class="col-md-3 col-xs-12">
+                <h4>{{controller.detail.name}}</h4>
                 <p>{{controller.detail.description}}</p>
                 <md-button ng-show="controller.detail.$id != null" ng-click="controller.showDetail(controller.detail)" md-no-ink class="md-primary pull-right">Ver detalle </md-button>
             </div>
@@ -33,12 +39,19 @@
     </div>
     <div ng-show="controller.visualizeAs == 'table'">
         <md-list flex>
-            <md-list-item class="md-3-line"  ng-repeat="technology in controller.technologiesArray" ng-click="controller.showDetail(technology)">
-              <div class="md-list-item-text" layout="column">
-                  <h4>{{technology.OTRI_name}}</h4>
-                  <p>{{technology.name}}</p>
-                  <md-button class="md-secondary md-icon-button" ng-repeat="document in patent.documents" ng-click="controller.showPDF(document)"><md-icon md-svg-icon="img/file-pdf.svg"></md-icon></md-button>
+            <md-list-item class="md-3-line" ng-repeat="technology in controller.technologiesArray" >
+              <div class="md-list-item-text" layout="column" style="border-left: solid 2px #E71C24; padding-left: 7px; margin: 3px; max-width: 900px;">
+                  <h4>{{technology.name}}</h4>
+                  <p>{{technology.description}}</p>
+                  <div class="md-secondary">
+                        <div style="vertical-align: top;">
+                          <span ng-show="{{technology['granted-date'] != undefined}}" class="badge" style="background-color: #D51B23;">Patente</span>
+                          <span ng-show="{{technology['granted-date'] == undefined}}" class="badge" style="background-color: #D51B23;">Tecnologia</span>
+                      </div>
+                        <md-button class=" md-icon-button" ng-repeat="document in patent.documents" ng-click="controller.showPDF(document)"><md-icon md-svg-icon="img/file-pdf.svg"></md-icon></md-button>
+                  </div>
               </div>
+              
             </md-list-item>
         </md-list>
     </div>

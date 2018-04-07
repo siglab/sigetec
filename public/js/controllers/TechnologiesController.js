@@ -48,7 +48,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
         }else{
             context.noTechnologies = true;
         }
-        console.log(context.technologies);
     });
     
     context.addTechnology = function(newTechnology){
