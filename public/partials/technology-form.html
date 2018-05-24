@@ -12,8 +12,24 @@
             <div class="col-md-4">
                 <h3>Formato Tecnología</h3>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-8">
                 <div class="float-rigth">
+                    <md-menu ng-show="userRole != 'researcher'" class="float-right">
+                        <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+                            <md-icon md-menu-origin md-svg-icon="img/icons/more.svg"></md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="controller.showShareDialog()">Compartir</md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-show="context.showReturn">
+                                <md-button ng-click="controller.return()">Return</md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-show="context.showAssign">
+                                <md-button ng-click="controller.showAssignDialog()">asignar</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                     <md-button ng-repeat="status in controller.allowedStatus" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.changeStatus(status)" style="text-align:left">
                         {{status}}
                     </md-button>
@@ -22,7 +38,7 @@
                     </md-button-->
                 </div>
             </div>
-            <div class="col-md-1">
+            <!-- <div class="col-md-1">
                 <md-menu ng-show="userRole != 'researcher'">
                     <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
                         <md-icon md-menu-origin md-svg-icon="img/icons/more.svg"></md-icon>
@@ -39,7 +55,7 @@
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
-            </div>
+            </div> -->
         </div>
         <md-nav-bar md-selected-nav-item="controller.currentNavItem"
                     nav-bar-aria-label="navigation links">
@@ -68,7 +84,7 @@
                                                  ng-model="answer[question.name]"
                                                  ng-required="question.required"
                                                  class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name}}">
-                                            <div ng-messages="$eval(questionGroup.name + '.' + question.name + '.$error')">
+                                            <div ng-messages="$eval(questionGroup.name + '[\'' + question.name + '\'].$error')">
                                                 <div ng-message="required">Se requiere de este campo para continuar.</div>
                                             </div>
                                         </md-input-container>
