@@ -15,7 +15,7 @@ dashboardController.controller('DashboardController',
                            '$window',
 function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArray, $mdDialog, $mdToast, $window){
     var context = this;
-    
+    window.onscroll = function() {};
     var rolesReference = firebase.database().ref().child("roles/definition");
     var roles = $firebaseArray(rolesReference);
     

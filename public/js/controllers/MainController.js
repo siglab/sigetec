@@ -25,37 +25,14 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
     
     context.isLoggedin = false;
     $rootScope.isLoggedin = false;
-                               
     context.userName = "Ingresar";
-                              
     //$mdSidenav('left').toggle();
-                               
     $rootScope.auth = $firebaseAuth();
                                
     var currentUser = firebase.auth().currentUser;
     if(currentUser != null){
         context.userName = currentUser.displayName;
     }
-                               
-    context.login = function () {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope("https://www.googleapis.com/auth/plus.login");
-        provider.setCustomParameters({
-            login_hint: "user@example.com"
-        });
-
-        $rootScope.auth.$signInWithPopup(provider).then(function(result) {
-            console.log("Signed in as:", result);
-            context.userName = result.user.displayName;
-            $rootScope.userName = result.user.displayName;
-            context.isLoggedin = true;
-            $rootScope.isLoggedin = true;
-            $rootScope.userEmail = result.user.email;
-            $location.path('/dashboard');
-        }).catch(function(error) {
-            console.error("Authentication failed:", error);
-        });
-    };
     
     context.newPatent = function(){
         $location.path('form/form-patents/patents');
@@ -112,11 +89,11 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $window,
             $rootScope.userName = "Ingresar";
             $rootScope.isLoggedin = false;
             $location.path('home');
+            $scope.$apply();
             context.toggleSidebar();
         }).catch(function(){
             console.log("Error signing out.")
         });
-        
     }
-    
+
 }]);

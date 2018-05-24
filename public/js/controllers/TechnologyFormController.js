@@ -21,21 +21,21 @@ technologyFormController.controller('TechnologyFormController',
                            'uuid2',
 function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2){
     var context = this;
-    console.log('UUID Generators'); 
-    console.log(uuid2);  
+    // console.log('UUID Generators'); 
+    // console.log(uuid2);  
+
+    $scope.tos = false;
+
     $scope.authObj = $rootScope.auth;
     context.allowedStatus = $rootScope.allowedStatus;
     context.availableUsers = $rootScope.availableUsers;
-    
     context.currentNavItem = "Información Basica";
     context.answers = {"documents": []};
     context.formatObjects = {};
-    
     context.showReturn = false;
     context.showAssign = false;
     context.showRegister = false;
     context.showCreate = false;
-    
     context.technologyStatus = "diligenciado";
     
     if($rootScope.permissions !== undefined){
@@ -69,8 +69,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     ];
                                
     var formatsReference = firebase.database().ref().child("formats/structure");
+    console.log(formatsReference);
     var referencesReference = firebase.database().ref().child("references/definition");
-    
+    console.log(formatsReference);
     var formats = $firebaseArray(formatsReference);
     var references = $firebaseObject(referencesReference);
 
@@ -100,7 +101,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 });
             });
         });
-        
+
         if($routeParams.technologyId){
             var technologyRequestedReference = firebase.database()
                                                         .ref()

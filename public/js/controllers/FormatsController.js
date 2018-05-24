@@ -30,7 +30,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                 context.selectedFormatJson = angular.toJson(format.questionGroups);
             }  
         });
-        console.log(context.selectedFormatJson);
+        // console.log(context.selectedFormatJson);
         context.selectedFormat = 0;
     });
     

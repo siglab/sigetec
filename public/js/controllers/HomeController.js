@@ -20,7 +20,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     context.visualizeAs = "graph";
     context.detail = {};
     context.showLegend = false;
-                               
+
     var color = d3.scale.category20()
     $scope.options = {
         chart: {
@@ -87,7 +87,32 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             "links":links
         };
     });
-                                                             
+    
+    context.login = function () {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope("https://www.googleapis.com/auth/plus.login");
+        provider.setCustomParameters({
+            login_hint: "user@example.com"
+        });
+
+        $rootScope.auth.$signInWithPopup(provider).then(function(result) {
+            console.log("Signed in as:", result);
+            $rootScope.userName = result.user.displayName;
+            $rootScope.isLoggedin = true;
+            $rootScope.userEmail = result.user.email;
+            var body = document.querySelector("body");
+            var sidebarOverlay = document.querySelector(".side-menu-overlay");
+            var sidebar = document.querySelector("#side-menu");
+            angular.element(body).removeClass("side-menu-visible");
+            angular.element(sidebarOverlay).css("display","none");
+            angular.element(body).removeClass("overflow-hidden ");
+            angular.element(sidebar).css("display","none");
+            $location.path('/dashboard');
+        }).catch(function(error) {
+            console.error("Authentication failed:", error);
+        });
+    };
+
     context.isInArray = function(array, value){
         for(var i=0; i<array.length; i++){
             if(array[i].name == value){
