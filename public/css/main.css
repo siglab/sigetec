@@ -210,3 +210,7 @@ md-card.md-default-theme, md-card {
 md-checkbox.md-checked .md-icon {
     background-color: rgba(64, 161, 255, 0.9);
 }
+
+.md-chip-input-container, .md-chip-input-container div, .md-chip-input-container input {
+    width: 100%
+}
