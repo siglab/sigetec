@@ -9,10 +9,10 @@
     <!-- Formatos de tecnología -->
     <div class="message">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <h3>Formato Tecnología</h3>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <div class="float-rigth">
                     <md-menu ng-show="userRole != 'researcher'" class="float-right">
                         <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
@@ -66,227 +66,151 @@
         
 
         <div class="ext-content">
-            <div ng-repeat="(groupKey, questionGroup) in controller.formatObjects[controller.currentNavItem].questionGroups">
-                <h3 style="margin-top: 25px">{{questionGroup.tag}}</h3>
-                <md-content layout-padding style="margin-top: 25px">
-                    <div ng-repeat="(answerKey, answer) in controller.answers[questionGroup.name]">
-                        <form name="{{questionGroup.name}}">
-                            <div class="form-group" ng-repeat="question in questionGroup.questions">
-                                <div ng-switch on="question.type">
-                                        <!-- <label>{{question.tag}}</label> -->
-                                        <!-- <span angular-popover direction="right" template="{{question.help}}" style="position: relative; cursor: pointer">
-                                            <b> <img src="img/help.svg" /> </b>
-                                        </span> -->
-                                    <div ng-switch-when="text">
-                                        <md-input-container class="md-block" flex-gt-sm>
+            <form name="{{controller.formatObjects[controller.currentNavItem].formName}}">
+                <div ng-repeat="(groupKey, questionGroup) in controller.formatObjects[controller.currentNavItem].questionGroups">
+                    <h3 style="margin-top: 25px; text-decoration: underline">{{questionGroup.tag}}:</h3>
+                        <div ng-repeat="(answerKey, answer) in controller.answers[questionGroup.name]">
+                            <md-content layout-padding style="margin-top: 25px">
+                                <div>
+                                <div class="form-group" ng-repeat="question in questionGroup.questions">
+                                    <div ng-switch on="question.type">
+                                            <!-- <label>{{question.tag}}</label> -->
+                                            <!-- <span angular-popover direction="right" template="{{question.help}}" style="position: relative; cursor: pointer">
+                                                <b> <img src="img/help.svg" /> </b>
+                                            </span> -->
+                                        <div ng-switch-when="text">
+                                            <md-input-container class="md-block" flex-gt-sm>
+                                                <label>{{question.tag}}</label>
+                                                <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                     ng-model="answer[question.name]"
+                                                     ng-required="question.required"
+                                                     class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name + $index}}">
+                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
+                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                </div>
+                                            </md-input-container>
+                                           <!--  <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                   ng-model="answer[question.name]" 
+                                                   ng-required="controller.formatObjects[controller.currentNavItem].required" 
+                                                   class="form-control" type="text" placeholder="{{question.tag}}"> -->
+                                        </div>
+                                        <div ng-switch-when="email">
+                                            <md-input-container class="md-block">
+                                                <label>{{question.tag}}</label>
+                                                <input ng-model="answer[question.name]"
+                                                   ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                   ng-require="question.required" 
+                                                   type="email" name="{{question.name}}">
+                                                   <div ng-messages="$eval(questionGroup.name + '.' + question.name + '.$error')">
+                                                       <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                   </div>
+                                            </md-input-container>
+                                            <!-- <input ng-model="answer[question.name]"
+                                                   ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                   class="form-control" type="text" placeholder="{{question.tag}}"> -->
+                                        </div>
+                                        <div ng-switch-when="checkbox">
                                             <label>{{question.tag}}</label>
-                                            <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                 ng-model="answer[question.name]"
-                                                 ng-required="question.required"
-                                                 class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name}}">
-                                            <div ng-messages="$eval(questionGroup.name + '[\'' + question.name + '\'].$error')">
-                                                <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                            </div>
-                                        </md-input-container>
-                                       <!--  <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
-                                               ng-model="answer[question.name]" 
-                                               ng-required="controller.formatObjects[controller.currentNavItem].required" 
-                                               class="form-control" type="text" placeholder="{{question.tag}}"> -->
-                                    </div>
-                                    <div ng-switch-when="email">
-                                        <md-input-container class="md-block">
-                                            <label>{{question.tag}}</label>
-                                            <input ng-model="answer[question.name]"
-                                               ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                               ng-require="question.required" 
-                                               type="email" name="{{question.name}}">
-                                               <div ng-messages="$eval(questionGroup.name + '.' + question.name + '.$error')">
-                                                   <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                               </div>
-                                        </md-input-container>
-                                        <!-- <input ng-model="answer[question.name]"
-                                               ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
-                                               class="form-control" type="text" placeholder="{{question.tag}}"> -->
-                                    </div>
-                                    <div ng-switch-when="checkbox">
-                                        <label>{{question.tag}}</label>
-                                        <div class="alert alert-info" role="alert">{{question.relatedText}}</div>
-                                        <md-input-container class="md-block">
-                                            <md-checkbox ng-model="answer[question.name]"
-                                                         ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"ng-required="question.required" 
-                                                         type="checkbox" name="{{question.name}}">
-                                                Acepto {{question.tag | lowercase}}
-                                            </md-checkbox>
-                                            <div ng-messages="$eval(questionGroup.name + '[\'' + question.name + '\'].$error')" multiple md-auto-hide="false">
-                                                <div ng-message="required">Se debe aceptar {{question.tag | lowercase}} para continuar.</div>
-                                            </div>
-                                        </md-input-container>
-                                    </div>
-                                    <div ng-switch-when="select">
-                                        <select ng-model="answer[question.name]"
-                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
-                                                class="form-control">
-                                            <option ng-repeat="option in question.options" >{{option}}</option>
-                                        </select>
-                                    </div>
-                                    <div ng-switch-when="date">
-                                        <md-datepicker ng-model="answer[question.name]"
-                                                       ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
-                                                       md-placeholder="Enter date"></md-datepicker>
-                                    </div>
-                                    <div ng-switch-when="reference">
-                                        <md-input-container class="md-block" flex-gt-sm style="margin-bottom: 30px">
-                                            <label>{{question.tag}}</label>
-                                            <md-select  name="{{question.name}}"
-                                                        ng-model="answer[question.name]"
+                                            <div class="alert alert-info" role="alert">{{question.relatedText}}</div>
+                                            <md-input-container class="md-block">
+                                                <md-checkbox ng-model="answer[question.name]"
+                                                             ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"ng-required="question.required" 
+                                                             type="checkbox" name="{{question.name}}">
+                                                    Acepto {{question.tag | lowercase}}
+                                                </md-checkbox>
+                                                <div ng-messages="$eval(questionGroup.name + '[\'' + question.name + '\'].$error')" multiple md-auto-hide="false">
+                                                    <div ng-message="required">Se debe aceptar {{question.tag | lowercase}} para continuar.</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <div ng-switch-when="select">
+                                            <select ng-model="answer[question.name]"
+                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                    class="form-control">
+                                                <option ng-repeat="option in question.options" >{{option}}</option>
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="date">
+                                            <md-datepicker ng-model="answer[question.name]"
+                                                           ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                           md-placeholder="Enter date"></md-datepicker>
+                                        </div>
+                                        <div ng-switch-when="reference">
+                                            <md-input-container class="md-block" flex-gt-sm style="margin-bottom: 30px">
+                                                <label>{{question.tag}}</label>
+                                                <md-select  name="{{question.name}}"
+                                                            ng-model="answer[question.name]"
+                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                            ng-required="question.required">
+                                                    <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.value}}">
+                                                        {{pair.key}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="$eval(questionGroup.name + '[\'' + question.name + '\'].$error')">
+                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- <select ng-model="answer[question.name]"
+                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                    class="form-control">
+                                                <option ng-repeat="pair in controller.references[question.reference]" value="{{pair.value}}" >{{pair.key}}</option>
+                                            </select> -->
+                                        </div>
+                                        <div ng-switch-when="long-text">
+                                            <md-input-container class="md-block">
+                                              <label>{{question.tag}}</label>
+                                              <textarea ng-model="answer[question.name]" 
+                                                        rows="3" 
+                                                        md-select-on-focus
                                                         ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                        ng-required="question.required">
-                                                <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.value}}">
-                                                    {{pair.key}}
-                                                </md-option>
-                                            </md-select>
-                                            <div ng-messages="$eval(questionGroup.name + '[\'' + question.name + '\'].$error')">
-                                                <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                            </div>
-                                        </md-input-container>
-                                        <!-- <select ng-model="answer[question.name]"
-                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
-                                                class="form-control">
-                                            <option ng-repeat="pair in controller.references[question.reference]" value="{{pair.value}}" >{{pair.key}}</option>
-                                        </select> -->
-                                    </div>
-                                    <div ng-switch-when="long-text">
-                                        <md-input-container class="md-block">
-                                          <label>{{question.tag}}</label>
-                                          <textarea ng-model="answer[question.name]" 
-                                                    rows="3" 
-                                                    md-select-on-focus
-                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                    >
-                                          </textarea>
-                                        </md-input-container>
-                                       <!--  <textarea ng-model="answer[question.name]"
-                                                  ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                  ng-keyup="resizeTextArea($event)" 
-                                                  ng-keydown="resizeTextArea($event)"
-                                                  class="form-control">
-                                        </textarea> -->
-                                    </div>
-                                    <div ng-switch-when="tags">
-                                        <md-chips ng-model="answer[question.name]" name="question.name" md-removable="true">
-                                        </md-chips>
+                                                        >
+                                              </textarea>
+                                            </md-input-container>
+                                           <!--  <textarea ng-model="answer[question.name]"
+                                                      ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                      ng-keyup="resizeTextArea($event)" 
+                                                      ng-keydown="resizeTextArea($event)"
+                                                      class="form-control">
+                                            </textarea> -->
+                                        </div>
+                                        <div ng-switch-when="tags">
+                                            <md-chips ng-model="answer[question.name]" name="question.name" md-removable="true">
+                                            </md-chips>
+                                        </div>
                                     </div>
                                 </div>
+                                <div>
+                                    <md-button ng-show="questionGroup.type == 'array' && answerKey != 0" class="md-raised md-primary float-rigth" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.removeAnswers(questionGroup.name, answerKey)" style="text-align:left">
+                                        <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{questionGroup.tag}}
+                                    </md-button>
+                                </div>
                             </div>
-                            <div>
-                                <md-button ng-show="questionGroup.type == 'array' && answerKey != 0" class="md-raised md-primary float-rigth" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.removeAnswers(questionGroup.name, answerKey)" style="text-align:left">
-                                    <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{questionGroup.tag}}
-                                </md-button>
-                            </div>
-                        </form>
-                        <md-divider ng-if="!$last"></md-divider>
+                            <!-- <md-divider ng-if="!$last"></md-divider> -->
+                        </md-content>
                     </div>
-                </md-content>
-                <div>
-                    <md-button class="md-raised md-primary" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.addAnswers(questionGroup.name)" style="text-align:left">
-                        <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{questionGroup.tag}}
+                    <div>
+                        <md-button class="md-raised md-primary" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.addAnswers(questionGroup.name)" style="text-align:left margin-top:10px">
+                            <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{questionGroup.tag}}
+                        </md-button>
+                    </div>
+                </div>
+                <!-- Botones -->
+                <div style="text-align: center">
+                    <md-button ng-show="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.create()" style="text-align:left">
+                         <md-icon md-svg-icon="img/icons/save.svg"></md-icon>Guardar y enviar
+                    </md-button>
+                    <!-- <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.save()" style="text-align:left" type="submit">
+                        <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar y continuar
+                    </md-button> -->
+                    <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" style="text-align:left" type="submit">
+                        <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar y continuar
+                    </md-button>
+                    <md-button ng-show="controller.showRegister" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.register()" style="text-align:left">
+                         Registrar
                     </md-button>
                 </div>
-            </div>
+            </form>
         </div>
-
-
-        <md-content layout-padding>
-            <div>
-             <!--  <form name="userForm"> -->
-
-                <!-- <div layout-gt-xs="row">
-                  <md-input-container class="md-block" flex-gt-xs>
-                    <label>Company (Disabled)</label>
-                    <input ng-model="user.company" disabled>
-                  </md-input-container>
-
-                  <md-input-container>
-                    <label>Enter date</label>
-                    <md-datepicker ng-model="user.submissionDate"></md-datepicker>
-                  </md-input-container>
-                </div>
-
-                <div layout-gt-sm="row">
-                  <md-input-container class="md-block" flex-gt-sm>
-                    <label>First name</label>
-                    <input ng-model="user.firstName">
-                  </md-input-container>
-
-                  <md-input-container class="md-block" flex-gt-sm>
-                    <label>Long Last Name That Will Be Truncated And 3 Dots (Ellipsis) Will Appear At The End</label>
-                    <input ng-model="theMax">
-                  </md-input-container>
-                </div>
-
-                <md-input-container class="md-block">
-                  <label>Address</label>
-                  <input ng-model="user.address">
-                </md-input-container>
-
-                <md-input-container md-no-float class="md-block">
-                  <input ng-model="user.address2" placeholder="Address 2">
-                </md-input-container>
-
-                <div layout-gt-sm="row">
-                  <md-input-container class="md-block" flex-gt-sm>
-                    <label>City</label>
-                    <input ng-model="user.city">
-                  </md-input-container> -->
-
-                  <!-- <md-input-container class="md-block" flex-gt-sm>
-                    <label>State</label>
-                    <md-select ng-model="user.state">
-                      <md-option ng-repeat="state in states" value="{{state.abbrev}}">
-                        {{state.abbrev}}
-                      </md-option>
-                    </md-select>
-                  </md-input-container> -->
-
-                 <!--  <md-input-container class="md-block" flex-gt-sm>
-                    <label>Postal Code</label>
-                    <input name="postalCode" ng-model="user.postalCode" placeholder="12345"
-                           required ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
-
-                    <div ng-messages="userForm.postalCode.$error" role="alert" multiple>
-                      <div ng-message="required" class="my-message">You must supply a postal code.</div>
-                      <div ng-message="pattern" class="my-message">That doesn't look like a valid postal
-                        code.
-                      </div>
-                      <div ng-message="md-maxlength" class="my-message">
-                        Don't use the long version silly...we don't need to be that specific...
-                      </div>
-                    </div>
-                  </md-input-container>
-                </div>
-
-                <md-input-container class="md-block">
-                  <label>Biography</label>
-                  <textarea ng-model="user.biography" md-maxlength="150" rows="5" md-select-on-focus></textarea>
-                </md-input-container> -->
-
-              <!-- </form> -->
-            </div>
-        </md-content>
-
-
-    </div>
-    <!-- Botones -->
-    <div style="text-align: center">
-        <md-button ng-show="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.create()" style="text-align:left">
-             <md-icon md-svg-icon="img/icons/save.svg"></md-icon>Guardar y enviar
-        </md-button>
-        <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.save()" style="text-align:left">
-            <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar
-        </md-button>
-        <md-button ng-show="controller.showRegister" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.register()" style="text-align:left">
-             Registrar
-        </md-button>
     </div>
     <br/>
     <!-- Archivos adjuntos -->

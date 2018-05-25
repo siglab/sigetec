@@ -24,8 +24,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     // console.log('UUID Generators'); 
     // console.log(uuid2);  
 
-    $scope.tos = false;
-
     $scope.authObj = $rootScope.auth;
     context.allowedStatus = $rootScope.allowedStatus;
     context.availableUsers = $rootScope.availableUsers;
