@@ -309,51 +309,59 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     context.save = function(){
-        var today = new Date().getTime();
-        var technologyId = "";
+
+        console.log("working");
+
+        // console.log($scope[form].$valid);
+        // if (!$scope[form].$valid) {
+        //     $scope[form].$invalid = true;
+        // }
+
+        // var today = new Date().getTime();
+        // var technologyId = "";
         
-        if($routeParams.technologyId){
-            var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
-            var technology = $firebaseObject(technologyReference);
-            technology.$loaded().then(function(){
-                technology.updatedAt = today;
-                technology.updatesBy = $rootScope.userEmail;
-                technology.status = context.technologyStatus;
-                if(context.assignedTo != undefined){
-                    technology.assignedTo = context.assignedTo;
-                }
+        // if($routeParams.technologyId){
+        //     var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
+        //     var technology = $firebaseObject(technologyReference);
+        //     technology.$loaded().then(function(){
+        //         technology.updatedAt = today;
+        //         technology.updatesBy = $rootScope.userEmail;
+        //         technology.status = context.technologyStatus;
+        //         if(context.assignedTo != undefined){
+        //             technology.assignedTo = context.assignedTo;
+        //         }
 
-                console.log(context.answers);
-                context.setBasicData(technology, basicData);
-                console.log(technology);
-                technology.$save().then(function(reference){
-                    technologyId = $routeParams.technologyId;
-                    context.saveDetail(technology.technologyId);
-                    $location.path('technology-form/'+technologyId);
-                });
-            });
-        }else{
-            var technology = {};
-            technology.technologyId = uuid2.newuuid();
-            technology.createdAt = today;
-            technology.createdBy = $rootScope.userEmail;
-            technology.status = context.technologyStatus;
+        //         console.log(context.answers);
+        //         context.setBasicData(technology, basicData);
+        //         console.log(technology);
+        //         technology.$save().then(function(reference){
+        //             technologyId = $routeParams.technologyId;
+        //             context.saveDetail(technology.technologyId);
+        //             $location.path('technology-form/'+technologyId);
+        //         });
+        //     });
+        // }else{
+        //     var technology = {};
+        //     technology.technologyId = uuid2.newuuid();
+        //     technology.createdAt = today;
+        //     technology.createdBy = $rootScope.userEmail;
+        //     technology.status = context.technologyStatus;
 
-            context.setBasicData(technology, basicData);
+        //     context.setBasicData(technology, basicData);
 
-            var technologiesReference = firebase.database().ref().child("technologies");
-            var technologies = $firebaseArray(technologiesReference);
-            technologies.$add(technology).then(function(reference){
-                console.log(reference.path.o[1]);
-                technologyId = reference.path.o[1];
-                context.saveDetail(technology.technologyId);
-                $location.path('technology-form/'+technologyId);
-            }, function(error){
-                console.log(error);
-            });
-        }
+        //     var technologiesReference = firebase.database().ref().child("technologies");
+        //     var technologies = $firebaseArray(technologiesReference);
+        //     technologies.$add(technology).then(function(reference){
+        //         console.log(reference.path.o[1]);
+        //         technologyId = reference.path.o[1];
+        //         context.saveDetail(technology.technologyId);
+        //         $location.path('technology-form/'+technologyId);
+        //     }, function(error){
+        //         console.log(error);
+        //     });
+        // }
                       
-        $rootScope.infoMessage = "La tecnologia fue almacenada correctamnete.";
+        // $rootScope.infoMessage = "La tecnologia fue almacenada correctamnete.";
     };
     
     context.saveDetail = function( key ){
