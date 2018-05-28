@@ -79,16 +79,30 @@
                                                 <b> <img src="img/help.svg" /> </b>
                                             </span> -->
                                         <div ng-switch-when="text">
-                                            <md-input-container class="md-block" flex-gt-sm>
-                                                <label>{{question.tag}}</label>
-                                                <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                     ng-model="answer[question.name]"
-                                                     ng-required="question.required"
-                                                     class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name + $index}}">
-                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
-                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                                </div>
-                                            </md-input-container>
+                                            <div ng-if="question.prerequisite">
+                                                <md-input-container class="md-block" flex-gt-sm ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName] == '{{question.prerequisite.value | lowercase}}'">
+                                                    <label>{{question.tag}}</label>
+                                                    <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                         ng-model="answer[question.name]"
+                                                         ng-required="question.required"
+                                                         class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name + $index}}">
+                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
+                                                        <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                            <div ng-if="question.prerequisite == null || question.prerequisite == '' || question.prerequisite == undefined" >
+                                                <md-input-container class="md-block" flex-gt-sm>
+                                                    <label>{{question.tag}}</label>
+                                                    <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                         ng-model="answer[question.name]"
+                                                         ng-required="question.required"
+                                                         class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name + $index}}">
+                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
+                                                        <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
                                            <!--  <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
                                                    ng-model="answer[question.name]" 
                                                    ng-required="controller.formatObjects[controller.currentNavItem].required" 
@@ -205,6 +219,29 @@
                                             <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px"
                                             </md-chips>
                                         </div>
+
+
+
+                                        <div ng-switch-when="number" style="max-width: 60%">
+                                            <md-input-container class="md-block">
+                                                <label>{{question.tag}}</label>
+                                                <input name="{{question.name + $index}}"
+                                                       ng-model="answer[question.name]"
+                                                       ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                       ng-required="question.required"
+                                                       type="number" step="any"
+                                                       min="{{question.min}}" max="{{question.max}}">
+                                                <md-icon ng-if="question.icon">{{question.icon}}</md-icon>
+                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')" multiple md-auto-hide="false">
+                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                    <div ng-message="min">El valor mínimo permitido es de {{question.min}}.</div>
+                                                    <div ng-message="max">El valor máximo permitido es de {{question.max}}.</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+
+
+
                                     </div>
                                 </div>
                                 <!-- Botón quitar -->
