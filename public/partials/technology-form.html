@@ -149,7 +149,7 @@
                                                             ng-model="answer[question.name]"
                                                             ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                             ng-required="question.required">
-                                                    <md-option ng-repeat="option in question.options">
+                                                    <md-option ng-repeat="option in question.options" value="{{option}}">
                                                         {{option}}
                                                     </md-option>
                                                 </md-select>
@@ -219,10 +219,7 @@
                                             <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px"
                                             </md-chips>
                                         </div>
-
-
-
-                                        <div ng-switch-when="number" style="max-width: 60%">
+                                        <div ng-switch-when="number" flex="60">
                                             <md-input-container class="md-block">
                                                 <label>{{question.tag}}</label>
                                                 <input name="{{question.name + $index}}"
@@ -239,9 +236,6 @@
                                                 </div>
                                             </md-input-container>
                                         </div>
-
-
-
                                     </div>
                                 </div>
                                 <!-- Botón quitar -->
