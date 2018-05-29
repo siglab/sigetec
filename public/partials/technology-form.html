@@ -80,7 +80,7 @@
                                             </span> -->
                                         <div ng-switch-when="text">
                                             <div ng-if="question.prerequisite">
-                                                <md-input-container class="md-block" flex-gt-sm ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toLowerCase() == '{{question.prerequisite.value | lowercase}}'">
+                                                <md-input-container class="md-block" flex-gt-sm ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
                                                     <label>{{question.tag}}</label>
                                                     <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                          ng-model="answer[question.name]"
@@ -124,13 +124,14 @@
                                                    class="form-control" type="text" placeholder="{{question.tag}}"> -->
                                         </div>
                                         <div ng-switch-when="checkbox">
-                                            <label>{{question.tag}}</label>
-                                            <div class="alert alert-info" role="alert">{{question.relatedText}}</div>
+                                            <label ng-if="question.relatedText">{{question.tag}}</label>
+                                            <div class="alert alert-info" role="alert" ng-if="question.relatedText">{{question.relatedText}}</div>
                                             <md-input-container class="md-block">
                                                 <md-checkbox ng-model="answer[question.name]"
                                                              ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"ng-required="question.required" 
                                                              type="checkbox" name="{{question.name + $index}}">
-                                                    Acepto {{question.tag | lowercase}}
+                                                    <div ng-if="question.relatedText"> Acepto {{question.tag | lowercase}} </div> 
+                                                    <div ng-if="!question.relatedText"> {{question.tag}} </div> 
                                                 </md-checkbox>
                                                 <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')" multiple md-auto-hide="false">
                                                     <div ng-message="required">Se debe aceptar {{question.tag | lowercase}} para continuar.</div>
@@ -219,7 +220,7 @@
                                             <!-- <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px">
                                             </md-chips> -->
                                             <div ng-if="question.prerequisite">
-                                                <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toLowerCase() == '{{question.prerequisite.value | lowercase}}'">
+                                                <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
                                                 </md-chips>
                                             </div>
                                             <div ng-if="!question.prerequisite">
