@@ -80,7 +80,7 @@
                                             </span> -->
                                         <div ng-switch-when="text">
                                             <div ng-if="question.prerequisite">
-                                                <md-input-container class="md-block" flex-gt-sm ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName] == '{{question.prerequisite.value | lowercase}}'">
+                                                <md-input-container class="md-block" flex-gt-sm ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toLowerCase() == '{{question.prerequisite.value | lowercase}}'">
                                                     <label>{{question.tag}}</label>
                                                     <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                          ng-model="answer[question.name]"
@@ -91,7 +91,7 @@
                                                     </div>
                                                 </md-input-container>
                                             </div>
-                                            <div ng-if="question.prerequisite == null || question.prerequisite == '' || question.prerequisite == undefined" >
+                                            <div ng-if="!question.prerequisite">
                                                 <md-input-container class="md-block" flex-gt-sm>
                                                     <label>{{question.tag}}</label>
                                                     <input ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
@@ -215,9 +215,17 @@
                                                       class="form-control">
                                             </textarea> -->
                                         </div>
-                                        <div ng-switch-when="tags">
-                                            <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px"
-                                            </md-chips>
+                                        <div ng-switch-when="tags" style="margin-bottom: 30px">
+                                            <!-- <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px">
+                                            </md-chips> -->
+                                            <div ng-if="question.prerequisite">
+                                                <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toLowerCase() == '{{question.prerequisite.value | lowercase}}'">
+                                                </md-chips>
+                                            </div>
+                                            <div ng-if="!question.prerequisite">
+                                                <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px">
+                                                </md-chips>
+                                            </div>
                                         </div>
                                         <div ng-switch-when="number" flex="60">
                                             <md-input-container class="md-block">

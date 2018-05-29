@@ -67,9 +67,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     ];
                                
     var formatsReference = firebase.database().ref().child("formats/structure");
-    console.log(formatsReference);
+    // console.log(formatsReference);
     var referencesReference = firebase.database().ref().child("references/definition");
-    console.log(formatsReference);
+    // console.log(formatsReference);
     var formats = $firebaseArray(formatsReference);
     var references = $firebaseObject(referencesReference);
 
@@ -430,19 +430,4 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
       $mdMenu.open();
     }
 
-    $scope.resizeTextArea = function($event){
-        var areaContent = $event.target.value;
-        areaContent.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/,'');
-        if (areaContent == '' || areaContent == ' ') {
-            $event.target.style.rows = 2;
-            $event.target.style.height = "auto";
-        }else{
-            if ($event.target.scrollHeight >= 66) {
-                $event.target.style.height = $event.target.scrollHeight + "px";
-            }else{
-                $event.target.style.rows = 2;
-                $event.target.style.height = "auto";  
-            };            
-        }
-    }
 }]);
