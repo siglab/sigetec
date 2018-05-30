@@ -312,11 +312,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
 
         console.log("working");
 
-        // console.log($scope[form].$valid);
-        // if (!$scope[form].$valid) {
-        //     $scope[form].$invalid = true;
-        // }
-
         // var today = new Date().getTime();
         // var technologyId = "";
         

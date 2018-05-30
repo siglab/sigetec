@@ -144,20 +144,38 @@
                                                     class="form-control">
                                                 <option ng-repeat="option in question.options" >{{option}}</option>
                                             </select> -->
-                                            <md-input-container class="md-block" flex-gt-sm style="margin-bottom: 30px">
-                                                <label>{{question.tag}}</label>
-                                                <md-select  name="{{question.name + $index}}"
-                                                            ng-model="answer[question.name]"
-                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                            ng-required="question.required">
-                                                    <md-option ng-repeat="option in question.options" value="{{option}}">
-                                                        {{option}}
-                                                    </md-option>
-                                                </md-select>
-                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
-                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                                </div>
-                                            </md-input-container>
+                                            <div ng-if="question.prerequisite">
+                                                <md-input-container class="md-block" flex-gt-sm style="margin-bottom: 30px" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                    <label>{{question.tag}}</label>
+                                                    <md-select  name="{{question.name + $index}}"
+                                                                ng-model="answer[question.name]"
+                                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                ng-required="question.required">
+                                                        <md-option ng-repeat="option in question.options" value="{{option}}">
+                                                            {{option}}
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
+                                                        <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                            <div ng-if="!question.prerequisite">
+                                                <md-input-container class="md-block" flex-gt-sm style="margin-bottom: 30px">
+                                                    <label>{{question.tag}}</label>
+                                                    <md-select  name="{{question.name + $index}}"
+                                                                ng-model="answer[question.name]"
+                                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                ng-required="question.required">
+                                                        <md-option ng-repeat="option in question.options" value="{{option}}">
+                                                            {{option}}
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
+                                                        <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
                                         </div>
                                         <div ng-switch-when="date">
                                             <!-- <md-datepicker ng-model="answer[question.name]"
