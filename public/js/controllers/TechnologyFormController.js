@@ -23,19 +23,21 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     var context = this;
     // console.log('UUID Generators'); 
     // console.log(uuid2);  
-
     $scope.authObj = $rootScope.auth;
     context.allowedStatus = $rootScope.allowedStatus;
     context.availableUsers = $rootScope.availableUsers;
-    context.currentNavItem = "Información Basica";
     context.answers = {"documents": []};
     context.formatObjects = {};
     context.showReturn = false;
     context.showAssign = false;
     context.showRegister = false;
     context.showCreate = false;
-    context.technologyStatus = "diligenciado";
-    
+    context.technologyStatus = "En diligencia";
+    if ($routeParams.technologyId) {
+        context.currentNavItem = "FNI";
+    } else {
+        context.currentNavItem = "Información Basica";
+    }
     if($rootScope.permissions !== undefined){
         if($rootScope.permissions.find(function(permission){ return "return" === permission; })){
             context.showReturn = true;
@@ -44,13 +46,11 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             context.showAssign = true;
         }
     }
-    
     if($rootScope.userRole === "researcher"){
         context.isResearcher = true;
     }else{
         context.isResearcher = false;
     }
-                          
     var basicData = [
         { questionGroup : "basic",
           questionName : "name" },
@@ -65,18 +65,15 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         { questionGroup : "patent-granted",
           questionName : "granted-date" }
     ];
-                               
     var formatsReference = firebase.database().ref().child("formats/structure");
     // console.log(formatsReference);
     var referencesReference = firebase.database().ref().child("references/definition");
     // console.log(formatsReference);
     var formats = $firebaseArray(formatsReference);
     var references = $firebaseObject(referencesReference);
-
     references.$loaded().then(function(){
         context.references = references;
     });
-    
     formats.$loaded().then(function(){
         context.formats = formats;
         angular.forEach(formats, function(format){
@@ -99,7 +96,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 });
             });
         });
-
         if($routeParams.technologyId){
             var technologyRequestedReference = firebase.database()
                                                         .ref()
@@ -107,13 +103,13 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             var technologyRequested = $firebaseObject(technologyRequestedReference);
             technologyRequested.$loaded().then(function(){
                 
-                if(technologyRequested.status !== 'diligenciado'){
+                if(technologyRequested.status !== 'En diligencia'){
                     context.formatObjects['FNI'].readonly = true;
                     context.formatObjects['Información Basica'].readonly = true;
                     context.showRegister = false;
                 }
                 
-                if(technologyRequested.status !== 'registrado'){
+                if(technologyRequested.status !== 'Registrado'){
                     context.showReturn = false;
                 }
                 
@@ -293,7 +289,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         if(context.answers.basic[0].acceptance){
             console.log(context.answers);
             if($rootScope.userEmail == context.answers['group-principal-researcher'][0]['principal-researcher-email']){
-                context.technologyStatus = "registrado";
+                context.technologyStatus = "Registrado";
                 context.save();
             }else{
                 alert("Solo puede registrar la tecnologia el investigador principal");
@@ -304,7 +300,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     context.return = function(){
-        context.technologyStatus = "diligenciado";
+        context.technologyStatus = "En diligencia";
         context.save();
     }
     
@@ -312,50 +308,50 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
 
         console.log("working");
 
-        // var today = new Date().getTime();
-        // var technologyId = "";
+        var today = new Date().getTime();
+        var technologyId = "";
         
-        // if($routeParams.technologyId){
-        //     var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
-        //     var technology = $firebaseObject(technologyReference);
-        //     technology.$loaded().then(function(){
-        //         technology.updatedAt = today;
-        //         technology.updatesBy = $rootScope.userEmail;
-        //         technology.status = context.technologyStatus;
-        //         if(context.assignedTo != undefined){
-        //             technology.assignedTo = context.assignedTo;
-        //         }
+        if($routeParams.technologyId){
+            // var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
+            // var technology = $firebaseObject(technologyReference);
+            // technology.$loaded().then(function(){
+            //     technology.updatedAt = today;
+            //     technology.updatesBy = $rootScope.userEmail;
+            //     technology.status = context.technologyStatus;
+            //     if(context.assignedTo != undefined){
+            //         technology.assignedTo = context.assignedTo;
+            //     }
 
-        //         console.log(context.answers);
-        //         context.setBasicData(technology, basicData);
-        //         console.log(technology);
-        //         technology.$save().then(function(reference){
-        //             technologyId = $routeParams.technologyId;
-        //             context.saveDetail(technology.technologyId);
-        //             $location.path('technology-form/'+technologyId);
-        //         });
-        //     });
-        // }else{
-        //     var technology = {};
-        //     technology.technologyId = uuid2.newuuid();
-        //     technology.createdAt = today;
-        //     technology.createdBy = $rootScope.userEmail;
-        //     technology.status = context.technologyStatus;
-
-        //     context.setBasicData(technology, basicData);
-
-        //     var technologiesReference = firebase.database().ref().child("technologies");
-        //     var technologies = $firebaseArray(technologiesReference);
-        //     technologies.$add(technology).then(function(reference){
-        //         console.log(reference.path.o[1]);
-        //         technologyId = reference.path.o[1];
-        //         context.saveDetail(technology.technologyId);
-        //         $location.path('technology-form/'+technologyId);
-        //     }, function(error){
-        //         console.log(error);
-        //     });
-        // }
-                      
+            //     console.log(context.answers);
+            //     context.setBasicData(technology, basicData);
+            //     console.log(technology);
+            //     technology.$save().then(function(reference){
+            //         technologyId = $routeParams.technologyId;
+            //         context.saveDetail(technology.technologyId);
+            //         $location.path('technology-form/'+technologyId);
+            //     });
+            // });
+        }else{
+            var technology = {};
+            technology.technologyId = uuid2.newuuid();
+            technology.createdAt = today;
+            technology.createdBy = $rootScope.userEmail;
+            technology.status = context.technologyStatus;
+            // technology.status = 'En diligencia';
+            context.setBasicData(technology, basicData);
+            // console.log(technology);
+            var technologiesReference = firebase.database().ref().child("technologies");
+            var technologies = $firebaseArray(technologiesReference);
+            technologies.$add(technology).then(function(reference){
+                console.log(reference.path.o[1]);
+                technologyId = reference.path.o[1];
+                context.saveDetail(technology.technologyId);
+                $location.path('technology-form/'+technologyId);
+                // context.currentNavItem = "FNI";
+            }, function(error){
+                console.log(error);
+            });
+        }
         // $rootScope.infoMessage = "La tecnologia fue almacenada correctamnete.";
     };
     
@@ -399,8 +395,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.setBasicData = function(technology, basicData){
         angular.forEach(basicData, function(question, key){
             var answer = context.answers[question.questionGroup][0][question.questionName];
-            console.log(context.answers[question.questionGroup]);
-            console.log(question.questionGroup+' : '+question.questionName+'=>'+answer);
+            // console.log(context.answers[question.questionGroup]);
+            // console.log(question.questionGroup+' : '+question.questionName+'=>'+answer);
             if(answer != undefined){
                 if(Object.prototype.toString.call(answer) === '[object Date]'){
                     technology[question.questionName] = answer.getTime();
