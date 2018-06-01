@@ -286,7 +286,7 @@
                     <md-button ng-show="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" type="submit" ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.create()" style="text-align:left">
                          <md-icon md-svg-icon="img/icons/save.svg"></md-icon>Guardar y continuar
                     </md-button>
-                    <md-button ng-show="controller.showRegister" class="md-raised md-primary float-right" aria-label="Guardar" type="submit" ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()" style="text-align:left">
+                    <md-button ng-show="controller.showRegister && (controller.currentNavItem =='FNI')" class="md-raised md-primary float-right" aria-label="Guardar" type="submit" ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()" style="text-align:left">
                         Registrar esta tecnología
                     </md-button>
                     <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" type="submit"ng-click="controller.save()" style="text-align:left">
@@ -298,7 +298,7 @@
     </div>
     <br/>
     <!-- Archivos adjuntos -->
-    <div class="message">
+    <div class="message" ng-hide="controller.showCreate">
         <div>
             <label>Documentos</label>
             <div ng-repeat="document in controller.answers.documents">

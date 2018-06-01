@@ -227,6 +227,7 @@ md-checkbox.md-checked .md-icon {
     background: #D51B23;
 }
 
-/*.ui-notification {
-    top: 65px;
-}*/
+.badge {
+    color: white;
+    background-color: #D51B23;
+}

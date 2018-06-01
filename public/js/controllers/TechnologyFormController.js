@@ -30,16 +30,6 @@ technologyFormController.controller('TechnologyFormController',
                            'uuid2',
                            'Notification',
 function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2, Notification){
-    
-     Notification.error({message: 'Error notification 1s', delay: 30000000, replaceMessage: true, positionX: 'center',
-            positionY: 'top'});
-     // Notification.info({message: 'Error notification 1s', delay: 30000000, positionX: 'center',
-     //        positionY: 'bottom'});
-     // Notification({message: 'Error notification 1s', delay: 30000000, positionX: 'center',
-     //        positionY: 'bottom'});
-
-
-
     var context = this;
     // console.log('UUID Generators'); 
     // console.log(uuid2);  
@@ -325,9 +315,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     context.save = function(){
-
-        console.log("working");
-
         var today = new Date().getTime();
         var technologyId = "";
         
@@ -366,9 +353,21 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 console.log(reference.path.o[1]);
                 technologyId = reference.path.o[1];
                 context.saveDetail(technology.technologyId);
+                // context.fireNotification('succes');
+                Notification.success({
+                    message: 'La información se guardó satisfactoriamente.', 
+                    delay: 5000, 
+                    replaceMessage: true, 
+                    positionX: 'right',
+                    positionY: 'bottom'});
                 $location.path('technology-form/'+technologyId);
-                // context.currentNavItem = "FNI";
             }, function(error){
+                Notification.error({
+                    message: 'No se pudo guardar la información. Por favor inténta de nuevo.', 
+                    delay: 5000, 
+                    replaceMessage: true, 
+                    positionX: 'right',
+                    positionY: 'bottom'});
                 console.log(error);
             });
         }
@@ -386,7 +385,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         technologyLog.at = new Date().getTime();
         technologyLog.answers = angular.copy(context.answers);
         var validationError = false;
-
         angular.forEach(technologiesDetail.answers , function(questionGroup, qgKey){
            angular.forEach(questionGroup, function(group, gKey){
                 angular.forEach(group, function(answer, aKey){
@@ -399,7 +397,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 });
            });
         });
-        
         if(!validationError){
             technologiesDetail.$save();
             technologiesLog.$add(technologyLog);
@@ -440,5 +437,4 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.openMenu = function() {
       $mdMenu.open();
     }
-
 }]);
