@@ -300,20 +300,27 @@
     <!-- Archivos adjuntos -->
     <div class="message" ng-hide="controller.showCreate">
         <div>
-            <label>Documentos</label>
+            <h3>Documentos adjuntos: </h3>
             <div ng-repeat="document in controller.answers.documents">
                 <a href="{{document.url}}">{{document.name}}</a>
             </div>
             <form ng-submit="controller.uploadFile()">
-                <select ng-model="controller.fileCategory" class="form-control">
-                    <option value="brochure">Brochure</option>
-                    <option value="other">Otro</option>
-                </select>
-                <input type="file" name="file" class="inputimg" id="document">
-                <br />
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-block">Adjuntar documento</button>
-                </span>
+                <md-content class="layout-padding _md">
+                    <h5>Adjuntar nuevo documento: </h5>
+                    <md-input-container class="md-block" flex-gt-sm style="margin-top: 30px">
+                        <label>Tipo de documento</label>
+                        <md-select  ng-model="controller.fileCategory">
+                            <md-option value="brochure">Brochure</md-option>
+                            <md-option value="other">Otro</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <input type="file" name="file" class="inputimg" id="document">
+                    <md-button type="submit" class="md-raised md-primary float-right" style="margin: 0; padding: 0px; padding-left: 5px; padding-right: 5px;">Adjuntar documento</md-button>
+                    <!-- <br /> -->
+                   <!--  <span class="input-group-btn"> -->
+                        <!-- <button type="submit" class="btn btn-block">Adjuntar documento</button> -->
+                    <!-- </span> -->
+                </md-content>
             </form>
         </div>
     </div>
