@@ -1,8 +1,14 @@
 'use strict';
 
 var dashboardController = angular.module('DashboardController', 
-                                    ['ngMaterial', 'firebase', 'nvd3']);
-
+                                    ['ngMaterial', 'firebase', 'nvd3', 'ui-notification']);
+dashboardController.config(function(NotificationProvider) {
+        NotificationProvider.setOptions({
+            startTop: 60,
+            positionX: 'right',
+            positionY: 'bottom'
+        });
+    });
 dashboardController.controller('DashboardController', 
                           ['$scope', 
                            '$rootScope',
@@ -13,7 +19,8 @@ dashboardController.controller('DashboardController',
                            '$mdDialog',
                            '$mdToast',
                            '$window',
-function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArray, $mdDialog, $mdToast, $window){
+                           'Notification',
+function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArray, $mdDialog, $mdToast, $window, Notification){
     var context = this;
     window.onscroll = function() {};
     var rolesReference = firebase.database().ref().child("roles/definition");
@@ -139,6 +146,13 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                 context.technologies.reverse();
             }else{
                 context.noTechnologies = true;
+                Notification({
+                    message: 'No tienes ninguna tecnologia guardada o registrada. Por favor haga click en el botón crear tecnologia para iniciar el registro de una nueva tecnología.', 
+                    templateUrl: "custom_template.html",
+                    delay: 10000, 
+                    replaceMessage: true, 
+                    positionX: 'center', 
+                    positionY: 'bottom'});
             }
             console.log(context.technologies);
         });

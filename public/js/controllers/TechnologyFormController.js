@@ -1,10 +1,19 @@
 'use strict';
 
 var technologyFormController = angular.module('TechnologyFormController', 
-                                    ['ngMaterial', 'firebase', 'angularUUID2','angular-popover', 'ngMessages']);
+                                    ['ngMaterial', 'firebase', 'angularUUID2','angular-popover', 'ngMessages', 'ui-notification']);
 technologyFormController.config(['$mdIconProvider', function($mdIconProvider) {
         $mdIconProvider.icon('md-close', 'img/icons/ic_close_24px.svg', 24);
       }]);
+
+technologyFormController.config(function(NotificationProvider) {
+        NotificationProvider.setOptions({
+            startTop: 60,
+            positionX: 'right',
+            positionY: 'bottom'
+        });
+    });
+
 technologyFormController.controller('TechnologyFormController', 
                           ['$scope', 
                            '$rootScope',
@@ -19,7 +28,18 @@ technologyFormController.controller('TechnologyFormController',
                            '$firebaseAuth',
                            '$routeParams',
                            'uuid2',
-function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2){
+                           'Notification',
+function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2, Notification){
+    
+     Notification.error({message: 'Error notification 1s', delay: 30000000, replaceMessage: true, positionX: 'center',
+            positionY: 'top'});
+     // Notification.info({message: 'Error notification 1s', delay: 30000000, positionX: 'center',
+     //        positionY: 'bottom'});
+     // Notification({message: 'Error notification 1s', delay: 30000000, positionX: 'center',
+     //        positionY: 'bottom'});
+
+
+
     var context = this;
     // console.log('UUID Generators'); 
     // console.log(uuid2);  

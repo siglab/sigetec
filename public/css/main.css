@@ -214,3 +214,19 @@ md-checkbox.md-checked .md-icon {
 .md-chip-input-container, .md-chip-input-container div, .md-chip-input-container input {
     width: 100%
 }
+
+.ui-notification .message {
+    margin: 10px 10px 10px 10px;
+    box-shadow: none !important;
+    border-radius: 0px !important;
+    background: none;
+    padding: 0px !important;
+}
+
+.ui-notification.error {
+    background: #D51B23;
+}
+
+/*.ui-notification {
+    top: 65px;
+}*/
