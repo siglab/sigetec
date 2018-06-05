@@ -289,7 +289,7 @@
                     <md-button ng-show="controller.showRegister && (controller.currentNavItem =='FNI')" class="md-raised md-primary float-right" aria-label="Guardar" type="submit" ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()" style="text-align:left">
                         Registrar esta tecnología
                     </md-button>
-                    <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" type="submit"ng-click="controller.save()" style="text-align:left">
+                    <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" type="submit"ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid controller.save()" style="text-align:left">
                         <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar cambios
                     </md-button>
                 </div>

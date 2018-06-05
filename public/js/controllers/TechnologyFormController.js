@@ -317,27 +317,42 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.save = function(){
         var today = new Date().getTime();
         var technologyId = "";
-        
         if($routeParams.technologyId){
-            // var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
-            // var technology = $firebaseObject(technologyReference);
-            // technology.$loaded().then(function(){
-            //     technology.updatedAt = today;
-            //     technology.updatesBy = $rootScope.userEmail;
-            //     technology.status = context.technologyStatus;
-            //     if(context.assignedTo != undefined){
-            //         technology.assignedTo = context.assignedTo;
-            //     }
-
-            //     console.log(context.answers);
-            //     context.setBasicData(technology, basicData);
-            //     console.log(technology);
-            //     technology.$save().then(function(reference){
-            //         technologyId = $routeParams.technologyId;
-            //         context.saveDetail(technology.technologyId);
-            //         $location.path('technology-form/'+technologyId);
-            //     });
-            // });
+            var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
+            var technology = $firebaseObject(technologyReference);
+            technology.$loaded().then(function(){
+                technology.updatedAt = today;
+                technology.updatesBy = $rootScope.userEmail;
+                technology.status = context.technologyStatus;
+                if(context.assignedTo != undefined){
+                    technology.assignedTo = context.assignedTo;
+                }
+                // console.log(context.answers);
+                context.setBasicData(technology, basicData);
+                // console.log(technology);
+                technology.$save().then(function(reference){
+                    technologyId = $routeParams.technologyId;
+                    context.saveDetail(technology.technologyId);
+                    Notification.success({
+                        message: 'La información se guardó satisfactoriamente.', 
+                        delay: 5000, 
+                        replaceMessage: true, 
+                        positionX: 'right',
+                        positionY: 'bottom'
+                    });
+                    // context.currentNavItem = "FNI";
+                    // $window.scrollTo(0, 0);
+                    $location.path('technology-form/'+technologyId);
+                }, function(error){
+                    Notification.error({
+                        message: 'No se pudo guardar la información. Por favor inténta de nuevo.', 
+                        delay: 5000, 
+                        replaceMessage: true, 
+                        positionX: 'right',
+                        positionY: 'bottom'
+                    });
+                });
+            });
         }else{
             var technology = {};
             technology.technologyId = uuid2.newuuid();

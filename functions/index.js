@@ -38,7 +38,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
 
 function sendEmail(email, technologyName) {
   const mailOptions = {
-    from: `SIGETEC <noreply@firebase.com>`,
+    from: `SIGETEC <noreply@sigetec.univalle.edu.co>`,
     to: email
   };
 
