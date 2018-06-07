@@ -112,9 +112,9 @@
                                             <md-input-container class="md-block">
                                                 <label>{{question.tag}}</label>
                                                 <input ng-model="answer[question.name]"
-                                                   ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                   ng-require="question.required" 
-                                                   type="email" name="{{question.name + $index}}">
+                                                    ng-required="question.required"
+                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                    type="email" name="{{question.name + $index}}">
                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                        <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                    </div>
@@ -289,7 +289,7 @@
                     <md-button ng-show="controller.showRegister && (controller.currentNavItem =='FNI')" class="md-raised md-primary float-right" aria-label="Guardar" type="submit" ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()" style="text-align:left">
                         Registrar esta tecnología
                     </md-button>
-                    <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" type="submit"ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid controller.save()" style="text-align:left">
+                    <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right" aria-label="Guardar" type="submit"ng-click="$eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.save()" style="text-align:left">
                         <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar cambios
                     </md-button>
                 </div>
@@ -301,10 +301,13 @@
     <div class="message" ng-hide="controller.showCreate">
         <div>
             <h3>Documentos adjuntos: </h3>
-            <div ng-repeat="document in controller.answers.documents">
-                <a href="{{document.url}}">{{document.name}}</a>
-            </div>
-            <form ng-submit="controller.uploadFile()">
+            <md-content class="layout-padding _md">
+                <h5>Documentos agregados previamente: </h5>
+                <div ng-repeat="document in controller.answers.documents">
+                    <a href="{{document.url}}">{{document.name}}</a>
+                </div>
+            </md-content>
+            <form ng-submit="controller.uploadFile()" style="margin-top: 20px">
                 <md-content class="layout-padding _md">
                     <h5>Adjuntar nuevo documento: </h5>
                     <md-input-container class="md-block" flex-gt-sm style="margin-top: 30px">
@@ -314,7 +317,7 @@
                             <md-option value="other">Otro</md-option>
                         </md-select>
                     </md-input-container>
-                    <input type="file" name="file" class="inputimg" id="document">
+                    <input type="file" name="file" class="inputimg" id="document" required="true">
                     <md-button type="submit" class="md-raised md-primary float-right" style="margin: 0; padding: 0px; padding-left: 5px; padding-right: 5px;">Adjuntar documento</md-button>
                     <!-- <br /> -->
                    <!--  <span class="input-group-btn"> -->

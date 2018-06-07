@@ -167,7 +167,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     };
                                
     context.uploadFile = function() {
-        console.log("Subiendo archivo");
+       console.log("Subiendo archivo...");
        var ref = 'documents/'+ new Date().getTime();
        var documentsReference = firebase.storage().ref().child(ref);
        var sFileName = $("#document").val();
@@ -189,12 +189,19 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     context.save();
                 }).catch(function(error) {
                     // [START onfailure]
+                    Notification.error({
+                        message: 'Ha ocurrido un error. Por favor intentelo de nuevo.', 
+                        delay: 5000, 
+                        replaceMessage: true, 
+                        positionX: 'right',
+                        positionY: 'bottom'}
+                    );
                     console.error('Upload failed:', error);
                     // [END onfailure]
                 });
             }
         }
-        return true;
+        // return true;
     };
     
     context.deleteFile = function(document) {
