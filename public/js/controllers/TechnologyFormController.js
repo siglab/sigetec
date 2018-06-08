@@ -119,7 +119,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     context.showRegister = false;
                 }
                 
-                if(technologyRequested.status !== 'Registrado'){
+                if(technologyRequested.status !== 'Registrada'){
                     context.showReturn = false;
                 }
                 
@@ -306,7 +306,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         if(context.answers.basic[0].acceptance){
             console.log(context.answers);
             if($rootScope.userEmail == context.answers['group-principal-researcher'][0]['principal-researcher-email']){
-                context.technologyStatus = "Registrado";
+                context.technologyStatus = "Registrada";
                 context.save();
             }else{
                 alert("Solo puede registrar la tecnologia el investigador principal");

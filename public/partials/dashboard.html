@@ -1,4 +1,4 @@
-<div ng-controller="DashboardController as controller" class="container-fluid" flex layout-padding>
+<div ng-controller="DashboardController as controller" class="container-fluid" flex layout-padding style="width:90%">
     <!-- <div ng-show="controller.noTechnologies" class="alert alert-info">
         <p>No tiene ninguna tecnologia registrada. Por favor haga click en el boton crear tecnologia para iniciar.</p>
     </div>
@@ -21,12 +21,12 @@
                 <md-card-content layout="row" layout-align="space-between">
                     <md-list flex>
                         <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:5" ng-click="controller.editTechnology(technology)">
-                            <div style="border-left: solid 2pt #333; padding-left: 3pt; max-width: 900px;" class="md-list-item-text" layout="column">
+                            <div style="border-left: solid 2pt #333; padding-left: 3pt; max-width: 900px; width: 100%;" class="md-list-item-text" layout="column">
                                 <h3>{{technology.name | limitTo: 120}}</h3>
                                 <p><i>Creada por {{technology.createdBy}} el {{technology.createdAt}}, asignada a {{technology.assignedTo}}</i></p>
                                 <p>{{technology.description | limitTo: 130}}</p>
                             </div>
-                            <span class="md-secondary badge">{{technology.status}}</span>
+                            <span class="md-secondary badge" style="width:120px">{{technology.status}}</span>
                         </md-list-item>
                     </md-list>
                 </md-card-content>

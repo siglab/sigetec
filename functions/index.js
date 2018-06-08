@@ -34,16 +34,17 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
               }
           });
       });
-    });
+    }
+);
 
 function sendEmail(email, technologyName) {
   const mailOptions = {
-    from: `SIGETEC <noreply@sigetec.univalle.edu.co>`,
+    from: `SIGETec <noreply@sigetec.univalle.edu.co>`,
     to: email
   };
 
   // The user subscribed to the newsletter.
-  mailOptions.subject = `La tecnologia ${technologyName || ''} fue actualizada.`;
+  mailOptions.subject = `Notificación SIGETec: La tecnologia ${technologyName || ''} fue actualizada.`;
   mailOptions.text = `La tecnologia ${technologyName || ''} fue actualizada!`;
   return mailTransport.sendMail(mailOptions).then(() => {
     console.log('New change status email sent to:', email);
