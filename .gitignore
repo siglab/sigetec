@@ -12,3 +12,4 @@ functions/package-lock.json
 node_modules/                                                                                                           
 storage.rules 
 functions/node_modules/
+.firebaserc
