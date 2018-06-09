@@ -17,7 +17,16 @@ const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailP
 exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyId}')
     .onWrite((change, context) => {
       // Grab the current value of what was written to the Realtime Database.
-      const technology = change.after.val()();
+      const technology = change.after.val();
+      if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada') {
+        const subject = 'Notificación SIGETec: Notificación de registro de tecnología.';
+        const message = 'La tecnología ' + technology.name + 
+          ' ha sido registrada exitosamente en el sistema integrado de gestión estratégica' + 
+          ' de tegnologías (SIGETec) de la Universidad del Valle.' + 
+          '\n Este es un mensaje autogenerado. Por favor intente responder este mensaje.'
+        sendEmail(technology['principal-researcher-email'], subject, message);
+      }
+
       admin.database().ref('/roles/definition').once("value").then(snapshot => {
           snapshot.forEach(function(data) {
               var rol = data.val();
@@ -25,9 +34,23 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                   rol.allowedStatus.notify.forEach(function(status){
                       if(status === technology.status ){
                           rol.users.forEach(function(user){
-                              console.log('Send email to:', user);
-                              sendEmail(user, technology.name);
-                              sendEmail(technology.createdBy, technology.name);
+                              // console.log('Send email to:', user);
+                              console.log(change.before.val());
+                              console.log(change.after.val());
+                              var subject = "";
+                              var message = "";
+                              if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada'){
+                                subject = 'Notificación SIGETec: Notificación de registro de tecnología.';
+                                message = 'La tecnología ' + technology.name + 
+                                  ' ha sido registrada en el sistema.' + 
+                                  '\n Este es un mensaje autogenerado. Por favor intente responder este mensaje.'
+                              }else{
+                                subject = 'Notificación SIGETec: Notificación de actualización de tecnología ' + technology.name;
+                                message = 'La tecnología ' + technology.name + 'ha sido atualizada por ' +
+                                  technology.updatesBy + '\n Este es un mensaje autogenerado. Por favor intente responder este mensaje.'
+                              }
+                              sendEmail(user, subject, message);
+                              // sendEmail(technology.createdBy, technology.name);
                           });
                       }
                   });
@@ -37,16 +60,21 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
     }
 );
 
-function sendEmail(email, technologyName) {
-  const mailOptions = {
-    from: `SIGETec <noreply@sigetec.univalle.edu.co>`,
-    to: email
-  };
-
-  // The user subscribed to the newsletter.
-  mailOptions.subject = `Notificación SIGETec: La tecnologia ${technologyName || ''} fue actualizada.`;
-  mailOptions.text = `La tecnologia ${technologyName || ''} fue actualizada!`;
-  return mailTransport.sendMail(mailOptions).then(() => {
-    console.log('New change status email sent to:', email);
-  });
+function sendEmail(email, subject, message){
+  try{
+    const mailOptions = {
+      from: `SIGETec <noreply@sigetec.univalle.edu.co>`,
+      to: email
+    };
+    mailOptions.subject = subject;
+    mailOptions.text = message;
+    // mailOptions.subject = `Notificación SIGETec: La tecnologia ${technologyName || ''} fue actualizada.`;
+    // mailOptions.text = `La tecnologia ${technologyName || ''} fue actualizada!`;
+    return mailTransport.sendMail(mailOptions).then(() => {
+      console.log('New change status email sent to:', email);
+    });
+  }catch(e){
+    console.log('Ocurrió un erro:');
+    console.log(e);
+  }
 }
