@@ -41,7 +41,7 @@ sigetecApp.config(['$routeProvider',
     function($routeProvider){
        $routeProvider.when('/home', {
            templateUrl: 'partials/home.html',
-           controller : 'HomeController',
+           // controller : 'HomeController',
            resolve: { "currentAuth": ["Auth", function(Auth){ return Auth.$waitForSignIn(); }]}
        }).when('/dashboard', {
            templateUrl: 'partials/dashboard.html',

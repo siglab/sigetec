@@ -48,6 +48,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     var sector = [];
     var faculty = [];
     context.technologiesArray = [];
+
     var request = $http({ method: 'GET',
                             url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
                         });
@@ -81,7 +82,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             links.push({"source":techIndex,"target":technologyIndex,"value":1});
             links.push({"source":facultyIndex,"target":technologyIndex,"value":1});
         });
-        
         $scope.data = {
             "nodes":nodes,
             "links":links
