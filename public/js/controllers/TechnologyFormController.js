@@ -119,7 +119,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     context.showRegister = false;
                 }
                 
-                if(technologyRequested.status !== 'Registrado'){
+                if(technologyRequested.status !== 'Registrada'){
                     context.showReturn = false;
                 }
                 
@@ -189,13 +189,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     context.save();
                 }).catch(function(error) {
                     // [START onfailure]
-                    Notification.error({
-                        message: 'Ha ocurrido un error. Por favor intentelo de nuevo.', 
-                        delay: 5000, 
-                        replaceMessage: true, 
-                        positionX: 'right',
-                        positionY: 'bottom'}
-                    );
+                    context.fireNotification('error', 'Ha ocurrido un error. Por favor intentelo de nuevo.');
                     console.error('Upload failed:', error);
                     // [END onfailure]
                 });
@@ -306,13 +300,15 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         if(context.answers.basic[0].acceptance){
             console.log(context.answers);
             if($rootScope.userEmail == context.answers['group-principal-researcher'][0]['principal-researcher-email']){
-                context.technologyStatus = "Registrado";
-                context.save();
+                context.technologyStatus = "Registrada";
+                context.save('La tecnología se registró exitosamente.', '/dashboard');
             }else{
-                alert("Solo puede registrar la tecnologia el investigador principal");
+                context.fireNotification('error', 'Solo puede registrar la tecnologia el investigador principal.');
+                // alert("Solo puede registrar la tecnologia el investigador principal");
             }
         }else{
-            alert("Debe aceptar los terminos y condiciones para poder guardar.");
+            context.fireNotification('error', 'Se deben aceptar los terminos y condiciones para poder continuar.');
+            // alert("Debe aceptar los terminos y condiciones para poder guardar.");
         }
     }
     
@@ -321,7 +317,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         context.save();
     }
     
-    context.save = function(){
+    context.save = function(message=null, url=null){
         var today = new Date().getTime();
         var technologyId = "";
         if($routeParams.technologyId){
@@ -334,30 +330,23 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 if(context.assignedTo != undefined){
                     technology.assignedTo = context.assignedTo;
                 }
-                // console.log(context.answers);
                 context.setBasicData(technology, basicData);
-                // console.log(technology);
                 technology.$save().then(function(reference){
                     technologyId = $routeParams.technologyId;
                     context.saveDetail(technology.technologyId);
-                    Notification.success({
-                        message: 'La información se guardó satisfactoriamente.', 
-                        delay: 5000, 
-                        replaceMessage: true, 
-                        positionX: 'right',
-                        positionY: 'bottom'
-                    });
-                    // context.currentNavItem = "FNI";
-                    // $window.scrollTo(0, 0);
-                    $location.path('technology-form/'+technologyId);
+                    if (message == null || message == undefined ) {
+                        context.fireNotification('success', 'Información guardada satisfactoriamente.');
+                    }else{
+                        context.fireNotification('success', message);
+                    }
+                    if (url == null || url == undefined) {
+                        $location.path('technology-form/'+technologyId);
+                    }else{
+                        $location.path(url);
+                    }
+                    // $location.path('technology-form/'+technologyId);
                 }, function(error){
-                    Notification.error({
-                        message: 'No se pudo guardar la información. Por favor inténta de nuevo.', 
-                        delay: 5000, 
-                        replaceMessage: true, 
-                        positionX: 'right',
-                        positionY: 'bottom'
-                    });
+                    context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
                 });
             });
         }else{
@@ -372,24 +361,21 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             var technologiesReference = firebase.database().ref().child("technologies");
             var technologies = $firebaseArray(technologiesReference);
             technologies.$add(technology).then(function(reference){
-                console.log(reference.path.o[1]);
+                // console.log(reference.path.o[1]);
                 technologyId = reference.path.o[1];
                 context.saveDetail(technology.technologyId);
-                // context.fireNotification('succes');
-                Notification.success({
-                    message: 'La información se guardó satisfactoriamente.', 
-                    delay: 5000, 
-                    replaceMessage: true, 
-                    positionX: 'right',
-                    positionY: 'bottom'});
-                $location.path('technology-form/'+technologyId);
+                if (message == null || message == undefined ) {
+                    context.fireNotification('success', 'Información guardada satisfactoriamente.');
+                }else{
+                    context.fireNotification('success', message);
+                }
+                if (url == null || url == undefined) {
+                    $location.path('technology-form/'+technologyId);
+                }else{
+                    $location.path(url);
+                }
             }, function(error){
-                Notification.error({
-                    message: 'No se pudo guardar la información. Por favor inténta de nuevo.', 
-                    delay: 5000, 
-                    replaceMessage: true, 
-                    positionX: 'right',
-                    positionY: 'bottom'});
+                context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
                 console.log(error);
             });
         }
@@ -458,5 +444,36 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     
     context.openMenu = function() {
       $mdMenu.open();
+    }
+
+    context.fireNotification = function(type, message) {
+        switch(type) {
+            case 'success':
+                Notification.success({
+                    message: message, 
+                    delay: 5000, 
+                    replaceMessage: true, 
+                    positionX: 'right',
+                    positionY: 'bottom'
+                });
+                break;
+            case 'error':
+                Notification.error({
+                    message: message, 
+                    delay: 5000, 
+                    replaceMessage: true, 
+                    positionX: 'right',
+                    positionY: 'bottom'
+                });
+                break;
+            default:
+                Notification({
+                    message: message, 
+                    delay: 5000, 
+                    replaceMessage: true, 
+                    positionX: 'right',
+                    positionY: 'bottom'
+                });
+        } 
     }
 }]);

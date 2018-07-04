@@ -1,4 +1,4 @@
-<div ng-controller="TechnologyFormController as controller" class="container-fluid">
+<div ng-controller="TechnologyFormController as controller" class="container-fluid" style="width: 90%">
     <!-- Estado de tecnología -->
     <div class="row" style="margin-top: 15px">
         <div class="col-md-10"><h2>{{controller.answers['basic'][0].name}}</h2></div>
@@ -303,6 +303,9 @@
             <h3>Documentos adjuntos: </h3>
             <md-content class="layout-padding _md">
                 <h5>Documentos agregados previamente: </h5>
+                <div ng-if="controller.answers.documents.length == 0 || !controller.answers.documents">
+                    Esta tecnología no tiene documentos adjuntos
+                </div>
                 <div ng-repeat="document in controller.answers.documents">
                     <a href="{{document.url}}">{{document.name}}</a>
                 </div>
