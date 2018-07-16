@@ -18,8 +18,8 @@ a {
 .message {
     /*max-width: 1050px;*/
     margin: 40px auto;
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
-    border-radius: 2px;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
+    border-radius: 10px;
     background: rgb(250, 250, 250);;
     padding: 16px 24px;
 }
@@ -234,4 +234,40 @@ md-checkbox.md-checked .md-icon {
 .badge {
     color: white;
     background-color: #D51B23;
+}
+
+.formgroup {
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
+    border-radius:10px
+}
+
+.formButton {
+    text-align:left;
+    display: block;
+    text-align: center;                    
+    border: 2px solid white;
+    border-radius: 10px;
+    outline: 0;
+    cursor: pointer;
+    font-weight: 500
+}
+
+.floatButton {
+    text-align:left;
+    display: block;
+    text-align: center;
+    position: fixed;
+    bottom: 27px;
+    right: 30px;
+    z-index: 20;
+    border: 2px solid white;
+    border-radius: 10px;
+    outline: 0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+button.md-accent {
+    color: rgb(63,81,181) !important;
+    background: default !important;
 }

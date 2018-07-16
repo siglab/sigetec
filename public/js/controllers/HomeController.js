@@ -1,7 +1,7 @@
 'use strict';
 
 var homeController = angular.module('HomeController', 
-                                    ['ngMaterial', 'firebase', 'nvd3']);
+                                    ['ngMaterial', 'firebase', 'nvd3', 'md.data.table']);
 
 
 homeController.controller('HomeController', 
@@ -17,6 +17,20 @@ homeController.controller('HomeController',
 function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $mdToast, $window, $http){
     var context = this;
                                
+    // $scope.selected = [];
+    //   $scope.query = {
+    //     order: 'name',
+    //     limit: 5,
+    //     page: 1
+    //   };
+    //   context.desserts = [{"_id":"5b025f909c944f00049834cd","name":" v","nameToLower":" v","__v":0,"iron":{"value":5,"unit":"%"},"calcium":{"value":7,"unit":"%"},"sodium":{"value":56,"unit":"mg"},"protein":{"value":65,"unit":"g"},"carbs":{"value":5,"unit":"g"},"fat":{"value":0,"unit":"g"},"calories":{"value":1,"unit":"Cal"},"serving":"100g"},{"_id":"5ad8f80bc3349300045c48d5","name":"!","nameToLower":"!","__v":0,"iron":{"value":5,"unit":"%"},"calcium":{"value":5,"unit":"%"},"sodium":{"value":5,"unit":"mg"},"protein":{"value":5,"unit":"g"},"carbs":{"value":5,"unit":"g"},"fat":{"value":5,"unit":"g"},"calories":{"value":50,"unit":"Cal"},"serving":"100g"},{"_id":"5ab09e873ad21c00043a80ee","name":"!ME !ME !ME","nameToLower":"!me !me !me","__v":0,"iron":{"value":69,"unit":"%"},"calcium":{"value":69,"unit":"%"},"sodium":{"value":69,"unit":"mg"},"protein":{"value":69,"unit":"g"},"carbs":{"value":69,"unit":"g"},"fat":{"value":69,"unit":"g"},"calories":{"value":69,"unit":"Cal"},"serving":"100g"},{"_id":"5aaa7e11a0bf400004b4680c","name":"\"\"A","nameToLower":"\"\"a","__v":0,"iron":{"value":32,"unit":"%"},"calcium":{"value":1,"unit":"%"},"sodium":{"value":3131,"unit":"mg"},"protein":{"value":5,"unit":"g"},"carbs":{"value":4,"unit":"g"},"fat":{"value":2,"unit":"g"},"calories":{"value":32,"unit":"Cal"},"serving":"100g"},{"_id":"5aafbd4b161c0a000437b8b0","name":"\"\"klasmdöasd","nameToLower":"\"\"klasmdöasd","__v":0,"iron":{"value":0,"unit":"%"},"calcium":{"value":0,"unit":"%"},"sodium":{"value":0,"unit":"mg"},"protein":{"value":0,"unit":"g"},"carbs":{"value":0,"unit":"g"},"fat":{"value":0,"unit":"g"},"calories":{"value":0,"unit":"Cal"},"serving":"100g"}]; 
+    //   function success(desserts) {
+    //     // $scope.desserts = desserts;
+    //   };
+    //   $scope.getDesserts = function () {
+    //     // $scope.promise = $nutrition.desserts.get($scope.query, success).$promise;
+    //   };
+
     context.visualizeAs = "graph";
     context.detail = {};
     context.showLegend = false;

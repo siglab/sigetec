@@ -45,11 +45,11 @@ sigetecApp.config(['$routeProvider',
            resolve: { "currentAuth": ["Auth", function(Auth){ return Auth.$waitForSignIn(); }]}
        }).when('/dashboard', {
            templateUrl: 'partials/dashboard.html',
-           controller : 'DashboardController',
+           // controller : 'DashboardController',
            resolve: { "currentAuth": ["Auth", function(Auth){ return Auth.$waitForSignIn(); }]}
        }).when('/technology-form', {
            templateUrl: 'partials/technology-form.html',
-           controller : 'TechnologyFormController',
+           // controller : 'TechnologyFormController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).when('/technology-form/:technologyId', {
            templateUrl: 'partials/technology-form.html',

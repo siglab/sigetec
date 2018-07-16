@@ -8,7 +8,7 @@ technologyFormController.config(['$mdIconProvider', function($mdIconProvider) {
 
 technologyFormController.config(function(NotificationProvider) {
         NotificationProvider.setOptions({
-            startTop: 60,
+            startTop: 80,
             positionX: 'right',
             positionY: 'bottom'
         });
@@ -31,8 +31,6 @@ technologyFormController.controller('TechnologyFormController',
                            'Notification',
 function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2, Notification){
     var context = this;
-    // console.log('UUID Generators'); 
-    // console.log(uuid2);  
     $scope.authObj = $rootScope.auth;
     context.allowedStatus = $rootScope.allowedStatus;
     context.availableUsers = $rootScope.availableUsers;
@@ -45,6 +43,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.technologyStatus = "En diligencia";
     if ($routeParams.technologyId) {
         context.currentNavItem = "FNI";
+        context.showCreate = true;
     } else {
         context.currentNavItem = "Información Basica";
     }
@@ -321,95 +320,120 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         var today = new Date().getTime();
         var technologyId = "";
         if($routeParams.technologyId){
-            var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
-            var technology = $firebaseObject(technologyReference);
-            technology.$loaded().then(function(){
-                technology.updatedAt = today;
-                technology.updatesBy = $rootScope.userEmail;
+            try{
+                var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
+                var technology = $firebaseObject(technologyReference);
+                technology.$loaded().then(function(){
+                    technology.updatedAt = today;
+                    technology.updatesBy = $rootScope.userEmail;
+                    technology.status = context.technologyStatus;
+                    if(context.assignedTo != undefined){
+                        technology.assignedTo = context.assignedTo;
+                    }
+                    context.setBasicData(technology, basicData);
+                    technology.$save().then(function(reference){
+                        try {
+                            technologyId = $routeParams.technologyId;
+                            context.saveDetail(technology.technologyId);
+                            if (message == null || message == undefined ) {
+                                context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                            }else{
+                                context.fireNotification('info', message);
+                            }
+                            if (url == null || url == undefined) {
+                                $location.path('technology-form/'+technologyId);
+                            }else{
+                                $location.path(url);
+                            }                    
+                        }catch(e){
+                            console.log(e);
+                            context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
+                        }
+                    }, function(error){
+                        context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                    });
+                });
+            }catch(e){
+                context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
+            }
+        }else{
+            try{
+                var technology = {};
+                technology.technologyId = uuid2.newuuid();
+                technology.createdAt = today;
+                technology.createdBy = $rootScope.userEmail;
                 technology.status = context.technologyStatus;
-                if(context.assignedTo != undefined){
-                    technology.assignedTo = context.assignedTo;
-                }
+                // technology.status = 'En diligencia';
                 context.setBasicData(technology, basicData);
-                technology.$save().then(function(reference){
-                    technologyId = $routeParams.technologyId;
-                    context.saveDetail(technology.technologyId);
-                    if (message == null || message == undefined ) {
-                        context.fireNotification('success', 'Información guardada satisfactoriamente.');
-                    }else{
-                        context.fireNotification('success', message);
+                // console.log(technology);
+                var technologiesReference = firebase.database().ref().child("technologies");
+                var technologies = $firebaseArray(technologiesReference);
+                technologies.$add(technology).then(function(reference){
+                    try{
+                        technologyId = reference.path.o[1];
+                        context.saveDetail(technology.technologyId);
+                        if (message == null || message == undefined ) {
+                            context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                        }else{
+                            context.fireNotification('info', message);
+                        }
+                        if (url == null || url == undefined) {
+                            $location.path('technology-form/'+technologyId);
+                        }else{
+                            $location.path(url);
+                        }
+                    }catch(e){
+                        console.log(e);
+                        context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
                     }
-                    if (url == null || url == undefined) {
-                        $location.path('technology-form/'+technologyId);
-                    }else{
-                        $location.path(url);
-                    }
-                    // $location.path('technology-form/'+technologyId);
                 }, function(error){
                     context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                    console.log(error);
                 });
-            });
-        }else{
-            var technology = {};
-            technology.technologyId = uuid2.newuuid();
-            technology.createdAt = today;
-            technology.createdBy = $rootScope.userEmail;
-            technology.status = context.technologyStatus;
-            // technology.status = 'En diligencia';
-            context.setBasicData(technology, basicData);
-            // console.log(technology);
-            var technologiesReference = firebase.database().ref().child("technologies");
-            var technologies = $firebaseArray(technologiesReference);
-            technologies.$add(technology).then(function(reference){
-                // console.log(reference.path.o[1]);
-                technologyId = reference.path.o[1];
-                context.saveDetail(technology.technologyId);
-                if (message == null || message == undefined ) {
-                    context.fireNotification('success', 'Información guardada satisfactoriamente.');
-                }else{
-                    context.fireNotification('success', message);
-                }
-                if (url == null || url == undefined) {
-                    $location.path('technology-form/'+technologyId);
-                }else{
-                    $location.path(url);
-                }
-            }, function(error){
-                context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
-                console.log(error);
-            });
+            }catch(e){
+                console.log(e);
+                context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
+            }
         }
         // $rootScope.infoMessage = "La tecnologia fue almacenada correctamnete.";
     };
     
     context.saveDetail = function( key ){
-        var technologiesDetailReference = firebase.database().ref().child("technologies-detail/"+key);
-        var technologiesLogReference = firebase.database().ref().child("technologies-log");
-        var technologiesDetail = $firebaseObject(technologiesDetailReference);
-        var technologiesLog = $firebaseArray(technologiesLogReference);
-        var technologyLog = {};
-        technologiesDetail.answers = angular.copy(context.answers);
-        technologyLog.by = $rootScope.userEmail;
-        technologyLog.at = new Date().getTime();
-        technologyLog.answers = angular.copy(context.answers);
-        var validationError = false;
-        angular.forEach(technologiesDetail.answers , function(questionGroup, qgKey){
-           angular.forEach(questionGroup, function(group, gKey){
-                angular.forEach(group, function(answer, aKey){
-                    if(Object.prototype.toString.call(answer) === '[object Date]'){
-                        technologiesDetail.answers[qgKey][gKey][aKey] = answer.getTime();
-                    }
-                    if(answer.$invalid){
-                        validationError = true;
-                    }
+        try{
+            var technologiesDetailReference = firebase.database().ref().child("technologies-detail/"+key);
+            var technologiesLogReference = firebase.database().ref().child("technologies-log");
+            var technologiesDetail = $firebaseObject(technologiesDetailReference);
+            var technologiesLog = $firebaseArray(technologiesLogReference);
+            var technologyLog = {};
+            technologiesDetail.answers = angular.copy(context.answers);
+            technologyLog.by = $rootScope.userEmail;
+            technologyLog.at = new Date().getTime();
+            technologyLog.answers = angular.copy(context.answers);
+            var validationError = false;
+            // console.log('Estas son las respuestas');
+            // console.log(technologiesDetail.answers);
+            angular.forEach(technologiesDetail.answers , function(questionGroup, qgKey){
+                angular.forEach(questionGroup, function(group, gKey){
+                    angular.forEach(group, function(answer, aKey){
+                        // console.log('group:' + group);
+                        // console.log('answer:' + answer);
+                        if(Object.prototype.toString.call(answer) === '[object Date]'){
+                            technologiesDetail.answers[qgKey][gKey][aKey] = answer.getTime();
+                        }
+                        if(answer.$invalid){
+                            validationError = true;
+                        }
+                    });
                 });
-           });
-        });
-        if(!validationError){
-            technologiesDetail.$save();
-            technologiesLog.$add(technologyLog);
-        }else{
-            console.log("Validation Error");
+            });
+            if(!validationError){
+                technologiesDetail.$save();
+                technologiesLog.$add(technologyLog);
+            }else{
+                context.fireNotification('error', 'Ocurrió un error en la validación de los campos. Por favor verifique la información del formulario.');
+            }
+        }catch(e){
+            throw e;           
         }
     }
     
@@ -446,6 +470,15 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
       $mdMenu.open();
     }
 
+    context.checker = function (valid){
+        if(!valid) {
+            context.fireNotification('error', 'El formulario no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
+            return true;
+        }else{
+            return true;
+        }
+    }
+
     context.fireNotification = function(type, message) {
         switch(type) {
             case 'success':
@@ -476,4 +509,5 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 });
         } 
     }
+
 }]);
