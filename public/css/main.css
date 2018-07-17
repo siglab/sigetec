@@ -2,7 +2,7 @@ body {
     font-family: Roboto, Arial, sans-serif;
     background-color: #FFF;
     color: rgba(0,0,0,0.87);
-    height: auto !important
+    /*height: auto !important*/
 }
 
 a {
