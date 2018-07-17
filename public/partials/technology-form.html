@@ -81,6 +81,7 @@
                                                             ng-model="answer[question.name]"
                                                             ng-required="question.required"
                                                             class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name + $index}}">
+                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                     <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                         <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                     </div>
@@ -93,6 +94,7 @@
                                                             ng-model="answer[question.name]"
                                                             ng-required="question.required"
                                                             class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" type="text" name="{{question.name + $index}}">
+                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                     <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                         <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                     </div>
@@ -106,6 +108,7 @@
                                                         ng-required="question.required"
                                                         ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                         type="email" name="{{question.name + $index}}">
+                                                <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                 <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                     <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                 </div>
@@ -121,6 +124,7 @@
                                                     <div ng-if="question.relatedText"> Acepto {{question.tag | lowercase}} </div> 
                                                     <div ng-if="!question.relatedText"> {{question.tag}} </div> 
                                                 </md-checkbox>
+                                                <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                 <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')" multiple md-auto-hide="false">
                                                     <div ng-message="required">Se debe aceptar {{question.tag | lowercase}} para continuar.</div>
                                                 </div>
@@ -138,6 +142,7 @@
                                                             {{option}}
                                                         </md-option>
                                                     </md-select>
+                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                     <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                         <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                     </div>
@@ -154,6 +159,7 @@
                                                             {{option}}
                                                         </md-option>
                                                     </md-select>
+                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                     <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                         <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                     </div>
@@ -167,6 +173,7 @@
                                                 ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
                                                 ng-required="question.required">
                                             </md-datepicker>
+                                            <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                             <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                 <div ng-message="required">Se requiere de este campo para continuar.</div>
                                             </div>
@@ -182,6 +189,7 @@
                                                         {{pair.key}}
                                                     </md-option>
                                                 </md-select>
+                                                <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                 <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                     <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                 </div>
@@ -197,6 +205,7 @@
                                                   ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                   ng-required="question.required">
                                                 </textarea>
+                                                <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                 <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
                                                     <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                 </div>
@@ -204,10 +213,26 @@
                                         </div>
                                         <div ng-switch-when="tags" style="margin-bottom: 30px">
                                             <div ng-if="question.prerequisite">
+                                                <label ng-if="question.message" style="color: #75797d; opacity: 0.65;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                    {{question.message}}
+                                                </label> 
+                                                <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                    <md-icon ng-if="question.hint" class="float-right">
+                                                        <img src="img/help.png" style="width:140%" />
+                                                    </md-icon>
+                                                </span>
                                                 <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
                                                 </md-chips>
                                             </div>
                                             <div ng-if="!question.prerequisite">
+                                                <label ng-if="question.message" style="color: #75797d; opacity: 0.65;">
+                                                    {{question.message}}
+                                                </label> 
+                                                <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;">
+                                                    <md-icon class="float-right">
+                                                        <img src="img/help.png" style="width:140%" />
+                                                    </md-icon>
+                                                </span>
                                                 <md-chips ng-model="answer[question.name]" name="{{question.name + $index}}" placeholder="Adiciona {{question.tag | lowercase}}" style="margin-bottom: 30px">
                                                 </md-chips>
                                             </div>
@@ -221,7 +246,8 @@
                                                     ng-required="question.required"
                                                     type="number" step="any"
                                                     min="{{question.min}}" max="{{question.max}}">
-                                                <md-icon ng-if="question.icon">{{question.icon}}</md-icon>
+                                                <md-icon ng-if="question.icon" style="font-size: 16px">{{question.icon}}</md-icon>
+                                                <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                 <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')" multiple md-auto-hide="false">
                                                     <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                     <div ng-message="min">El valor mínimo permitido es de {{question.min}}.</div>
@@ -269,7 +295,7 @@
             <h3>Documentos adjuntos: </h3>
             <md-content class="layout-padding _md formgroup">
                 <h5>Documentos agregados previamente: </h5>
-                <div ng-if="controller.answers.documents.length == 0 || !controller.answers.documents">
+                <div ng-if="controller.answers.documents.length == 0 || !controller.answers.documents" style="color: #75797d;">
                     Esta tecnología no tiene documentos adjuntos
                 </div>
                 <div ng-repeat="document in controller.answers.documents">
@@ -279,7 +305,7 @@
             <form ng-submit="controller.uploadFile()" style="margin-top: 10px">
                 <md-content class="layout-padding _md formgroup">
                     <h5>Adjuntar nuevo documento: </h5>
-                    <div>Adjunte aquí todos los documentos que considere necesarios para registrar su tecnología.</div>
+                    <div style="color: #75797d;">Adjunte aquí todos los documentos que considere necesarios para registrar su tecnología.</div>
                     <div class="row" style="width: 100%">
                         <md-input-container class="md-block col-md-6" flex-gt-sm style="margin-left: 13px">
                             <label>Tipo de documento</label>

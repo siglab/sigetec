@@ -271,3 +271,8 @@ button.md-accent {
     color: rgb(63,81,181) !important;
     background: default !important;
 }
+
+.angular-popover-container{
+    top: 35px !important;
+    bottom: 35px !important
+}
