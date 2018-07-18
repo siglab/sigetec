@@ -276,3 +276,19 @@ button.md-accent {
     top: 35px !important;
     bottom: 35px !important
 }
+
+.dataTables_length {
+    color: #75797d !important;
+}
+
+.dataTables_length select {
+    color: #75797d !important;
+}
+
+.dataTables_filter {
+    color: #75797d !important;
+}
+
+.dataTables_info {
+    color: #75797d !important;
+}

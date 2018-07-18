@@ -109,10 +109,40 @@
             <p class="text-center" style="padding:0;margin:0;">Copyright 2018 / Última Actualización: 15-05-2018<br></p>
         </div>
     </section>
-    <section id="aboutSec" class="section">
-        <div class="container" style="height:100%;max-height:100%;">
+    <section id="aboutSec">
+        <div class="" style="height:100%; width:90%; margin-left: 5%">
             <div class="row" style="height:100%;">
-                <div class="col-12"></div>
+                <md-content style="width: 100%; margin-top: 5%; margin-bottom: 5%; border-radius: 10px; box-shadow: 6px 4px 0px #cbc7c7;">
+                    <div style="margin:2%">
+                        <table datatable="ng" class="row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center; color: #75797d; font-size: 14px">Id</th>
+                                        <th style="text-align: center; color: #75797d; font-size: 14px">Nombre</th>
+                                        <th style="text-align: center; color: #75797d; font-size: 14px">Descripción</th>
+                                        <th style="text-align: center; color: #75797d; font-size: 14px">Investigador</th>
+                                        <th style="text-align: center; color: #75797d; font-size: 14px">Tipo</th>
+                                        <th style="text-align: center; color: #75797d; font-size: 14px">Detalles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="technology in controller.technologiesArray" style="color: rgb(105, 105, 107); font-size: 14px">
+                                        <td>{{ technology.createdAt }}</td>
+                                        <td>{{ technology.name }}</td>
+                                        <td>{{ technology.description | limitTo:100 }}</td>
+                                        <td>{{ technology['principal-researcher-email'] }}</td>
+                                        <td>
+                                            <div style="vertical-align: top; text-align: center;">
+                                                <span ng-show="{{technology['granted-date'] != undefined}}" class="badge" style="background-color: #D51B23;">Patente</span>
+                                                <span ng-show="{{technology['granted-date'] == undefined}}" class="badge" style="background-color: #D51B23;">Tecnología</span>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                        </table>
+                    </div>
+                </md-content>
             </div>
         </div>
     </section>

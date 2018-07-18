@@ -8,7 +8,8 @@ var sigetecApp = angular.module('SigetecApp', ['ngRoute',
                                                'FormatsController',
                                                'TechnologiesController',
                                                'ReportController',
-                                               'firebase']);
+                                               'firebase',
+                                               'datatables']);
 
 sigetecApp.run(["$rootScope", "$location", function($rootScope, $location) {
     console.log("login"+firebase.auth().currentUser);
