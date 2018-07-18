@@ -292,3 +292,7 @@ button.md-accent {
 .dataTables_info {
     color: #75797d !important;
 }
+
+md-backdrop{
+position: fixed;
+}
