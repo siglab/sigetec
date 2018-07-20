@@ -2,8 +2,10 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp();
 const nodemailer = require('nodemailer');
+const cors = require('cors')({origin: true});
+
+admin.initializeApp();
 // Configure the email transport using the default SMTP transport and a GMail account.
 // For Gmail, enable these:
 // 1. https://www.google.com/settings/security/lesssecureapps
@@ -23,7 +25,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
         const message = 'La tecnología ' + technology.name + 
           ' ha sido registrada exitosamente en el sistema integrado de gestión estratégica' + 
           ' de tegnologías (SIGETec) de la Universidad del Valle.' + 
-          '\n Este es un mensaje autogenerado. Por favor intente responder este mensaje.'
+          '\n Este es un mensaje autogenerado. Por favor no intente responder este mensaje.'
         sendEmail(technology['principal-researcher-email'], subject, message);
       }
 
@@ -43,7 +45,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                                 subject = 'Notificación SIGETec: Notificación de registro de tecnología.';
                                 message = 'La tecnología ' + technology.name + 
                                   ' ha sido registrada en el sistema.' + 
-                                  '\n Este es un mensaje autogenerado. Por favor intente responder este mensaje.'
+                                  '\nEste es un mensaje autogenerado. Por favor intente responder este mensaje.'
                               }else{
                                 subject = 'Notificación SIGETec: Notificación de actualización de tecnología ' + technology.name;
                                 message = 'La tecnología ' + technology.name + 'ha sido atualizada por ' +
@@ -77,4 +79,14 @@ function sendEmail(email, subject, message){
     console.log('Ocurrió un erro:');
     console.log(e);
   }
-}
+};
+
+exports.getTechnologies = functions.https.onRequest((req,res)=>{
+  cors(req,res,() => {
+    var db = admin.database();
+    var ref = db.ref("/technologies");
+    ref.orderByChild("status").startAt('Registrada').endAt('Registrada'+"\uf8ff").once('value', function(data) {
+      res.status(200).json(data);
+    });
+  });
+});

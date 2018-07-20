@@ -52,10 +52,12 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
 
     var request = $http({ 
         method: 'GET',
-        url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
+        // url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
+        url: 'https://us-central1-nuevosigetec.cloudfunctions.net/getTechnologies'
     });
     request.then(function(response){
         angular.forEach(response.data, function(technology){
+            console.log(technology);
             context.technologiesArray.push(technology);
             var techIndex = context.isInArray(nodes, technology["technology-type"]);
             if(techIndex < 0){
