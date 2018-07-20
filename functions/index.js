@@ -45,7 +45,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                                 subject = 'Notificación SIGETec: Notificación de registro de tecnología.';
                                 message = 'La tecnología ' + technology.name + 
                                   ' ha sido registrada en el sistema.' + 
-                                  '\nEste es un mensaje autogenerado. Por favor intente responder este mensaje.'
+                                  '\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
                               }else{
                                 subject = 'Notificación SIGETec: Notificación de actualización de tecnología ' + technology.name;
                                 message = 'La tecnología ' + technology.name + 'ha sido atualizada por ' +
