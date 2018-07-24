@@ -15,7 +15,10 @@ admin.initializeApp();
 const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
+var registeredTechnologies = {};
+var processedTechnologies = 0;
 
+// Cloud functions
 exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyId}')
     .onWrite((change, context) => {
       // Grab the current value of what was written to the Realtime Database.
@@ -62,6 +65,24 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
     }
 );
 
+exports.getTechnologies = functions.https.onRequest((req,res)=>{
+  cors(req,res,() => {
+    var db = admin.database();
+    var ref = db.ref("/technologies");
+    ref.orderByChild("status").startAt('Registrada').endAt('Registrada'+"\uf8ff").once('value', function(data) {
+      registeredTechnologies = data.val();
+      if(Object.keys(registeredTechnologies).length == 0){
+        res.status(200).json(registeredTechnologies);
+      }else{
+        for (var i = 0; i < Object.keys(registeredTechnologies).length ; i++) {
+          getTechnologyDetails(req, res, Object.keys(registeredTechnologies)[i]);
+        }
+      }
+    });
+  });
+});
+
+// Functions helpers
 function sendEmail(email, subject, message){
   try{
     const mailOptions = {
@@ -80,27 +101,6 @@ function sendEmail(email, subject, message){
     console.log(e);
   }
 };
-
-var registeredTechnologies = {};
-var processedTechnologies = 0;
-
-exports.getTechnologies = functions.https.onRequest((req,res)=>{
-  cors(req,res,() => {
-    var db = admin.database();
-    var ref = db.ref("/technologies");
-    ref.orderByChild("status").startAt('Registrada').endAt('Registrada'+"\uf8ff").once('value', function(data) {
-      registeredTechnologies = data.val();
-      if(Object.keys(registeredTechnologies).length == 0){
-        res.status(200).json(registeredTechnologies);
-      }else{
-        for (var i = 0; i < Object.keys(registeredTechnologies).length ; i++) {
-          getTechnologyDetails(req, res, Object.keys(registeredTechnologies)[i]);
-        }
-      }
-      // res.status(200).json(data);
-    });
-  });
-});
 
 function getTechnologyDetails (req, res, uuid){
   var db = admin.database();
