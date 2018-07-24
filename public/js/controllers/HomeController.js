@@ -21,8 +21,13 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     context.visualizeAs = "graph";
     context.detail = {};
     context.showLegend = false;
-
-    var color = d3.scale.category20()
+    context.technologiesArray = [];
+    context.selectedTechnology = {};
+    var color = d3.scale.category20();
+    var nodes = [];
+    var links = [];
+    var sector = [];
+    var faculty = [];
     $scope.options = {
         chart: {
             type: 'forceDirectedGraph',
@@ -43,18 +48,12 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             }
         }
     };
-    
-    var nodes = [];
-    var links = [];
-    var sector = [];
-    var faculty = [];
-    context.technologiesArray = [];
-
     var request = $http({ 
         method: 'GET',
         // url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
         url: 'https://us-central1-nuevosigetec.cloudfunctions.net/getTechnologies'
     });
+
     request.then(function(response){
         angular.forEach(response.data, function(technology){
             console.log(technology);
@@ -89,6 +88,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             "nodes":nodes,
             "links":links
         };
+        console.log(context.technologiesArray);
     });
     
     context.login = function () {
@@ -170,6 +170,36 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     
     context.visualizeChange = function(option){
         context.visualizeAs = option;
+    }
+
+    context.showDetails = function(technologyId){
+       $mdDialog.show({
+          controller: context.showDetailsDialogController,
+          templateUrl: 'partials/technology-details.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose:true,
+          fullscreen: true// Only for -xs, -sm breakpoints.
+        })
+        .then(function(answer) {
+            console.log(answer);
+            $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+            console.log('You cancelled the dialog');
+            $scope.status = 'You cancelled the dialog.';
+        });
+        console.log('clicked');
+    }
+
+    context.showDetailsDialogController = function ($scope, $mdDialog){
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function(answer) {
+            $mdDialog.hide(answer);
+        };
     }
     
 }]);
