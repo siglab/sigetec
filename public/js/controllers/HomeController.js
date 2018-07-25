@@ -56,7 +56,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
 
     request.then(function(response){
         angular.forEach(response.data, function(technology){
-            console.log(technology);
             context.technologiesArray.push(technology);
             var techIndex = context.isInArray(nodes, technology["technology-type"]);
             if(techIndex < 0){
@@ -80,7 +79,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
                         "$id":technology.$id, 
                         "description": technology.description});
             }
-            
             links.push({"source":techIndex,"target":technologyIndex,"value":1});
             links.push({"source":facultyIndex,"target":technologyIndex,"value":1});
         });
@@ -88,7 +86,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             "nodes":nodes,
             "links":links
         };
-        console.log(context.technologiesArray);
     });
     
     context.login = function () {

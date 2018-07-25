@@ -71,13 +71,13 @@ exports.getTechnologies = functions.https.onRequest((req,res)=>{
     var ref = db.ref("/technologies");
     ref.orderByChild("status").startAt('Registrada').endAt('Registrada'+"\uf8ff").once('value', function(data) {
       registeredTechnologies = data.val();
-      if(Object.keys(registeredTechnologies).length == 0){
+      // if(Object.keys(registeredTechnologies).length == 0){
         res.status(200).json(registeredTechnologies);
-      }else{
-        for (var i = 0; i < Object.keys(registeredTechnologies).length ; i++) {
-          getTechnologyDetails(req, res, Object.keys(registeredTechnologies)[i]);
-        }
-      }
+      // }else{
+      //   for (var i = 0; i < Object.keys(registeredTechnologies).length ; i++) {
+      //     getTechnologyDetails(req, res, Object.keys(registeredTechnologies)[i]);
+      //   }
+      // }
     });
   });
 });
@@ -103,14 +103,16 @@ function sendEmail(email, subject, message){
 };
 
 function getTechnologyDetails (req, res, uuid){
-  var db = admin.database();
-  var ref = db.ref("/technologies-detail/" + registeredTechnologies[uuid]['technologyId']);
-  ref.once('value', function(data) {
-    registeredTechnologies[uuid]['details'] = {};
-    registeredTechnologies[uuid]['details'] = data.val();
-    processedTechnologies = processedTechnologies + 1;
-    if (processedTechnologies == Object.keys(registeredTechnologies).length) {
-      res.status(200).json(registeredTechnologies);
-    }
+  cors(req,res,() => {
+    var db = admin.database();
+    var ref = db.ref("/technologies-detail/" + registeredTechnologies[uuid]['technologyId']);
+    ref.once('value', function(data) {
+      // registeredTechnologies[uuid]['details'] = {};
+      registeredTechnologies[uuid]['details'] = data.val();
+      processedTechnologies = processedTechnologies + 1;
+      if (processedTechnologies == Object.keys(registeredTechnologies).length) {
+        res.status(200).json(registeredTechnologies);
+      }
+    });
   });
 };
