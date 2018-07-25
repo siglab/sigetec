@@ -15,8 +15,8 @@ admin.initializeApp();
 const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
-var registeredTechnologies = {};
-var processedTechnologies = 0;
+// var registeredTechnologies = {};
+// var processedTechnologies = 0;
 
 // Cloud functions
 exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyId}')
@@ -70,14 +70,27 @@ exports.getTechnologies = functions.https.onRequest((req,res)=>{
     var db = admin.database();
     var ref = db.ref("/technologies");
     ref.orderByChild("status").startAt('Registrada').endAt('Registrada'+"\uf8ff").once('value', function(data) {
-      registeredTechnologies = data.val();
-      // if(Object.keys(registeredTechnologies).length == 0){
+      var registeredTechnologies = data.val();
+      var uuids = Object.keys(registeredTechnologies);
+      if(uuids.length == 0){
         res.status(200).json(registeredTechnologies);
-      // }else{
-      //   for (var i = 0; i < Object.keys(registeredTechnologies).length ; i++) {
-      //     getTechnologyDetails(req, res, Object.keys(registeredTechnologies)[i]);
-      //   }
-      // }
+      }else{
+        var detailsPromises = [];
+        var snapshotData = [];
+        for (var i = 0; i < uuids.length ; i++) {
+          detailsPromises.push(
+            db.ref('/technologies-detail/' + registeredTechnologies[uuids[i]]['technologyId'])
+            .once('value')
+            .then(function(snapshot) {
+                registeredTechnologies[uuids[i]]['details'] = snapshot.val();
+                // snapshotData.push(snapshot.val())
+            })
+          );
+          return Promise.all(detailsPromises).then(snap =>  {
+            res.status(200).json(registeredTechnologies);
+          })
+        }
+      }
     });
   });
 });
@@ -100,19 +113,4 @@ function sendEmail(email, subject, message){
     console.log('Ocurrió un erro:');
     console.log(e);
   }
-};
-
-function getTechnologyDetails (req, res, uuid){
-  cors(req,res,() => {
-    var db = admin.database();
-    var ref = db.ref("/technologies-detail/" + registeredTechnologies[uuid]['technologyId']);
-    ref.once('value', function(data) {
-      // registeredTechnologies[uuid]['details'] = {};
-      registeredTechnologies[uuid]['details'] = data.val();
-      processedTechnologies = processedTechnologies + 1;
-      if (processedTechnologies == Object.keys(registeredTechnologies).length) {
-        res.status(200).json(registeredTechnologies);
-      }
-    });
-  });
 };
