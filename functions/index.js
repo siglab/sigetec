@@ -15,8 +15,6 @@ admin.initializeApp();
 const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
-// var registeredTechnologies = {};
-// var processedTechnologies = 0;
 
 // Cloud functions
 exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyId}')
@@ -76,20 +74,25 @@ exports.getTechnologies = functions.https.onRequest((req,res)=>{
         res.status(200).json(registeredTechnologies);
       }else{
         var detailsPromises = [];
-        var snapshotData = [];
         for (var i = 0; i < uuids.length ; i++) {
           detailsPromises.push(
             db.ref('/technologies-detail/' + registeredTechnologies[uuids[i]]['technologyId'])
             .once('value')
-            .then(function(snapshot) {
-                registeredTechnologies[uuids[i]]['details'] = snapshot.val();
-                // snapshotData.push(snapshot.val())
-            })
+            // .then(function(snapshot) {
+            //     registeredTechnologies[uuids[i]]['details'] = snapshot.val();
+            // })
           );
-          return Promise.all(detailsPromises).then(snap =>  {
-            res.status(200).json(registeredTechnologies);
-          })
         }
+        return Promise.all(detailsPromises).then(snap =>  {
+          for (var k = 0; k < snap.length; k++) {
+            registeredTechnologies[uuids[k]]['details'] = snap[k];
+          }
+          res.status(200).json(registeredTechnologies);
+        })
+        // .catch(error => {
+        //   console.log(error.val());
+        //   res.status(500).json({error: error});
+        // })
       }
     });
   });
