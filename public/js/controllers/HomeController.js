@@ -22,7 +22,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     context.detail = {};
     context.showLegend = false;
     context.technologiesArray = [];
-    context.selectedTechnology = {};
+    context.selectedTechnologyPosition = null;
     var color = d3.scale.category20();
     var nodes = [];
     var links = [];
@@ -170,32 +170,31 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
     }
 
     context.showDetails = function(technologyId){
-       $mdDialog.show({
-          controller: context.showDetailsDialogController,
-          templateUrl: 'partials/technology-details.html',
-          parent: angular.element(document.body),
-          clickOutsideToClose:true,
-          fullscreen: true// Only for -xs, -sm breakpoints.
-        })
+        context.selectedTechnologyPosition = technologyId;
+        $mdDialog.show({
+            controller: context.showDetailsDialogController,
+            templateUrl: 'partials/technology-details.html',
+            parent: angular.element(document.body),
+            clickOutsideToClose:true,
+            fullscreen: true// Only for -xs, -sm breakpoints.
+            })
         .then(function(answer) {
-            console.log(answer);
+            // console.log(answer);
             $scope.status = 'You said the information was "' + answer + '".';
         }, function() {
-            console.log('You cancelled the dialog');
+            // console.log('You cancelled the dialog');
             $scope.status = 'You cancelled the dialog.';
         });
-        console.log('clicked');
     }
 
     context.showDetailsDialogController = function ($scope, $mdDialog){
+        $scope.selectedTechnology = context.technologiesArray[context.selectedTechnologyPosition];
+        console.log($scope.selectedTechnology);
         $scope.hide = function() {
             $mdDialog.hide();
         };
         $scope.cancel = function() {
             $mdDialog.cancel();
-        };
-        $scope.answer = function(answer) {
-            $mdDialog.hide(answer);
         };
     }
     
