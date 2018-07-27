@@ -189,7 +189,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
 
     context.showDetailsDialogController = function ($scope, $mdDialog){
         $scope.selectedTechnology = context.technologiesArray[context.selectedTechnologyPosition];
-        console.log($scope.selectedTechnology);
         $scope.hide = function() {
             $mdDialog.hide();
         };
