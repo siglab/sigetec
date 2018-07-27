@@ -15,7 +15,8 @@ homeController.controller('HomeController',
                            '$window',
                            '$http',
                            'DTColumnDefBuilder',
-                           'DTOptionsBuilder', 
+                           'DTOptionsBuilder',
+                           '__apiRoutes',
 function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $mdToast, $window, $http, DTColumnBuilder, DTOptionsBuilder){
     var context = this;
     context.visualizeAs = "graph";
@@ -48,10 +49,11 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             }
         }
     };
+
     var request = $http({ 
         method: 'GET',
         // url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
-        url: 'https://us-central1-nuevosigetec.cloudfunctions.net/getTechnologies'
+        url: __apiRoutes.points.getTechnologies
     });
 
     request.then(function(response){

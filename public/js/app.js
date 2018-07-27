@@ -1,15 +1,29 @@
-var sigetecApp = angular.module('SigetecApp', ['ngRoute',
-                                               'MainController',
-                                               'DashboardController',
-                                               'HomeController',
-                                               'RolesController',
-                                               'ReferencesController',
-                                               'TechnologyFormController',
-                                               'FormatsController',
-                                               'TechnologiesController',
-                                               'ReportController',
-                                               'firebase',
-                                               'datatables']);
+var apiRoutes = {};
+
+// Import variables if present (from api-points.js)
+if(window){  
+  Object.assign(apiRoutes, window.__apiRoutes);
+}
+
+var sigetecApp = angular.module('SigetecApp', 
+  [
+    'ngRoute',
+    'MainController',
+    'DashboardController',
+    'HomeController',
+    'RolesController',
+    'ReferencesController',
+    'TechnologyFormController',
+    'FormatsController',
+    'TechnologiesController',
+    'ReportController',
+    'firebase',
+    'datatables'
+  ]
+);
+
+// Register apiRoutes in AngularJS as constant
+sigetecApp.constant('__apiRoutes', apiRoutes);
 
 sigetecApp.run(["$rootScope", "$location", function($rootScope, $location) {
     console.log("login"+firebase.auth().currentUser);
@@ -87,3 +101,14 @@ sigetecApp.factory("Auth", ["$firebaseAuth",
     return $firebaseAuth();
   }
 ]);
+
+// function disableLogging($logProvider, __env){  
+//   $logProvider.debugEnabled(__env.enableDebug);
+// }
+
+// // Inject dependencies
+// disableLogging.$inject = ['$logProvider', '__apiRoutes'];
+
+// sigetecApp.config(disableLogging);
+// 
+// 

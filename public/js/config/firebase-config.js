@@ -1,4 +1,4 @@
-var config = {
+var projectConfig = {
     apiKey: "AIzaSyB8dYtRpIU_HiGdBqmmJBf46Y9DEAiL1Kc",
     authDomain: "nuevosigetec.firebaseapp.com",
     databaseURL: "https://nuevosigetec.firebaseio.com",
@@ -7,4 +7,4 @@ var config = {
     messagingSenderId: "442561749987"
   };
 
-firebase.initializeApp(config);
+firebase.initializeApp(projectConfig);
