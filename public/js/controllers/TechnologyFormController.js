@@ -41,6 +41,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.showRegister = false;
     context.showCreate = false;
     context.technologyStatus = "En diligencia";
+    context.fileCategory = "";  
     if ($routeParams.technologyId) {
         context.currentNavItem = "FNI";
         context.showCreate = true;
@@ -121,7 +122,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 if(technologyRequested.status !== 'Registrada'){
                     context.showReturn = false;
                 }
-                
+
                 context.assignedTo = technologyRequested.assignedTo;
                 context.technologyStatus = technologyRequested.status;
                 
@@ -144,6 +145,10 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         });
                         context.answers[name] = answersWithDate;
                     });
+
+
+                    console.log(context.answers);
+
                 });
             });
             if($rootScope.userRole === "researcher"){
@@ -164,12 +169,15 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.removeAnswers = function(questionGroupName, index){
         context.answers[questionGroupName].splice(index, 1);
     };
-                               
+    
     context.uploadFile = function() {
        console.log("Subiendo archivo...");
        var ref = 'documents/'+ new Date().getTime();
        var documentsReference = firebase.storage().ref().child(ref);
        var sFileName = $("#document").val();
+
+       console.log(context.fileCategory);
+
        if (sFileName.length > 0) {
            var filesSelected = document.getElementById("document").files;
             if (filesSelected.length > 0) {
@@ -180,11 +188,16 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 documentsReference.put(fileToLoad, metadata).then(function(snapshot){
                     var url = snapshot.metadata.downloadURLs[0];
                     console.log(context.answers);
-                    context.answers.documents.push({"url": url, 
-                                                    "name": fileToLoad.name,
-                                                    "ref": ref});
+                    context.answers.documents.push(
+                        {
+                            "url": url, 
+                            "name": fileToLoad.name,
+                            "ref": ref,
+                            "fileCategory": context.fileCategory,
+                            "fileType": fileToLoad.type
+                        });
                     $scope.$digest();
-                    console.log(context.answers);
+                    // console.log(context.answers);
                     context.save();
                 }).catch(function(error) {
                     // [START onfailure]
@@ -337,6 +350,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                             context.saveDetail(technology.technologyId);
                             if (message == null || message == undefined ) {
                                 context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                                context.fileCategory = "";
+                                $("#document").val('');
                             }else{
                                 context.fireNotification('info', message);
                             }
@@ -374,6 +389,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         context.saveDetail(technology.technologyId);
                         if (message == null || message == undefined ) {
                             context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                            context.fileCategory = "";
+                            $("#document").val('');
                         }else{
                             context.fireNotification('info', message);
                         }
