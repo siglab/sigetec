@@ -208,6 +208,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     
     context.deleteFile = function(document) {
        var documentsReference = firebase.storage().ref().child(document.ref);
+       context.fireNotification('info', 'Eliminando archivo adjunto...');
        documentsReference.delete().then(function(){
            for(var i=0; i < context.answers.documents.length; i++){
                if(context.answers.documents[i].ref == document.ref){
@@ -215,7 +216,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                }
            }
            $scope.$digest();
+           context.save('Archivo adjunto eliminado satisfactoriamente.');
        }).catch(function(error) {
+            context.fireNotification('error', 'No se pudo eliminar el archivo adjunto. Por favor inténtelo de nuevo.');
             console.error('Delete failed:', error);
         });
     }

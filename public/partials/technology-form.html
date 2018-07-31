@@ -322,12 +322,11 @@
                                     <a href="{{document.url}}" target="_blank" style="text-decoration: none">
                                         <img src="img/download.png" style="width: 28px; height: 28px; cursor: pointer"/>
                                     </a>
-                                    <img ng-if="controller.technologyStatus == 'En diligencia'" src="img/trash.png" style="width: 28px; height: 28px; cursor: pointer"/>
+                                    <img ng-if="controller.technologyStatus == 'En diligencia'" src="img/trash.png" style="width: 28px; height: 28px; cursor: pointer" ng-click="controller.deleteFile(document)"/>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <!-- <a href="{{document.url}}">{{document.name}}</a> -->
                 </div>
             </md-content>
             <form ng-submit="(attachments.$valid) && controller.uploadFile()" name="attachments" style="margin-top: 10px">
