@@ -335,6 +335,7 @@
                     <h5>Adjuntar nuevo documento: </h5>
                     <div style="color: #75797d;">Adjunte aquí todos los documentos que considere necesarios para registrar su tecnología.</div>
                     <div class="row" style="width: 100%">
+                        <input type="file" name="file" class="inputimg col-md-6" id="document" ng-required="true" style="margin-top: 18px">
                         <md-input-container class="md-block col-md-6" flex-gt-sm style="margin-left: 13px">
                             <label>Tipo de documento</label>
                             <md-select  ng-model="controller.fileCategory" ng-required="true" name="type">
@@ -347,13 +348,10 @@
                                 <div ng-message="required">Se requiere de este campo para continuar.</div>
                             </div>
                         </md-input-container>
-                        <input type="file" name="file" class="inputimg col-md-6" id="document" ng-required="true" style="margin-top: 18px">
                     </div>
-                    <md-button type="submit" class="md-raised md-primary float-right formButton" style="margin: 0; padding: 0px; padding-left: 5px; padding-right: 5px;">Adjuntar documento</md-button>
-                    <!-- <br /> -->
-                   <!--  <span class="input-group-btn"> -->
-                        <!-- <button type="submit" class="btn btn-block">Adjuntar documento</button> -->
-                    <!-- </span> -->
+                    <md-button type="submit" class="md-raised md-primary float-right formButton" style="margin: 0; padding: 0px; padding-left: 5px; padding-right: 5px;">
+                        Adjuntar documento
+                    </md-button>
                 </md-content>
             </form>
         </div>

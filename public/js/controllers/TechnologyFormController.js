@@ -171,13 +171,10 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     };
     
     context.uploadFile = function() {
-       console.log("Subiendo archivo...");
+       context.fireNotification('info', 'Cargando archivo. Esto puede tardar un momento...');
        var ref = 'documents/'+ new Date().getTime();
        var documentsReference = firebase.storage().ref().child(ref);
        var sFileName = $("#document").val();
-
-       console.log(context.fileCategory);
-
        if (sFileName.length > 0) {
            var filesSelected = document.getElementById("document").files;
             if (filesSelected.length > 0) {
@@ -197,8 +194,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                             "fileType": fileToLoad.type
                         });
                     $scope.$digest();
-                    // console.log(context.answers);
-                    context.save();
+                    context.save('Archivo cargado exitosamente');
                 }).catch(function(error) {
                     // [START onfailure]
                     context.fireNotification('error', 'Ha ocurrido un error. Por favor intentelo de nuevo.');
@@ -350,10 +346,12 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                             context.saveDetail(technology.technologyId);
                             if (message == null || message == undefined ) {
                                 context.fireNotification('info', 'Información guardada satisfactoriamente.');
-                                context.fileCategory = "";
-                                $("#document").val('');
                             }else{
                                 context.fireNotification('info', message);
+                                context.fileCategory = "";
+                                $("#document").val('');
+                                $scope.attachments.$setUntouched();
+                                $scope.attachments.$setPristine();
                             }
                             if (url == null || url == undefined) {
                                 $location.path('technology-form/'+technologyId);
@@ -389,10 +387,12 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         context.saveDetail(technology.technologyId);
                         if (message == null || message == undefined ) {
                             context.fireNotification('info', 'Información guardada satisfactoriamente.');
-                            context.fileCategory = "";
-                            $("#document").val('');
                         }else{
                             context.fireNotification('info', message);
+                            context.fileCategory = "";
+                            $("#document").val('');
+                            $scope.attachments.$setUntouched();
+                            $scope.attachments.$setPristine();
                         }
                         if (url == null || url == undefined) {
                             $location.path('technology-form/'+technologyId);

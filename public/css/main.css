@@ -296,3 +296,8 @@ button.md-accent {
 md-backdrop{
     position: fixed;
 }
+
+.ng-untouched ~ .md-input-messages-animation {
+    height: 0 !important;
+    opacity: 0 !important;
+}
