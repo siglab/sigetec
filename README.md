@@ -74,7 +74,7 @@ In order to run this project you will need:
 
 	```
 	  // Default variables initialization
-	  const DEFAULT_CLOUD_FUNCTIONS_ROUTE = 'https://us-central1-nuevosigetec.cloudfunctions.net';
+	  const DEFAULT_CLOUD_FUNCTIONS_ROUTE = 'https://us-central1-yourdomain.cloudfunctions.net';
 	```
 
 9. Finally run the following command at the project root folder to deploy the changes made in step 8 and get the application completely up and running:  
