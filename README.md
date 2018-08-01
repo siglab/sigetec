@@ -27,7 +27,7 @@ In order to run this project you will need:
 	git clone https://github.com/siglab/sigetec.git
 	```
 
-3 .Add your firebase project config settings to the firebase-config file under /public/js/config. This configurations file should looks like:
+3. Add your firebase project config settings to the firebase-config file under /public/js/config. This configurations file should looks like:
 
 	```
 	var projectConfig = {
