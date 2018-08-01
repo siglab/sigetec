@@ -1,6 +1,8 @@
 # Sistema Integrado de Gestión de Tecnologías - SIGETec
 
-A web application built in firebase platform to fulfill the OTRI's needs.
+![alt text](https://github.com/siglab/sigetec/blob/material/public/img/SIGETEC_Logo.jpg)
+
+A web application built in firebase platform to fulfill the Univalle OTRI's needs.
 This application is still under development.
 
 ## Getting Started
@@ -11,11 +13,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 In order to run this project you will need:
 
-	```
 	Git
 	Nodejs v8+ & npm
-	Firebase CLI (https://firebase.google.com/docs/cli/?hl=en-419)
-	```
+	Firebase CLI (check https://firebase.google.com/docs/cli/?hl=en-419)
 
 ### Installation, Project configuration & Deployment
 
