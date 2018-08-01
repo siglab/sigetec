@@ -11,11 +11,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 In order to run this project you will need:
 
-```
-Git
-Nodejs v8+ & npm
-Firebase CLI (https://firebase.google.com/docs/cli/?hl=en-419)
-```
+	```
+	Git
+	Nodejs v8+ & npm
+	Firebase CLI (https://firebase.google.com/docs/cli/?hl=en-419)
+	```
 
 ### Installation, Project configuration & Deployment
 
@@ -23,24 +23,24 @@ Firebase CLI (https://firebase.google.com/docs/cli/?hl=en-419)
 
 2. Clone this repo running the command:
 
-```
-git clone https://github.com/siglab/sigetec.git
-```
+	```
+	git clone https://github.com/siglab/sigetec.git
+	```
 
 3 .Add your firebase project config settings to the firebase-config file under /public/js/config. This configurations file should looks like:
 
-```
-var projectConfig = {
-    apiKey: "JuhLtrgFRT688_89jr5dd00kHgvCFk",
-    authDomain: "yourdomain.firebaseapp.com",
-    databaseURL: "https://yourdomain.firebaseio.com",
-    projectId: "yourprojectId",
-    storageBucket: "yourdomain.appspot.com",
-    messagingSenderId: "650237649"
-  };
+	```
+	var projectConfig = {
+	    apiKey: "JuhLtrgFRT688_89jr5dd00kHgvCFk",
+	    authDomain: "yourdomain.firebaseapp.com",
+	    databaseURL: "https://yourdomain.firebaseio.com",
+	    projectId: "yourprojectId",
+	    storageBucket: "yourdomain.appspot.com",
+	    messagingSenderId: "650237649"
+	  };
 
-firebase.initializeApp(projectConfig);
-```
+	firebase.initializeApp(projectConfig);
+	```
 
 4. Delete any firebase.json file from root project folder (if exist).
 
@@ -48,42 +48,42 @@ firebase.initializeApp(projectConfig);
 
 6. Run in project root folder the following command and authenticate your user using your firebase account (the same used when your created the project in firebase console).
 
-```
-firebase login
-```
+	```
+	firebase login
+	```
 
 7. Run in project root folder the following command and follow the firebase CLI steps.
 
-```
-firebase init
-```
+	```
+	firebase init
+	```
 
 8. Set up your gmail email account into the project for mailer cloud functions. Run the following command.
 
-```
-firebase functions:config:set gmail.email="youremailhere@gmail.com" gmail.password="your password here"
-```
+	```
+	firebase functions:config:set gmail.email="youremailhere@gmail.com" gmail.password="your password here"
+	```
 
 9. Run in project root folder the following command and follow de firebase CLI steps to deploy this project in firebase cloud service.
 
-```
-firebase deploy
-```
+	```
+	firebase deploy
+	```
 
-9. When project deployment has finished, you will be able to see the assigned api points routes in your system console. Copy the main api routes scheme (protocol) and host (without resource), and use it to set the variable DEFAULT_CLOUD_FUNCTIONS_ROUTE in api-points file under /public/js/config. That line in api-points.js file should looks like this:  
+10. When project deployment has finished, you will be able to see the assigned api points routes in your system console. Copy the main api routes scheme (protocol) and host (without resource), and use it to set the variable DEFAULT_CLOUD_FUNCTIONS_ROUTE in api-points file under /public/js/config. That line in api-points.js file should looks like this:  
 
-```
-  // Default variables initialization
-  const DEFAULT_CLOUD_FUNCTIONS_ROUTE = 'https://us-central1-nuevosigetec.cloudfunctions.net';
-```
+	```
+	  // Default variables initialization
+	  const DEFAULT_CLOUD_FUNCTIONS_ROUTE = 'https://us-central1-nuevosigetec.cloudfunctions.net';
+	```
 
 9. Finally run the following command at the project root folder to deploy the changes made in step 8 and get the application completely up and running:  
 
-```
-  firebase deploy --only hosting
-```
+	```
+	  firebase deploy --only hosting
+	```
 
-####Important notice: If something related to your gmail account fail when using cloud functions, ensure you have enabled the "Less secure apps" options in the google account you used in step 8. Also check you have firebase server added to the white list of devices in your google account.
+**Important notice:** If something related to your gmail account fail when using cloud functions, ensure you have enabled the "Less secure apps" options in the google account you used in step 8. Also check you have firebase server added to the white list of devices in your google account.
 
 ## Authors
 
