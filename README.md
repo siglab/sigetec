@@ -1,6 +1,5 @@
-# Sistema Integrado de Gestión de Tecnologías - SIGETec
-
 ![alt text](https://github.com/siglab/sigetec/blob/material/public/img/SIGETEC_Logo.jpg)
+# Sistema Integrado de Gestión de Tecnologías - SIGETec
 
 A web application built in firebase platform to fulfill the Univalle OTRI's needs.
 This application is still under development.
