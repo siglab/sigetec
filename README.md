@@ -1,5 +1,5 @@
 ![alt text](https://github.com/siglab/sigetec/blob/material/public/img/SIGETEC_Logo.jpg)
-# Sistema Integrado de Gestión Estratégica de Tecnologías - SIGETec
+# Sistema Integrado de Gestión Estratégica de Tecnologías
 
 A web application built in firebase platform to fulfill the Univalle OTRI's needs.
 This application is still under development.
@@ -93,4 +93,4 @@ See also the list of [contributors](https://github.com/siglab/sigetec/graphs/con
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
