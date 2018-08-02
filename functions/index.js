@@ -22,11 +22,16 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
       // Grab the current value of what was written to the Realtime Database.
       const technology = change.after.val();
       if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada') {
-        const subject = 'Notificación SIGETec: Notificación de registro de tecnología.';
-        const message = 'La tecnología ' + technology.name + 
-          ' ha sido registrada exitosamente en el sistema integrado de gestión estratégica' + 
-          ' de tegnologías (SIGETec) de la Universidad del Valle.' + 
-          '\n Este es un mensaje autogenerado. Por favor no intente responder este mensaje.'
+        const subject = 'Notificación SIGETec: Notificación de registro de nueva tecnología.';
+        const message = 'La tecnología titulada "' + technology.name + 
+          '" ha sido registrada exitosamente en el sistema integrado de gestión estratégica' + 
+          ' de tegnologías (SIGETec) de la Universidad del Valle. \n \n' +
+          'Detalles de tecnología registrada: \n'+
+          'Investigador principal: ' + technology['principal-researcher-email'] + '. \n' +
+          'Tipo de tecnología: ' + technology['technology-type'] + '. \n' +
+          'Identificador generado por el sistema: ' + technology['technologyId'] + '. \n\n' +
+          'Su tecnología será procesada por nuestro personal de la OTRI. \nMuchas gracias por utilizar SIGETec.' +
+          '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
         sendEmail(technology['principal-researcher-email'], subject, message);
       }
 
@@ -44,13 +49,13 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                               var message = "";
                               if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada'){
                                 subject = 'Notificación SIGETec: Notificación de registro de tecnología.';
-                                message = 'La tecnología ' + technology.name + 
-                                  ' ha sido registrada en el sistema.' + 
-                                  '\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
+                                message = 'La tecnología titulada "' + technology.name + 
+                                  '" ha sido registrada en el sistema con el id ' + technology['technologyId'] + '.' +
+                                  '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.';
                               }else{
                                 subject = 'Notificación SIGETec: Notificación de actualización de tecnología ' + technology.name;
-                                message = 'La tecnología ' + technology.name + 'ha sido atualizada por ' +
-                                  technology.updatesBy + '\n Este es un mensaje autogenerado. Por favor intente responder este mensaje.'
+                                message = 'La tecnología titulada ' + technology.name + 'ha sido atualizada por ' +
+                                  technology.updatesBy + '. \n\nEste es un mensaje autogenerado. Por favor intente responder este mensaje.'
                               }
                               sendEmail(user, subject, message);
                               // sendEmail(technology.createdBy, technology.name);
