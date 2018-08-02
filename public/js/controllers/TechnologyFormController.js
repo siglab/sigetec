@@ -44,18 +44,20 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.fileCategory = "";  
     if ($routeParams.technologyId) {
         context.currentNavItem = "FNI";
-        context.showCreate = true;
+        // context.showCreate = false;
     } else {
         context.currentNavItem = "Información Basica";
     }
-    if($rootScope.permissions !== undefined){
-        if($rootScope.permissions.find(function(permission){ return "return" === permission; })){
-            context.showReturn = true;
-        }
-        if($rootScope.permissions.find(function(permission){ return "assign" === permission; })){
-            context.showAssign = true;
-        }
-    }
+    // if($rootScope.permissions !== undefined){
+    //     if($rootScope.permissions.find(function(permission){ return "return" === permission; })){
+    //         console.log('Entra acá 1?');
+    //         context.showReturn = true;
+    //     }
+    //     if($rootScope.permissions.find(function(permission){ return "assign" === permission; })){
+    //         context.showAssign = true;
+    //         console.log('Entra acá 2?');
+    //     }
+    // }
     if($rootScope.userRole === "researcher"){
         context.isResearcher = true;
     }else{
@@ -112,20 +114,19 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                                                         .child("technologies/"+$routeParams.technologyId);
             var technologyRequested = $firebaseObject(technologyRequestedReference);
             technologyRequested.$loaded().then(function(){
-                
-                if(technologyRequested.status !== 'En diligencia'){
+                if(technologyRequested.status != 'En diligencia'){
                     context.formatObjects['FNI'].readonly = true;
                     context.formatObjects['Información Basica'].readonly = true;
                     context.showRegister = false;
+                    context.showCreate = false;
                 }
-                
-                if(technologyRequested.status !== 'Registrada'){
-                    context.showReturn = false;
+                if(technologyRequested.status == 'Registrada'){
+                    console.log('Entra a esta vaina 3?????');
+                    context.showReturn = true;
+                    context.showAssign = true;
                 }
-
                 context.assignedTo = technologyRequested.assignedTo;
                 context.technologyStatus = technologyRequested.status;
-                
                 var detailRequestedReference = firebase.database()
                                                         .ref()
                                                         .child("technologies-detail/"+technologyRequested.technologyId);
@@ -156,9 +157,10 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             }
         }else{
             context.formatObjects["FNI"].showTab = false;
-            if($rootScope.userRole === "researcher"){
-                context.showCreate = true;
-            }
+            context.showCreate = true;
+            // if($rootScope.userRole === "researcher"){
+            //     context.showCreate = true;
+            // }
         }
     });
                                

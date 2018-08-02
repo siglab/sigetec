@@ -68,27 +68,27 @@ sigetecApp.config(['$routeProvider',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).when('/technology-form/:technologyId', {
            templateUrl: 'partials/technology-form.html',
-           controller : 'TechnologyFormController',
+           // controller : 'TechnologyFormController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).when('/roles', {
            templateUrl: 'partials/roles.html',
-           controller : 'RolesController',
+           // controller : 'RolesController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
         }).when('/references', {
            templateUrl: 'partials/references.html',
-           controller : 'ReferencesController',
+           // controller : 'ReferencesController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).when('/formats', {
            templateUrl: 'partials/formats.html',
-           controller : 'FormatsController',
+           // controller : 'FormatsController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).when('/technologies', {
            templateUrl: 'partials/technologies.html',
-           controller : 'TechnologiesController',
+           // controller : 'TechnologiesController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).when('/reports', {
            templateUrl: 'partials/report.html',
-           controller : 'ReportController',
+           // controller : 'ReportController',
            resolve: { "currentAuth": ["Auth", function(Auth){  return Auth.$waitForSignIn(); }]}
        }).otherwise({
            redirectTo : '/home' 

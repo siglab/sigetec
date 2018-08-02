@@ -1,13 +1,13 @@
 <div ng-controller="TechnologyFormController as controller" class="container-fluid" style="width: 90%">
     <!-- Estado de tecnología -->
-    <div class="row" style="margin-top: 15px">
+    <div class="row" style="margin-top: 15px" ng-cloak>
         <div class="col-md-10"><h4 ng-if="controller.answers['basic'][0].name">Título de tu tecnología: <u>{{controller.answers['basic'][0].name}}</u></h4></div>
         <div class="col-md-2"><div class="float-right">
             <span class="badge" style="margin-top: 20px; font-size: 12pt; padding: 5pt; background-color: #D51B23; color: white; font-weight: normal"> Estado: {{controller.technologyStatus}}</span>
         </div></div>
     </div>
     <!-- Formatos de tecnología -->
-    <div class="message">
+    <div class="message" ng-cloak>
         <div class="row">
             <div class="col-md-6">
                 <h3>Formato Tecnología</h3>
@@ -19,20 +19,20 @@
                             <md-icon md-menu-origin md-svg-icon="img/icons/more.svg"></md-icon>
                         </md-button>
                         <md-menu-content width="4">
+                            <md-menu-item ng-show="controller.showReturn && userRole == 'coordinator'">
+                                <md-button ng-click="controller.return()">Retornar a investigador</md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-show="controller.showAssign">
+                                <md-button ng-click="controller.showAssignDialog() && userRole == 'coordinator'">Asignar a personal OTRI</md-button>
+                            </md-menu-item>
                             <md-menu-item>
                                 <md-button ng-click="controller.showShareDialog()">Compartir</md-button>
                             </md-menu-item>
-                            <md-menu-item ng-show="context.showReturn">
-                                <md-button ng-click="controller.return()">Return</md-button>
-                            </md-menu-item>
-                            <md-menu-item ng-show="context.showAssign">
-                                <md-button ng-click="controller.showAssignDialog()">asignar</md-button>
-                            </md-menu-item>
                         </md-menu-content>
                     </md-menu>
-                    <md-button ng-repeat="status in controller.allowedStatus" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.changeStatus(status)" style="text-align:left">
+                    <!-- <md-button ng-repeat="status in controller.allowedStatus" class="md-raised md-primary float-right" aria-label="Guardar" ng-click="controller.changeStatus(status)" style="text-align:left">
                         {{status}}
-                    </md-button>
+                    </md-button> -->
                     <!--md-button ng-hide="controller.showCreate" class="md-raised float-right" aria-label="Cancelar" ng-click="controller.back()" style="text-align:left">
                         Cancelar
                     </md-button-->
@@ -276,13 +276,13 @@
                 </div>
                 <!-- Botones -->
                 <div style="text-align: center">
-                    <md-button ng-hide="controller.showCreate" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.create()">
+                    <md-button ng-show="controller.showCreate" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.create()">
                          <md-icon md-svg-icon="img/icons/save.svg"></md-icon>Guardar y continuar
                     </md-button>
-                    <md-button ng-show="!controller.showRegister && (controller.currentNavItem =='FNI')" class="md-raised md-primary float-right formButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()">
+                    <md-button ng-show="controller.showRegister && (controller.currentNavItem =='FNI')" class="md-raised md-primary float-right formButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()">
                         Registrar esta tecnología
                     </md-button>
-                    <md-button ng-hide="!controller.showCreate" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit"ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.save()">
+                    <md-button ng-show="!controller.showCreate && !controller.formatObjects[controller.currentNavItem].readonly" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.save()">
                         <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar cambios
                     </md-button>
                 </div>
