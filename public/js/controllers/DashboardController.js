@@ -154,7 +154,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                     positionX: 'center', 
                     positionY: 'bottom'});
             }
-            console.log(context.technologies);
+            // console.log(context.technologies);
         });
     }
     

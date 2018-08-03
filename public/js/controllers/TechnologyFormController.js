@@ -41,6 +41,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.showRegister = false;
     context.showCreate = false;
     context.technologyStatus = "En diligencia";
+    context.technologyStatusComments = [];
     context.fileCategory = "";  
     if ($routeParams.technologyId) {
         context.currentNavItem = "FNI";
@@ -50,12 +51,10 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     // if($rootScope.permissions !== undefined){
     //     if($rootScope.permissions.find(function(permission){ return "return" === permission; })){
-    //         console.log('Entra acá 1?');
     //         context.showReturn = true;
     //     }
     //     if($rootScope.permissions.find(function(permission){ return "assign" === permission; })){
     //         context.showAssign = true;
-    //         console.log('Entra acá 2?');
     //     }
     // }
     if($rootScope.userRole === "researcher"){
@@ -121,12 +120,14 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     context.showCreate = false;
                 }
                 if(technologyRequested.status == 'Registrada'){
-                    console.log('Entra a esta vaina 3?????');
                     context.showReturn = true;
                     context.showAssign = true;
                 }
                 context.assignedTo = technologyRequested.assignedTo;
                 context.technologyStatus = technologyRequested.status;
+                if (technologyRequested.statusComments) {
+                    context.technologyStatusComments = technologyRequested.statusComments; 
+                }
                 var detailRequestedReference = firebase.database()
                                                         .ref()
                                                         .child("technologies-detail/"+technologyRequested.technologyId);
@@ -326,9 +327,46 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     context.return = function(){
-        context.technologyStatus = "En diligencia";
-        context.save();
-    }
+        $mdDialog.show({
+            controller: context.showReturnDialogController,
+            templateUrl: 'partials/return-technology-comments.html',
+            parent: angular.element(document.body),
+            clickOutsideToClose:true,
+            fullscreen: true// Only for -xs, -sm breakpoints.
+        })
+        .then(function(answer) {
+        }, function() {
+        });
+    };
+
+    context.showReturnDialogController = function ($scope, $mdDialog){
+        $scope.commentsField = "";
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.send = function(){
+            context.technologyStatus = "En diligencia";
+            if(context.technologyStatusComments){
+                context.technologyStatusComments = [{
+                    message:$scope.commentsField,
+                    date: Date.now(),
+                    by: $rootScope.userEmail
+                }].concat(context.technologyStatusComments);
+            }else{
+                context.technologyStatusComments = [{
+                    message:$scope.commentsField,
+                    date: Date.now(),
+                    by: $rootScope.userEmail
+                }];
+            }
+            context.save('La tecnología se retornó al investigador satisfactoriamente', 'dashboard');
+            $scope.comments = "";
+            $mdDialog.hide();
+        }
+    };
     
     context.save = function(message=null, url=null){
         var today = new Date().getTime();
@@ -341,6 +379,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     technology.updatedAt = today;
                     technology.updatesBy = $rootScope.userEmail;
                     technology.status = context.technologyStatus;
+                    if(!technology.statusComments) technology.statusComments = [];
+                    technology.statusComments = context.technologyStatusComments;
                     if(context.assignedTo != undefined){
                         technology.assignedTo = context.assignedTo;
                     }
@@ -373,6 +413,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 });
             }catch(e){
                 context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
+                console.log(e);
             }
         }else{
             try{
