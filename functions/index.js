@@ -33,6 +33,16 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
           'Su tecnología será procesada por nuestro personal de la OTRI. \nMuchas gracias por utilizar SIGETec.' +
           '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
         sendEmail(technology['principal-researcher-email'], subject, message);
+      } else if (change.before.val().status == 'Registrada' && technology.status == 'En diligencia') {
+        const subject = 'Notificación SIGETec: Notificación de retorno de tecnología registrada.';
+        const message = 'La tecnología titulada "' + technology.name + 
+          '" ha sido devuelta a estado "En diligencia" en el sistema integrado de gestión estratégica' + 
+          ' de tegnologías (SIGETec) de la Universidad del Valle, tras haber sido inspeccionada por el personal de la OTRI. \n \n' +
+          'Comentarios agregados por el personal de la OTRI: \n'+
+          technology.statusComments[0].message + '\n\n' + 
+          'Realice los cambios que considere necesarios en los formatos y registre nuevamente la tecnología en el sistema cuando así lo desee. \nMuchas gracias por utilizar SIGETec.' +
+          '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
+        sendEmail(technology['principal-researcher-email'], subject, message);
       }
 
       admin.database().ref('/roles/definition').once("value").then(snapshot => {
@@ -42,9 +52,6 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                   rol.allowedStatus.notify.forEach(function(status){
                       if(status === technology.status ){
                           rol.users.forEach(function(user){
-                              // console.log('Send email to:', user);
-                              console.log(change.before.val());
-                              console.log(change.after.val());
                               var subject = "";
                               var message = "";
                               if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada'){
