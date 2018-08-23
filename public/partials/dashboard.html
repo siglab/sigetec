@@ -11,16 +11,39 @@
     <br />
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="100" layout="column">
+            
+
             <md-card md-theme="{{ 'default' }}" md-theme-watch>
                 <md-card-title>
                     <md-card-title-text>
-                        <span class="md-headline" ng-show="controller.showWorkerDashboard">Tecnologias</span>
-                        <span class="md-headline" ng-show="controller.showResearcherDashboard">Mis Tecnologias</span>
+                        <span class="md-headline">Mis Tecnologias</span>
                     </md-card-title-text>
                 </md-card-title>
                 <md-card-content layout="row" layout-align="space-between">
                     <md-list flex>
-                        <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:5" ng-click="controller.editTechnology(technology)">
+                        <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:5" ng-click="controller.editTechnology(technology)" ng-if="technology.createdBy == userEmail">
+                            <div style="border-left: solid 2pt #333; padding-left: 3pt; max-width: 900px; width: 100%;" class="md-list-item-text" layout="column">
+                                <h3>{{technology.name | limitTo: 120}}</h3>
+                                <!-- <p><i>Creada por {{technology.createdBy}} el {{technology.createdAt}}, asignada a {{technology.assignedTo}}</i></p> -->
+                                <p><i>Creada por {{technology.createdBy}} el {{technology.createdAt}}</i></p>
+                                <p>{{technology.description | limitTo: 130}}</p>
+                            </div>
+                            <span class="md-secondary badge" style="width:120px">{{technology.status}}</span>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+
+
+            <md-card md-theme="{{ 'default' }}" md-theme-watch ng-if="controller.showCoordinatorDashboard">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Tecnologias registradas sin asignar</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content layout="row" layout-align="space-between">
+                    <md-list flex>
+                        <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:5" ng-click="controller.editTechnology(technology)" ng-if="technology.status == 'Registrada'">
                             <div style="border-left: solid 2pt #333; padding-left: 3pt; max-width: 900px; width: 100%;" class="md-list-item-text" layout="column">
                                 <h3>{{technology.name | limitTo: 120}}</h3>
                                 <p><i>Creada por {{technology.createdBy}} el {{technology.createdAt}}, asignada a {{technology.assignedTo}}</i></p>
@@ -31,6 +54,8 @@
                     </md-list>
                 </md-card-content>
             </md-card>
+
+
         </div>
     </md-content>
 

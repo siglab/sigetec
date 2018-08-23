@@ -153,7 +153,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
 
                 });
             });
-            if($rootScope.userRole === "researcher"){
+            if($rootScope.userRoles.indexOf("researcher") >= 0){
                 context.showRegister = true;
             }
         }else{

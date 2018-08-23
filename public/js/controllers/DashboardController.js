@@ -21,63 +21,94 @@ dashboardController.controller('DashboardController',
                            '$window',
                            'Notification',
 function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArray, $mdDialog, $mdToast, $window, Notification){
-    var context = this;
     window.onscroll = function() {};
+    var context = this;
     var rolesReference = firebase.database().ref().child("roles/definition");
     var roles = $firebaseArray(rolesReference);
-    
     context.noTechnologies = false;
-           
-    context.chartOptions = {
-        chart: {
-            type: 'multiBarHorizontalChart',
-            height: 450,
-            x: function(d){return d.label;},
-            y: function(d){return d.value;},
-            showControls: false,
-            showValues: true,
-            duration: 500,
-            width: 500,
-            xAxis: {
-                showMaxMin: false
-            },
-            yAxis: {
-                axisLabel: '',
-                tickFormat: function(d){
-                    return d3.format(',.0f')(d);
-                }
-            }
-        }
+    context.showResearcherDashboard = true;
+    context.showCoordinatorDashboard = false;
+    context.showWorkerDashboard = false;
+    $rootScope.permissions = [];
+    $rootScope.userRoles = ['researcher'];
+    $rootScope.allowedStatus = {
+        change: [],
+        view: []
     };
+
+    // Grafico de barras    
+    // context.chartOptions = {
+    //     chart: {
+    //         type: 'multiBarHorizontalChart',
+    //         height: 450,
+    //         x: function(d){return d.label;},
+    //         y: function(d){return d.value;},
+    //         showControls: false,
+    //         showValues: true,
+    //         duration: 500,
+    //         width: 500,
+    //         xAxis: {
+    //             showMaxMin: false
+    //         },
+    //         yAxis: {
+    //             axisLabel: '',
+    //             tickFormat: function(d){
+    //                 return d3.format(',.0f')(d);
+    //             }
+    //         }
+    //     }
+    // };
     
-    $rootScope.userRole = "none";
+    // Get user permissions from assigned roles.
     roles.$loaded().then(function(){
         var availableUsers = [];
-        var userRole = undefined;
+        // var userRole = 'researcher';
         angular.forEach(roles, function(rol, rolName){
             angular.forEach(rol.users, function(user, userKey){
                 availableUsers.push(user);
                 if(user == $rootScope.userEmail){
-                    userRole = rol.rolName;
-                    $rootScope.permissions = rol.permissions;
-                    $rootScope.allowedStatus = rol.allowedStatus.change;
-                    $rootScope.allowedStatusView = rol.allowedStatus.view;
-                    context.showWorkerDashboard = true;
-                    context.showResearcherDashboard = false;
+                    // userRole = rol.rolName;
+                    $rootScope.userRoles.push(rol.rolName);
+                    if (rol.permissions) {
+                        $rootScope.permissions = $rootScope.permissions.concat(rol.permissions).unique();
+                    }
+                    if (rol.allowedStatus.change) {
+                        $rootScope.allowedStatus.change = $rootScope.allowedStatus.change.concat(rol.allowedStatus.change).unique();
+                    }
+                    if (rol.allowedStatus.view) {
+                        $rootScope.allowedStatus.view = $rootScope.allowedStatus.view.concat(rol.allowedStatus.view).unique();
+                    }
+                    // context.showWorkerDashboard = true;
+                    // context.showResearcherDashboard = false;
                 }
             });
             $rootScope.availableUsers = availableUsers;
         });
-        if(userRole == undefined){
-            userRole = "researcher";
-            context.showResearcherDashboard = true;
-            context.showWorkerDashboard = false;
+
+        if ($rootScope.permissions.indexOf("showRegistered") >= 0) {
+            context.showCoordinatorDashboard = true;
         }
-        $rootScope.userRole = userRole;
-        if(userRole !== undefined){
-            context.getAllowedTechnologies(userRole);
-        } 
+
+        // if(userRole == undefined){
+        //     userRole = "researcher";
+        //     context.showResearcherDashboard = true;
+        //     context.showWorkerDashboard = false;
+        // }
+        // $rootScope.userRole = userRole;
+        // if(userRole !== undefined){
+        //  context.getAllowedTechnologies(userRole);
+        // }
+        
+        if ($rootScope.userRoles.length == 1) {
+            context.getAllowedTechnologies('researcher');
+        }else{
+            context.getAllowedTechnologies('other');
+        }
     });
+
+
+
+
     
     context.getAllowedTechnologies = function(rolName){
         var technologiesReference = undefined;
@@ -92,7 +123,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
         
         //var technologiesReference = firebase.database().ref().child("technologies").orderByChild('createdAt');
         var technologies = $firebaseArray(technologiesReference);
-        
+
         technologies.$loaded().then(function(){
             context.technologies = [];
             if(rolName == "researcher"){
@@ -100,8 +131,12 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                     context.addTechnology(technology);
                 });
             }else {
+
+                console.log($rootScope.allowedStatus);
+
+
                 angular.forEach(technologies, function(technology, key){
-                    if($rootScope.allowedStatusView.find(function(status){ return status == technology.status; })){
+                    if($rootScope.allowedStatus.view.find(function(status){ return status == technology.status; })){
                         context.addTechnology(technology);
                     }
                 });
@@ -114,7 +149,7 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                 var share = $firebaseArray(shareReference);
                 share.$loaded().then(function(){
                     angular.forEach(technologies, function(technology, key){
-                        if($rootScope.allowedStatusView.find(function(status){ return status == technology.status; })){
+                        if($rootScope.allowedStatus.view.find(function(status){ return status == technology.status; })){
                             context.addTechnology(technology);
                         }
                     });
@@ -182,5 +217,16 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
     context.editTechnology = function(technology){
         $location.path('technology-form/'+technology.$id);
     }
+
+    Array.prototype.unique = function() {
+        var a = this.concat();
+        for(var i=0; i<a.length; ++i) {
+            for(var j=i+1; j<a.length; ++j) {
+                if(a[i] === a[j])
+                    a.splice(j--, 1);
+            }
+        }
+        return a;
+    };
     
 }]);
