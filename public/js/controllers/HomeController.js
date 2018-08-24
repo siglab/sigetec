@@ -182,10 +182,10 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
             })
         .then(function(answer) {
             // console.log(answer);
-            $scope.status = 'You said the information was "' + answer + '".';
+            // $scope.status = 'You said the information was "' + answer + '".';
         }, function() {
             // console.log('You cancelled the dialog');
-            $scope.status = 'You cancelled the dialog.';
+            // $scope.status = 'You cancelled the dialog.';
         });
     }
 

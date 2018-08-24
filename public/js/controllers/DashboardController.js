@@ -106,10 +106,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
         }
     });
 
-
-
-
-    
     context.getAllowedTechnologies = function(rolName){
         var technologiesReference = undefined;
         if(rolName == "researcher"){
@@ -131,9 +127,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                     context.addTechnology(technology);
                 });
             }else {
-
-                console.log($rootScope.allowedStatus);
-
 
                 angular.forEach(technologies, function(technology, key){
                     if($rootScope.allowedStatus.view.find(function(status){ return status == technology.status; })){

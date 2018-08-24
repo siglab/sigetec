@@ -183,31 +183,31 @@
                             </h1>
                         </md-toolbar>
                         <md-content layout-margin>
-                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showRoles()">
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showRoles()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Roles</h3>
                                     <p>Administracion de roles</p>
                                 </div>
                             </md-list-item>
-                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showFormats()">
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showFormats()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Formatos</h3>
                                     <p>Administracion de Formatos</p>
                                 </div>
                             </md-list-item>
-                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showReferences()">
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showReferences()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Valores de referencia</h3>
                                     <p>Administracion de listados de valores</p>
                                 </div>
                             </md-list-item>
-                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showTechnologies()">
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showTechnologies()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Tecnologias</h3>
                                     <p>Listado de tecnologias.</p>
                                 </div>
                             </md-list-item>
-                            <md-list-item ng-hide="userRole == 'researcher'" class="md-2-line" ng-click="controller.showReports()">
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showReports()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Informes</h3>
                                     <p>Listado de informes.</p>
@@ -221,7 +221,8 @@
                             </md-list-item>
                             <md-list-item class="md-2-line" ng-click="controller.closeSession()">
                                 <div class="md-list-item-text" layout="column">
-                                    <h3>Cerrar sesion.</h3>
+                                    <h3>Cerrar sesión</h3>
+                                    <p>Cierra tu sesión de usuario aquí.</p>
                                 </div>
                             </md-list-item>
                         </md-content>
