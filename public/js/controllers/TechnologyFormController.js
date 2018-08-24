@@ -120,8 +120,12 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     context.showCreate = false;
                 }
                 if(technologyRequested.status == 'Registrada'){
-                    context.showReturn = true;
-                    context.showAssign = true;
+                    if ($rootScope.permissions.indexOf('showReturn') >= 0) {
+                        context.showReturn = true;
+                    }
+                    if ($rootScope.permissions.indexOf('showAssign') >= 0) {
+                        context.showAssign = true;
+                    }                    
                 }
                 context.assignedTo = technologyRequested.assignedTo;
                 context.technologyStatus = technologyRequested.status;

@@ -14,19 +14,19 @@
             </div>
             <div class="col-md-6">
                 <div class="float-rigth">
-                    <md-menu ng-show="userRole != 'researcher'" class="float-right">
+                    <md-menu class="float-right">
                         <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
                             <md-icon md-menu-origin md-svg-icon="img/icons/more.svg"></md-icon>
                         </md-button>
                         <md-menu-content width="4">
-                            <md-menu-item ng-show="controller.showReturn && userRole == 'coordinator'">
+                            <md-menu-item ng-show="controller.showReturn">
                                 <md-button ng-click="controller.return()">Retornar a investigador</md-button>
                             </md-menu-item>
                             <md-menu-item ng-show="controller.showAssign">
-                                <md-button ng-click="controller.showAssignDialog() && userRole == 'coordinator'">Asignar a personal OTRI</md-button>
+                                <md-button ng-click="controller.showAssignDialog()">Asignar a personal OTRI</md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="controller.showShareDialog()">Compartir</md-button>
+                                <md-button ng-click="controller.showShareDialog()">Compartir esta tecnología</md-button>
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
