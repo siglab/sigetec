@@ -380,40 +380,44 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
                 var technology = $firebaseObject(technologyReference);
                 technology.$loaded().then(function(){
-                    technology.updatedAt = today;
-                    technology.updatesBy = $rootScope.userEmail;
-                    technology.status = context.technologyStatus;
-                    if(!technology.statusComments) technology.statusComments = [];
-                    technology.statusComments = context.technologyStatusComments;
-                    if(context.assignedTo != undefined){
-                        technology.assignedTo = context.assignedTo;
-                    }
-                    context.setBasicData(technology, basicData);
-                    technology.$save().then(function(reference){
-                        try {
-                            technologyId = $routeParams.technologyId;
-                            context.saveDetail(technology.technologyId);
-                            if (message == null || message == undefined ) {
-                                context.fireNotification('info', 'Información guardada satisfactoriamente.');
-                            }else{
-                                context.fireNotification('info', message);
-                                context.fileCategory = "";
-                                $("#document").val('');
-                                $scope.attachments.$setUntouched();
-                                $scope.attachments.$setPristine();
-                            }
-                            if (url == null || url == undefined) {
-                                $location.path('technology-form/'+technologyId);
-                            }else{
-                                $location.path(url);
-                            }                    
-                        }catch(e){
-                            console.log(e);
-                            context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
+                    if (technology.status == 'Registrada' && $rootScope.userRoles.length == 1) {
+                        context.fireNotification('error', 'No es posible guardar las modificaciones en el estado actual de la tecnología.');
+                    }else{
+                        technology.updatedAt = today;
+                        technology.updatesBy = $rootScope.userEmail;
+                        technology.status = context.technologyStatus;
+                        if(!technology.statusComments) technology.statusComments = [];
+                        technology.statusComments = context.technologyStatusComments;
+                        if(context.assignedTo != undefined){
+                            technology.assignedTo = context.assignedTo;
                         }
-                    }, function(error){
-                        context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
-                    });
+                        context.setBasicData(technology, basicData);
+                        technology.$save().then(function(reference){
+                            try {
+                                technologyId = $routeParams.technologyId;
+                                context.saveDetail(technology.technologyId);
+                                if (message == null || message == undefined ) {
+                                    context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                                }else{
+                                    context.fireNotification('info', message);
+                                    context.fileCategory = "";
+                                    $("#document").val('');
+                                    $scope.attachments.$setUntouched();
+                                    $scope.attachments.$setPristine();
+                                }
+                                if (url == null || url == undefined) {
+                                    $location.path('technology-form/'+technologyId);
+                                }else{
+                                    $location.path(url);
+                                }                    
+                            }catch(e){
+                                console.log(e);
+                                context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
+                            }
+                        }, function(error){
+                            context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                        });
+                    }
                 });
             }catch(e){
                 context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
