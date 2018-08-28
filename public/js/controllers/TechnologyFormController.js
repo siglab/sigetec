@@ -380,7 +380,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
                 var technology = $firebaseObject(technologyReference);
                 technology.$loaded().then(function(){
-                    if (technology.status == 'Registrada' && $rootScope.userRoles.length == 1) {
+                    if (technology.status == 'Registrada') {
                         context.fireNotification('error', 'No es posible guardar las modificaciones en el estado actual de la tecnología.');
                     }else{
                         technology.updatedAt = today;

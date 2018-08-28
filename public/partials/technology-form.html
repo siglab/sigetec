@@ -197,20 +197,38 @@
                                             </md-input-container>
                                         </div>
                                         <div ng-switch-when="long-text">
-                                            <md-input-container class="md-block" style="margin-bottom: 30px">
-                                                <label>{{question.tag}}</label>
-                                                <textarea name="{{question.name + $index}}"
-                                                  ng-model="answer[question.name]" 
-                                                  rows="3" 
-                                                  md-select-on-focus
-                                                  ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                  ng-required="question.required">
-                                                </textarea>
-                                                <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
-                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
-                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                                </div>
-                                            </md-input-container>
+                                            <div ng-if="question.prerequisite">
+                                                <md-input-container class="md-block" flex-gt-sm ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'" style="margin-bottom: 15px">
+                                                    <label>{{question.tag}}</label>
+                                                    <textarea name="{{question.name + $index}}"
+                                                      ng-model="answer[question.name]" 
+                                                      rows="3" 
+                                                      md-select-on-focus
+                                                      ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                      ng-required="question.required">
+                                                    </textarea>
+                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
+                                                        <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                            <div ng-if="!question.prerequisite">
+                                                <md-input-container class="md-block" style="margin-bottom: 15px">
+                                                    <label>{{question.tag}}</label>
+                                                    <textarea name="{{question.name + $index}}"
+                                                      ng-model="answer[question.name]" 
+                                                      rows="3" 
+                                                      md-select-on-focus
+                                                      ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                      ng-required="question.required">
+                                                    </textarea>
+                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + $index + '\'].$error')">
+                                                        <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
                                         </div>
                                         <div ng-switch-when="tags" style="margin-bottom: 30px">
                                             <div ng-if="question.prerequisite">
