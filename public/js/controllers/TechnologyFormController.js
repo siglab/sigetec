@@ -402,6 +402,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                                     context.fireNotification('info', message);
                                     context.fileCategory = "";
                                     $("#document").val('');
+                                    $('form[name="attachments"]').trigger("reset");
                                     $scope.attachments.$setUntouched();
                                     $scope.attachments.$setPristine();
                                 }
