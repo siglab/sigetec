@@ -293,8 +293,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     
     function AssignDialogController($scope, $mdDialog) {
         console.log(context.availableUsers);
-        $scope.users = context.availableUsers;
-        
+        // $scope.users = context.availableUsers;
+        $scope.users = ["Julian", "Felipe"];
         $scope.select = function() {
             context.selectedUser = $scope.selectedUser;
         };

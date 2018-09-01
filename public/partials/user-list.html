@@ -1,4 +1,4 @@
-<md-dialog aria-label="UserSelection">
+<!-- <md-dialog aria-label="UserSelection">
   <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -21,4 +21,48 @@
         <md-button ng-click="onClickShare()">Compartir</md-button>
     </md-dialog-actions>
     </form>
+</md-dialog> -->
+
+
+<md-dialog aria-label="Assign technology" style="min-width: 50%">
+  <form ng-cloak name="assign">
+    <md-toolbar style="color:#75797d">
+      <div class="md-toolbar-tools">
+        <h2>Asignación de tecnología</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <img src="img/delete.png" style="width:100%; opacity: 0.5" />
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <p style="color: #75797d">
+          Seleccione el la persona a quien desea asignar esta tecnología:
+        </p>
+        <br>
+        <md-input-container class="md-block" flex-gt-sm>
+            <label>Correo institucional de persona seleccionada para asignar esta tecnología: </label>
+            <md-select name="personal" 
+                ng-model="selectedUser"
+                ng-required="true">
+                <md-option ng-repeat="user in users" value="{{option}}">
+                    {{user}}
+                </md-option>
+            </md-select>
+            <div ng-messages="assign.personal.$error">
+              <div ng-message="required">Se requiere de este campo para continuar.</div>
+            </div>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="cancel()">
+        Cerrar
+      </md-button>
+      <md-button type="submit" ng-click="assign.$valid && onClickShare()" style="background-color: #D51B23; color: white; border-radius: 5px; font-weight: 700;">
+        Asignar
+      </md-button>
+    </md-dialog-actions>
+  </form>
 </md-dialog>
