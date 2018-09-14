@@ -34,7 +34,12 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     $scope.authObj = $rootScope.auth;
     context.allowedStatus = $rootScope.allowedStatus;
     context.availableUsers = $rootScope.availableUsers;
-    context.answers = {"documents": []};
+    context.answers = {
+        "documents": [],
+        prerequisites: {
+            // "group-coresearcher": {}
+        }
+    };
     context.formatObjects = {};
     context.showReturn = false;
     context.showAssign = false;
@@ -151,10 +156,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         });
                         context.answers[name] = answersWithDate;
                     });
-
-
-                    console.log(context.answers);
-
                 });
             });
             if($rootScope.userRoles.indexOf("researcher") >= 0){
@@ -191,7 +192,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 };
                 documentsReference.put(fileToLoad, metadata).then(function(snapshot){
                     var url = snapshot.metadata.downloadURLs[0];
-                    console.log(context.answers);
                     context.answers.documents.push(
                         {
                             "url": url, 
@@ -246,7 +246,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     function ShareDialogController($scope, $mdDialog) {
-        console.log(context.availableUsers);
         $scope.users = context.availableUsers;
         
         $scope.select = function() {
@@ -292,7 +291,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     function AssignDialogController($scope, $mdDialog) {
-        console.log(context.availableUsers);
         // $scope.users = context.availableUsers;
         $scope.users = ["Julian", "Felipe"];
         $scope.select = function() {
@@ -316,7 +314,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     
     context.register = function(){
         if(context.answers.basic[0].acceptance){
-            console.log(context.answers);
             if($rootScope.userEmail == context.answers['group-principal-researcher'][0]['principal-researcher-email']){
                 context.technologyStatus = "Registrada";
                 context.save('La tecnología se registró exitosamente.', '/dashboard');
@@ -548,6 +545,19 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             return true;
         }else{
             return true;
+        }
+    }
+
+    context.prerequisitesChecker = function (questionGroup, prerequisiteQuestions){
+        if (!prerequisiteQuestions) {
+            return true;    
+        }else{
+            for (var i = 0; i < prerequisiteQuestions.length; i++) {
+                if(context.answers.prerequisites[questionGroup] && context.answers.prerequisites[questionGroup][prerequisiteQuestions[i].name] == prerequisiteQuestions[i].value){
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
