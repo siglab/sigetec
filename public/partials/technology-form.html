@@ -68,7 +68,6 @@
             <form name="{{controller.formatObjects[controller.currentNavItem].formName}}">
                 <div ng-repeat="(groupKey, questionGroup) in controller.formatObjects[controller.currentNavItem].questionGroups">
                     <h3 style="margin-top: 25px; text-decoration: underline">{{questionGroup.tag}}:</h3>
-
                     <div class="formgroup">
                         <md-content ng-if="questionGroup.prerequisites.ownGroupQuestions" layout-padding style="margin-top: 25px; border-radius:10px">
                             <div ng-repeat="prerequisiteQuestion in questionGroup.prerequisites.ownGroupQuestions">
@@ -89,9 +88,7 @@
                             </div>
                         </md-content>
                     </div>
-
                     <div ng-if="controller.prerequisitesChecker(questionGroup.name, questionGroup.prerequisites.ownGroupQuestions)">
-                        
                         <div ng-repeat="(answerKey, answer) in controller.answers[questionGroup.name]" class="formgroup">
                             <md-content layout-padding style="margin-top: 25px; border-radius:10px">
                                 <div class="row" style="width: 100%">
@@ -167,7 +164,11 @@
                                                                 {{option}}
                                                             </md-option>
                                                         </md-select>
-                                                        <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                        <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                            <md-icon ng-if="question.hint" class="float-right">
+                                                                <img src="img/help.png" style="width:140%" />
+                                                            </md-icon>
+                                                        </span>
                                                         <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
                                                             <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                         </div>
@@ -184,7 +185,11 @@
                                                                 {{option}}
                                                             </md-option>
                                                         </md-select>
-                                                        <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                        <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                            <md-icon ng-if="question.hint" class="float-right">
+                                                                <img src="img/help.png" style="width:140%" />
+                                                            </md-icon>
+                                                        </span>
                                                         <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
                                                             <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                         </div>
@@ -214,7 +219,11 @@
                                                             {{pair.key}}
                                                         </md-option>
                                                     </md-select>
-                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                     <!-- <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                        <md-icon ng-if="question.hint" class="float-right">
+                                                            <img src="img/help.png" style="width:140%" />
+                                                        </md-icon>
+                                                    </span> -->
                                                     <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
                                                         <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                     </div>
@@ -331,18 +340,15 @@
                                 </div>
                             </md-content>
                         </div>
-                        
-                    
-
-
                     </div>
-
-
-
-
                     <!-- Botón adicionar -->
-                    <div>
+                    <div ng-if="!questionGroup.prerequisites">
                         <md-button class="md-raised md-primary" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.addAnswers(questionGroup.name)" style="text-align:left margin-top:10px">
+                            <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{questionGroup.tag}}
+                        </md-button>
+                    </div>
+                    <div ng-if="questionGroup.prerequisites">
+                        <md-button class="md-raised md-primary" ng-show="(questionGroup.type == 'array' && controller.prerequisitesChecker(questionGroup.name, questionGroup.prerequisites.ownGroupQuestions))" aria-label="add" ng-click="controller.addAnswers(questionGroup.name)" style="text-align:left margin-top:10px">
                             <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{questionGroup.tag}}
                         </md-button>
                     </div>
