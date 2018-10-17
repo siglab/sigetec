@@ -43,14 +43,14 @@
                 </md-card-title>
                 <md-card-content layout="row" layout-align="space-between">
                     <md-list flex>
-                        <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:5" ng-click="controller.editTechnology(technology)" ng-if="technology.status == 'Registrada'">
+                        <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies | limitTo:10" ng-click="controller.editTechnology(technology)" ng-if="technology.status == 'Registrada'">
                             <div style="border-left: solid 2pt #333; padding-left: 3pt; max-width: 900px; width: 100%;" class="md-list-item-text" layout="column">
                                 <h3>{{technology.name | limitTo: 120}}</h3>
                                 <p>
                                     <i ng-if="technology.assignedTo">Creada por {{technology.createdBy}} el {{technology.createdAt}}, asignada a {{technology.assignedTo}}</i>
                                     <i ng-if="!technology.assignedTo">Creada por {{technology.createdBy}} el {{technology.createdAt}}, sin asignar.</i>
                                 </p>
-                                <p>{{technology.description | limitTo: 130}}</p>
+                                <p>{{technology.description | limitTo: 280}}</p>
                             </div>
                             <span class="md-secondary badge" style="width:120px">{{technology.status}}</span>
                         </md-list-item>
