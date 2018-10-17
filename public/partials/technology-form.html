@@ -207,16 +207,21 @@
                                                 </div>
                                             </div>
                                             <div ng-switch-when="date">
-                                                <label>{{question.tag}}</label>
-                                                <md-datepicker name="{{question.name + groupKey}}"
-                                                    ng-model="answer[question.name]"
-                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
-                                                    ng-required="question.required">
-                                                </md-datepicker>
-                                                <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
-                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
-                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                                </div>
+                                                <md-input-container class="md-block" flex-gt-sm style="margin-left: 13px; margin-top: 30px;">
+                                                    <div class="row" style="width: 100%">
+                                                        <label>{{question.tag}}</label>
+                                                        <md-datepicker name="{{question.name + groupKey}}"
+                                                            ng-model="answer[question.name]"
+                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                            ng-required="question.required"
+                                                            style="margin-top: 12px">
+                                                        </md-datepicker>
+                                                        <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                        <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
+                                                            <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                        </div>
+                                                    </div>
+                                                </md-input-container>
                                             </div>
                                             <div ng-switch-when="reference">
                                                 <md-input-container class="md-block" flex-gt-sm style="margin-bottom: 30px">
