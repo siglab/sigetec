@@ -116,18 +116,20 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         });
         if($routeParams.technologyId){
             var technologyRequestedReference = firebase.database()
-                                                        .ref()
-                                                        .child("technologies/"+$routeParams.technologyId);
+                .ref()
+                .child("technologies/"+$routeParams.technologyId);
             var technologyRequested = $firebaseObject(technologyRequestedReference);
             technologyRequested.$loaded().then(function(){
+                if (technologyRequested.status == 'En diligencia') {
+                    if ($rootScope.permissions.indexOf('showRegistrationDate') >= 0) {
+                        context.showRegistrationDate = true;
+                    }
+                }
                 if(technologyRequested.status != 'En diligencia'){
                     context.formatObjects['FNI'].readonly = true;
                     context.formatObjects['Información Basica'].readonly = true;
                     context.showRegister = false;
                     context.showCreate = false;
-                    if ($rootScope.permissions.indexOf('showRegistrationDate') >= 0) {
-                        context.showRegistrationDate = true;
-                    }
                 }
                 if(technologyRequested.status == 'Registrada'){
                     if ($rootScope.permissions.indexOf('showReturn') >= 0) {
@@ -319,16 +321,19 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     
     context.register = function(){
         if(context.answers.basic[0].acceptance){
-            if($rootScope.userEmail == context.answers['group-principal-researcher'][0]['principal-researcher-email']){
+            if(context.showRegistrationDate){
                 context.technologyStatus = "Registrada";
                 context.save('La tecnología se registró exitosamente.', '/dashboard');
             }else{
-                context.fireNotification('error', 'Solo puede registrar la tecnologia el investigador principal.');
-                // alert("Solo puede registrar la tecnologia el investigador principal");
+                if($rootScope.userEmail == context.answers['group-principal-researcher'][0]['principal-researcher-email']){
+                    context.technologyStatus = "Registrada";
+                    context.save('La tecnología se registró exitosamente.', '/dashboard');
+                }else{
+                    context.fireNotification('error', 'Solo puede registrar la tecnologia el investigador principal.');
+                }
             }
         }else{
             context.fireNotification('error', 'Se deben aceptar los terminos y condiciones para poder continuar.');
-            // alert("Debe aceptar los terminos y condiciones para poder guardar.");
         }
     }
     
@@ -550,7 +555,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
       $mdMenu.open();
     }
 
-    context.checker = function (valid){
+    context.checker = function(valid){
         if(!valid) {
             context.fireNotification('error', 'El formulario no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
             return true;
