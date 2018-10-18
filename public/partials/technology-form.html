@@ -342,7 +342,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                        <!-- Botón quitar -->
+                                    <!-- Botón quitar -->
                                     <div class="col-md-12">
                                         <md-button ng-show="questionGroup.type == 'array' && answerKey != 0" class="md-raised md-primary float-rigth" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.removeAnswers(questionGroup.name, answerKey)" style="text-align:left">
                                             <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{questionGroup.tag}}
@@ -376,9 +376,8 @@
                         <md-input-container class="md-block col-md-6" flex-gt-sm style="margin-top: 30px;">
                             <div class="row" style="width: 100%">
                                 <label>Fecha de registro del formato</label>
-                                <md-datepicker name="{{question.name + groupKey}}"
-                                    ng-model="answer[question.name]"
-                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                <md-datepicker name="registrationDate"
+                                    ng-model="controller.registrationDate"
                                     ng-required=true
                                     style="margin-top: 12px">
                                 </md-datepicker>

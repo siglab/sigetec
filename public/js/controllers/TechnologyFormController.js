@@ -47,6 +47,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.showCreate = false;
     context.showRegistrationDate = false;
     context.technologyStatus = "En diligencia";
+    context.registrationDate = null;
     context.technologyStatusComments = [];
     context.fileCategory = "";  
     if ($routeParams.technologyId) {
@@ -83,14 +84,13 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
           questionName : "granted-date" }
     ];
     var formatsReference = firebase.database().ref().child("formats/structure");
-    // console.log(formatsReference);
     var referencesReference = firebase.database().ref().child("references/definition");
-    // console.log(formatsReference);
     var formats = $firebaseArray(formatsReference);
     var references = $firebaseObject(referencesReference);
     references.$loaded().then(function(){
         context.references = references;
     });
+    // Load the existing formats and sets controller variables if a saved technology has been selected.
     formats.$loaded().then(function(){
         context.formats = formats;
         angular.forEach(formats, function(format){
@@ -120,11 +120,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 .child("technologies/"+$routeParams.technologyId);
             var technologyRequested = $firebaseObject(technologyRequestedReference);
             technologyRequested.$loaded().then(function(){
-                if (technologyRequested.status == 'En diligencia') {
-                    if ($rootScope.permissions.indexOf('showRegistrationDate') >= 0) {
-                        context.showRegistrationDate = true;
-                    }
-                }
                 if(technologyRequested.status != 'En diligencia'){
                     context.formatObjects['FNI'].readonly = true;
                     context.formatObjects['Información Basica'].readonly = true;
@@ -139,14 +134,21 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         context.showAssign = true;
                     }                    
                 }
+                if ($rootScope.permissions.indexOf('showRegistrationDate') >= 0) {
+                    context.showRegistrationDate = true;
+                }
                 context.assignedTo = technologyRequested.assignedTo;
                 context.technologyStatus = technologyRequested.status;
+
+                if (technologyRequested.registeredAt) {
+                    context.registrationDate = new Date(technologyRequested.registeredAt);
+                }
                 if (technologyRequested.statusComments) {
                     context.technologyStatusComments = technologyRequested.statusComments; 
                 }
                 var detailRequestedReference = firebase.database()
-                                                        .ref()
-                                                        .child("technologies-detail/"+technologyRequested.technologyId);
+                    .ref()
+                    .child("technologies-detail/"+technologyRequested.technologyId);
                 var technologiesRequestedDetail = $firebaseObject(detailRequestedReference);
                 technologiesRequestedDetail.$loaded().then(function(){
                     var answers = technologiesRequestedDetail.answers;
@@ -394,11 +396,13 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         technology.updatedBy = $rootScope.userEmail;
                         if (technology.status == 'Registrada' && context.technologyStatus == 'En diligencia' && technology.registeredAt) {
                           technology.registeredAt = null;  
-                        }  
-                        technology.status = context.technologyStatus;
-                        if (context.technologyStatus == 'Registrada') {
-                          technology.registeredAt = today;  
                         }
+                        if (context.showRegistrationDate) {
+                            technology.registeredAt = new Date(context.registrationDate).getTime();
+                        } else {
+                            technology.registeredAt = today
+                        }
+                        technology.status = context.technologyStatus;
                         if(!technology.statusComments) technology.statusComments = [];
                         technology.statusComments = context.technologyStatusComments;
                         if(context.assignedTo != undefined){
