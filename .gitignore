@@ -16,3 +16,4 @@ functions/node_modules/
 .firebase/
 firebase.json
 firebase-debug.log
+public/js/config/
