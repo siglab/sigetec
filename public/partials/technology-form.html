@@ -2,8 +2,15 @@
     <!-- Estado de tecnología -->
     <div class="row" style="margin-top: 15px" ng-cloak>
         <div class="col-md-10"><h4 ng-if="controller.answers['basic'][0].name">Título de tu tecnología: <u>{{controller.answers['basic'][0].name}}</u></h4></div>
-        <div class="col-md-2"><div class="float-right">
-            <span class="badge" style="margin-top: 20px; font-size: 12pt; padding: 5pt; background-color: #D51B23; color: white; font-weight: normal"> Estado: {{controller.technologyStatus}}</span>
+        <div class="col-md-2"><div class="float-right" style="text-align: center">
+            <span class="badge" style="margin-top: 20px; font-size: 12pt; padding: 5pt; background-color: #D51B23; color: white; font-weight: normal"> 
+                Estado: {{controller.technologyStatus}}
+            </span>
+            <div ng-if="controller.technologyStatus == 'Registrada'">
+                <p style="font-size: 0.8rem;">
+                    Esta tecnología no puede ser modificada en el estado actual
+                </p>
+            </div>
         </div></div>
     </div>
     <!-- Formatos de tecnología -->
@@ -230,8 +237,8 @@
                                                             ng-model="answer[question.name]"
                                                             ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                             ng-required="question.required">
-                                                        <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.value}}">
-                                                            {{pair.key}}
+                                                        <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}">
+                                                            {{pair.value}}
                                                         </md-option>
                                                     </md-select>
                                                      <!-- <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">

@@ -1,10 +1,10 @@
 var projectConfig = {
-    apiKey: "AIzaSyB8dYtRpIU_HiGdBqmmJBf46Y9DEAiL1Kc",
-    authDomain: "nuevosigetec.firebaseapp.com",
-    databaseURL: "https://nuevosigetec.firebaseio.com",
-    projectId: "nuevosigetec",
-    storageBucket: "nuevosigetec.appspot.com",
-    messagingSenderId: "442561749987"
-  };
+    apiKey: "AIzaSyDvEwv-mudgDHMIF4407J84Jd9cqk0kwU4",
+    authDomain: "sigetec-dev.firebaseapp.com",
+    databaseURL: "https://sigetec-dev.firebaseio.com",
+    projectId: "sigetec-dev",
+    storageBucket: "sigetec-dev.appspot.com",
+    messagingSenderId: "396670079668"
+};
 
 firebase.initializeApp(projectConfig);

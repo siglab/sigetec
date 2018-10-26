@@ -8,7 +8,7 @@
   window.__apiRoutes = window.__apiRoutes || {};
 
   // Default variables initialization
-  const DEFAULT_CLOUD_FUNCTIONS_ROUTE = 'https://us-central1-nuevosigetec.cloudfunctions.net';
+  const DEFAULT_CLOUD_FUNCTIONS_ROUTE = 'YOUR_GIVEN_CLOUD_FUNCTIONS_URL_HERE';
 
   // Api routes object. Add as much routes as as cloud functions you have with a request response.
   /* DO NOT TOUCH ANY LINE OF CODE FROM HERE */
