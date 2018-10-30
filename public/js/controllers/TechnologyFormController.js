@@ -400,9 +400,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
                 var technology = $firebaseObject(technologyReference);
                 technology.$loaded().then(function(){
-                    if (technology.status == 'Registrada') {
-                        context.fireNotification('error', 'No es posible guardar las modificaciones en el estado actual de la tecnología.');
-                    }else{
+                    // if (technology.status == 'Registrada' && $rootScope.userRoles.length) {
+                        // context.fireNotification('error', 'No es posible guardar las modificaciones en el estado actual de la tecnología.');
+                    // }else{
                         technology.updatedAt = today;
                         technology.updatedBy = $rootScope.userEmail;
                         if (technology.status == 'Registrada' && context.technologyStatus == 'En diligencia' && technology.registeredAt) {
@@ -446,7 +446,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         }, function(error){
                             context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
                         });
-                    }
+                    // }
                 });
             }catch(e){
                 context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');

@@ -15,6 +15,7 @@
     </div>
     <!-- Formatos de tecnología -->
     <div class="message" ng-cloak>
+        <!-- Título y opciones de personal de OTRI -->
         <div class="row">
             <div class="col-md-6">
                 <h3>Formato Tecnología</h3>
@@ -64,27 +65,23 @@
                 </md-menu>
             </div> -->
         </div>
-
-
+        <!-- Pestañas con nombres de fotmatos -->
         <md-nav-bar md-selected-nav-item="controller.currentNavItem"
                     nav-bar-aria-label="navigation links">
             <md-nav-item ng-repeat="format in controller.formats" md-nav-click="goto(format.name)" name="{{format.name}}" ng-show="format.showTab">
                 {{format.name}}
             </md-nav-item>
         </md-nav-bar>
-        
-
         <!-- <md-tabs md-selected="controller.currentNavItem" md-border-bottom md-autoselect md-swipe-conten>
             <md-tab ng-repeat="format in controller.formats" md-nav-click="goto(format.name)" name="{{format.name}}" ng-show="format.showTab">
                 {{format.name}}
             </md-tab>
         </md-tabs> -->
-
-
         <div class="ext-content">
             <form name="{{controller.formatObjects[controller.currentNavItem].formName}}">
                 <div ng-repeat="(groupKey, questionGroup) in controller.formatObjects[controller.currentNavItem].questionGroups">
                     <h3 style="margin-top: 25px; text-decoration: underline">{{questionGroup.tag}}:</h3>
+                    <!-- Preguntas pre-requisitos para mostrar grupo de preguntas -->
                     <div class="formgroup">
                         <md-content ng-if="questionGroup.prerequisites.ownGroupQuestions" layout-padding style="margin-top: 25px; border-radius:10px">
                             <div ng-repeat="prerequisiteQuestion in questionGroup.prerequisites.ownGroupQuestions">
@@ -105,6 +102,7 @@
                             </div>
                         </md-content>
                     </div>
+                    <!-- Grupo de preguntas -->
                     <div ng-if="controller.prerequisitesChecker(questionGroup.name, questionGroup.prerequisites.ownGroupQuestions)">
                         <div ng-repeat="(answerKey, answer) in controller.answers[questionGroup.name]" class="formgroup">
                             <md-content layout-padding style="margin-top: 25px; border-radius:10px">
@@ -175,7 +173,7 @@
                                                         <label>{{question.tag}}</label>
                                                         <md-select  name="{{question.name + groupKey}}"
                                                             ng-model="answer[question.name]"
-                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                            ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
                                                             ng-required="question.required">
                                                             <md-option ng-repeat="option in question.options" value="{{option}}">
                                                                 {{option}}
@@ -235,7 +233,7 @@
                                                     <label>{{question.tag}}</label>
                                                     <md-select  name="{{question.name + groupKey}}"
                                                             ng-model="answer[question.name]"
-                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                            ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
                                                             ng-required="question.required">
                                                         <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}">
                                                             {{pair.value}}
@@ -372,12 +370,6 @@
                     </div>
                 </div>
                 <!-- Fecha de de registro -->
-
-
-
-
-
-
                 <div class="formgroup" ng-if="controller.currentNavItem =='FNI' && controller.showRegistrationDate">
                     <md-content class="layout-padding" style="margin-top: 25px; border-radius:10px">
                         <md-input-container class="md-block col-md-6" flex-gt-sm style="margin-top: 30px;">
@@ -392,13 +384,6 @@
                         </md-input-container>
                     </md-content>  
                 </div>
-
-
-
-
-
-
-
                 <!-- Botones de guardar cambios-->
                 <div style="text-align: center">
                     <md-button ng-show="controller.showCreate" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.create()">
