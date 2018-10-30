@@ -94,7 +94,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     formats.$loaded().then(function(){
         context.formats = formats;
         angular.forEach(formats, function(format){
-
             if(format.allowedRole != undefined && (format.allowedRole === "all" || context.rolesChecker(format.allowedRole))){
                 format.readonly = false;
                 format.showTab = true;
@@ -120,6 +119,17 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 .child("technologies/"+$routeParams.technologyId);
             var technologyRequested = $firebaseObject(technologyRequestedReference);
             technologyRequested.$loaded().then(function(){
+                context.assignedTo = technologyRequested.assignedTo;
+                context.technologyStatus = technologyRequested.status;
+                angular.forEach(context.formats, function(format){
+                    if(format.allowedRole != undefined && (format.allowedRole === "all" || context.rolesChecker(format.allowedRole))){
+                        format.readonly = false;
+                        format.showTab = true;
+                    }else{
+                        format.readonly = true;
+                        format.showTab = false;
+                    }
+                });
                 if(technologyRequested.status != 'En diligencia'){
                     context.formatObjects['FNI'].readonly = true;
                     context.formatObjects['Información Basica'].readonly = true;
@@ -137,9 +147,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 if ($rootScope.permissions.indexOf('showRegistrationDate') >= 0) {
                     context.showRegistrationDate = true;
                 }
-                context.assignedTo = technologyRequested.assignedTo;
-                context.technologyStatus = technologyRequested.status;
-
                 if (technologyRequested.registeredAt) {
                     context.registrationDate = new Date(technologyRequested.registeredAt);
                 }
@@ -182,7 +189,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.rolesChecker = function(formatAllowedRoles){
         var response = false;
         for (var i = 0; i < $rootScope.userRoles.length; i++) {
-            if (formatAllowedRoles.includes($rootScope.userRoles[i])) {
+            if (formatAllowedRoles.includes($rootScope.userRoles[i]) && (context.technologyStatus != 'En diligencia')) {
                 response = true;
                 break;
             }
