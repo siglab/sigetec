@@ -151,21 +151,42 @@
                                                 </md-input-container>
                                             </div>
                                             <div ng-switch-when="checkbox">
-                                                <label ng-if="question.relatedText">{{question.tag}}</label>
-                                                <div class="alert alert-info" role="alert" ng-if="question.relatedText">{{question.relatedText}}</div>
-                                                <md-input-container class="md-block">
-                                                    <md-checkbox ng-model="answer[question.name]"
-                                                            ng-disabled="controller.formatObjects[controller.currentNavItem].readonly" 
-                                                            ng-required="question.required" 
-                                                            type="checkbox" name="{{question.name + groupKey}}">
-                                                        <div ng-if="question.relatedText"> Acepto {{question.tag | lowercase}} </div> 
-                                                        <div ng-if="!question.relatedText"> {{question.tag}} </div> 
-                                                    </md-checkbox>
-                                                    <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
-                                                    <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')" multiple md-auto-hide="false">
-                                                        <div ng-message="required">Se debe aceptar {{question.tag | lowercase}} para continuar.</div>
+                                                <div ng-if="question.prerequisite">
+                                                    <div ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                        <label ng-if="question.relatedText">{{question.tag}}</label>
+                                                        <div class="alert alert-info" role="alert" ng-if="question.relatedText">{{question.relatedText}}</div>
+                                                        <md-input-container class="md-block">
+                                                            <md-checkbox ng-model="answer[question.name]"
+                                                                    ng-disabled="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                                    ng-required="question.required" 
+                                                                    type="checkbox" name="{{question.name + groupKey}}">
+                                                                <div ng-if="question.relatedText"> Acepto {{question.tag | lowercase}} </div> 
+                                                                <div ng-if="!question.relatedText"> {{question.tag}} </div> 
+                                                            </md-checkbox>
+                                                            <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                            <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')" multiple md-auto-hide="false">
+                                                                <div ng-message="required">Se debe aceptar {{question.tag | lowercase}} para continuar.</div>
+                                                            </div>
+                                                        </md-input-container>
                                                     </div>
-                                                </md-input-container>
+                                                </div>
+                                                <div ng-if="!question.prerequisite">
+                                                    <label ng-if="question.relatedText">{{question.tag}}</label>
+                                                    <div class="alert alert-info" role="alert" ng-if="question.relatedText">{{question.relatedText}}</div>
+                                                    <md-input-container class="md-block">
+                                                        <md-checkbox ng-model="answer[question.name]"
+                                                                ng-disabled="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                                ng-required="question.required" 
+                                                                type="checkbox" name="{{question.name + groupKey}}">
+                                                            <div ng-if="question.relatedText"> Acepto {{question.tag | lowercase}} </div> 
+                                                            <div ng-if="!question.relatedText"> {{question.tag}} </div> 
+                                                        </md-checkbox>
+                                                        <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
+                                                        <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')" multiple md-auto-hide="false">
+                                                            <div ng-message="required">Se debe aceptar {{question.tag | lowercase}} para continuar.</div>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
                                             </div>
                                             <div ng-switch-when="select">
                                                 <div ng-if="question.prerequisite">
@@ -194,7 +215,7 @@
                                                         <label>{{question.tag}}</label>
                                                         <md-select  name="{{question.name + groupKey}}"
                                                             ng-model="answer[question.name]"
-                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                            ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
                                                             ng-required="question.required">
                                                             <md-option ng-repeat="option in question.options" value="{{option}}">
                                                                 {{option}}
