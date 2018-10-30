@@ -83,8 +83,10 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                 }
             });
             $rootScope.availableUsers = availableUsers;
-            console.log("Los usuarios son: ");
-            console.log($rootScope.availableUsers);
+            // console.log('User roles: ');
+            // console.log($rootScope.userRoles);
+            // console.log("Los usuarios son: ");
+            // console.log($rootScope.availableUsers);
         });
 
         if ($rootScope.permissions.indexOf("showRegistered") >= 0) {

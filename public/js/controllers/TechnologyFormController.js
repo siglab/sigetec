@@ -15,20 +15,20 @@ technologyFormController.config(function(NotificationProvider) {
     });
 
 technologyFormController.controller('TechnologyFormController', 
-                          ['$scope', 
-                           '$rootScope',
-                           '$location',
-                           '$firebase',
-                           '$mdDialog',
-                           '$mdToast',
-                           '$mdMenu',
-                           '$window',
-                           '$firebaseObject',
-                           '$firebaseArray',
-                           '$firebaseAuth',
-                           '$routeParams',
-                           'uuid2',
-                           'Notification',
+    ['$scope', 
+    '$rootScope',
+    '$location',
+    '$firebase',
+    '$mdDialog',
+    '$mdToast',
+    '$mdMenu',
+    '$window',
+    '$firebaseObject',
+    '$firebaseArray',
+    '$firebaseAuth',
+    '$routeParams',
+    'uuid2',
+    'Notification',
 function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2, Notification){
     var context = this;
     $scope.authObj = $rootScope.auth;
@@ -94,8 +94,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     formats.$loaded().then(function(){
         context.formats = formats;
         angular.forEach(formats, function(format){
-            if(format.allowedRole != undefined && 
-               (format.allowedRole === "all" || format.allowedRole.includes($rootScope.userRole))){
+
+            if(format.allowedRole != undefined && (format.allowedRole === "all" || context.rolesChecker(format.allowedRole))){
                 format.readonly = false;
                 format.showTab = true;
             }else{
@@ -179,6 +179,17 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         }
     });
                                
+    context.rolesChecker = function(formatAllowedRoles){
+        var response = false;
+        for (var i = 0; i < $rootScope.userRoles.length; i++) {
+            if (formatAllowedRoles.includes($rootScope.userRoles[i])) {
+                response = true;
+                break;
+            }
+        }
+        return response;
+    };
+
     context.addAnswers = function(questionGroupName){
         context.answers[questionGroupName].push({});
     };
