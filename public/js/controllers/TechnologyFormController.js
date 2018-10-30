@@ -54,7 +54,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         context.currentNavItem = "FNI";
         // context.showCreate = false;
     } else {
-        context.currentNavItem = "Información Basica";
+        context.currentNavItem = "Información Básica";
     }
     // if($rootScope.permissions !== undefined){
     //     if($rootScope.permissions.find(function(permission){ return "return" === permission; })){
@@ -132,7 +132,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 });
                 if(technologyRequested.status != 'En diligencia'){
                     context.formatObjects['FNI'].readonly = true;
-                    context.formatObjects['Información Basica'].readonly = true;
+                    context.formatObjects['Información Básica'].readonly = true;
                     context.showRegister = false;
                     context.showCreate = false;
                 }
