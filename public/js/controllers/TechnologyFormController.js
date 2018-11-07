@@ -110,6 +110,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     if(question.type === "tags"){
                         context.answers[questionGroup.name][0][question.name] = [];
                     }
+                    if(question.type === "array"){
+                        context.answers[questionGroup.name][0][question.name] = [{}];
+                    }
                 });
             });
         });
@@ -200,9 +203,17 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.addAnswers = function(questionGroupName){
         context.answers[questionGroupName].push({});
     };
-    
+
     context.removeAnswers = function(questionGroupName, index){
         context.answers[questionGroupName].splice(index, 1);
+    };
+
+    context.addArrayData = function(questionGroupName, questionName){
+        context.answers[questionGroupName][0][questionName].push({});
+    };
+
+    context.removeArrayData = function(questionGroupName, questionName, index){
+        context.answers[questionGroupName][0][questionName].splice(index, 1);
     };
     
     context.uploadFile = function() {
