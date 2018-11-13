@@ -366,10 +366,52 @@
                                                     </div>
                                                 </md-input-container>
                                             </div>
-
-
                                             <div ng-switch-when="array">
-                                                <div ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                <div ng-if="question.prerequisite">
+                                                    <div ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                        <label style="color: #75797d; opacity: 0.85; font-size: 0.85em">
+                                                            {{question.tag}}
+                                                        </label>
+                                                        <div ng-repeat="(position, reponseGroup) in answer[question.name]" style="margin: 1em; background-color: #fafafa; border-left: 6px solid #eb1e00;border-radius: 4px; box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);">
+                                                            <div class="row" flex-gt-sm style="padding-top: 0.7em; margin: auto;">
+                                                                <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
+                                                                    <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
+                                                                        <label>{{field.tag}}</label>
+                                                                        <input name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                            ng-model="answer[question.name][position][field.name]"
+                                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                            ng-required="field.required"
+                                                                            class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
+                                                                            type="field.type">
+                                                                        <md-icon ng-if="question.hint">
+                                                                            <img src="img/help.png" style="width:140%" />
+                                                                        </md-icon>
+                                                                        <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
+                                                                            <div ng-message="required">
+                                                                                Se requiere de este campo para continuar.
+                                                                            </div>
+                                                                        </div>
+                                                                    </md-input-container>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Botón de eliminar último grupo adicionado -->
+                                                            <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
+                                                                <!-- <md-button ng-show="position != 0 && (position == answer[question.name].length-1)" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name)" style="text-align:left"> -->
+
+                                                                <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
+                                                                    <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
+                                                                </md-button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Botón de agregar nuevo grupo de respuestas -->
+                                                        <div>
+                                                            <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name)" style="text-align:left margin-top:10px">
+                                                                <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
+                                                            </md-button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div ng-if="!question.prerequisite">
                                                     <label style="color: #75797d; opacity: 0.85; font-size: 0.85em">
                                                         {{question.tag}}
                                                     </label>
@@ -397,12 +439,12 @@
                                                         </div>
                                                         <!-- Botón de eliminar último grupo adicionado -->
                                                         <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
-                                                            <!-- <md-button ng-show="position != 0 && (position == answer[question.name].length-1)" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name)" style="text-align:left"> -->
+                                                                <!-- <md-button ng-show="position != 0 && (position == answer[question.name].length-1)" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name)" style="text-align:left"> -->
 
-                                                            <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
-                                                                <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
-                                                            </md-button>
-                                                        </div>
+                                                                <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
+                                                                    <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
+                                                                </md-button>
+                                                            </div>
                                                     </div>
                                                     <!-- Botón de agregar nuevo grupo de respuestas -->
                                                     <div>
@@ -412,8 +454,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                     <!-- Botón quitar -->
