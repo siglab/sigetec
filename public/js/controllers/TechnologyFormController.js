@@ -588,8 +588,13 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
       $mdMenu.open();
     }
 
-    context.checker = function(valid){
+    context.checker = function(valid, formName){
         if(!valid) {
+            angular.forEach($scope[formName].$error, function (field) {
+                angular.forEach(field, function(errorField){
+                    errorField.$setTouched();
+                })
+            });
             context.fireNotification('error', 'El formulario no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
             return true;
         }else{

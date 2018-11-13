@@ -65,10 +65,13 @@
                 </md-menu>
             </div> -->
         </div>
-        <!-- Pestañas con nombres de fotmatos -->
-        <md-nav-bar md-selected-nav-item="controller.currentNavItem"
-                    nav-bar-aria-label="navigation links">
-            <md-nav-item ng-repeat="format in controller.formats" md-nav-click="goto(format.name)" name="{{format.name}}" ng-show="format.showTab">
+        <!-- Pestañas con nombres de formatos -->
+        <md-nav-bar md-selected-nav-item="controller.currentNavItem" nav-bar-aria-label="navigation links">
+            <md-nav-item 
+                ng-repeat="format in controller.formats" 
+                md-nav-click="goto(format.name)" 
+                name="{{format.name}}" 
+                ng-show="format.showTab">
                 {{format.name}}
             </md-nav-item>
         </md-nav-bar>
@@ -77,6 +80,7 @@
                 {{format.name}}
             </md-tab>
         </md-tabs> -->
+        <!-- Contenido de formato -->
         <div class="ext-content">
             <form name="{{controller.formatObjects[controller.currentNavItem].formName}}">
                 <div ng-repeat="(groupKey, questionGroup) in controller.formatObjects[controller.currentNavItem].questionGroups">
@@ -260,11 +264,11 @@
                                                             {{pair.value}}
                                                         </md-option>
                                                     </md-select>
-                                                     <!-- <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
+                                                     <span ng-if="question.hint" class="float-right" angular-popover direction="left" template="{{question.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;" ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
                                                         <md-icon ng-if="question.hint" class="float-right">
                                                             <img src="img/help.png" style="width:140%" />
                                                         </md-icon>
-                                                    </span> -->
+                                                    </span>
                                                     <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
                                                         <div ng-message="required">Se requiere de este campo para continuar.</div>
                                                     </div>
@@ -279,7 +283,7 @@
                                                           rows="3" 
                                                           md-select-on-focus
                                                           ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                          ng-required="question.required">
+                                                          ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && question.required">
                                                         </textarea>
                                                         <md-icon ng-if="question.hint"><img src="img/help.png" style="width:140%" /></md-icon>
                                                         <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
@@ -339,13 +343,11 @@
                                                         ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                         ng-required="question.required">
                                                     </md-chips>
-                                                    <!-- <div ng-messages="answer[question.name].length == 0"> -->
-                                                        <div ng-if="question.required && (answer[question.name].length == 0 || !answer[question.name])" class="md-input-message-animation" 
+                                                    <div ng-if="question.required && (answer[question.name].length == 0 || !answer[question.name])" class="md-input-message-animation" 
                                                         style="color: rgb(221,44,0); padding-top: 5px; font-size: 12px;
                                                         line-height: 14px;">
-                                                            Se requiere de este campo para continuar.
-                                                        </div>
-                                                    <!-- </div> -->
+                                                        Se requiere de este campo para continuar.
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div ng-switch-when="number">
@@ -396,8 +398,6 @@
                                                             </div>
                                                             <!-- Botón de eliminar último grupo adicionado -->
                                                             <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
-                                                                <!-- <md-button ng-show="position != 0 && (position == answer[question.name].length-1)" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name)" style="text-align:left"> -->
-
                                                                 <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
                                                                     <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
                                                                 </md-button>
@@ -437,16 +437,21 @@
                                                                 </md-input-container>
                                                             </div>
                                                         </div>
-                                                        <!-- Botón de eliminar último grupo adicionado -->
                                                         <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
+<<<<<<< HEAD
                                                                 <!-- <md-button ng-show="position != 0 && (position == answer[question.name].length-1)" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name)" style="text-align:left"> -->
 
                                                                 <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
                                                                     <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
                                                                 </md-button>
                                                             </div>
+=======
+                                                            <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
+                                                                <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
+                                                            </md-button>
+                                                        </div>
+>>>>>>> bugfix
                                                     </div>
-                                                    <!-- Botón de agregar nuevo grupo de respuestas -->
                                                     <div>
                                                         <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name)" style="text-align:left margin-top:10px">
                                                             <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
@@ -472,7 +477,8 @@
                     <div ng-if="!questionGroup.prerequisites">
                         <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
                             <md-button class="md-raised md-primary" ng-show="questionGroup.type == 'array'" aria-label="add" ng-click="controller.addAnswers(questionGroup.name)" style="text-align:left margin-top:10px">
-                                <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{questionGroup.tag}}
+                                <md-icon md-svg-icon="img/icons/add.svg"></md-icon> 
+                                Adicionar {{questionGroup.tag}}
                             </md-button>
                         </div>
                     </div>
@@ -507,7 +513,7 @@
                     <md-button ng-show="controller.showRegister && (controller.currentNavItem =='FNI')" class="md-raised md-primary float-right formButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()">
                         Registrar esta tecnología
                     </md-button>
-                    <md-button ng-show="!controller.showCreate && !controller.formatObjects[controller.currentNavItem].readonly" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.save()">
+                    <md-button ng-show="!controller.showCreate && !controller.formatObjects[controller.currentNavItem].readonly" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid, controller.formatObjects[controller.currentNavItem].formName) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.save()">
                         <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar cambios
                     </md-button>
                 </div>
