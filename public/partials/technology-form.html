@@ -379,12 +379,25 @@
                                                                 <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
                                                                     <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
                                                                         <label>{{field.tag}}</label>
-                                                                        <input name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
-                                                                            ng-model="answer[question.name][position][field.name]"
-                                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                            ng-required="field.required"
-                                                                            class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
-                                                                            type="field.type">
+                                                                        <div ng-if="field.type != 'reference'">
+                                                                            <input name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                                ng-model="answer[question.name][position][field.name]"
+                                                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
+                                                                                class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
+                                                                                type="field.type">
+                                                                        </div>
+                                                                        <div ng-if="field.type == 'reference'">
+                                                                            <md-select  
+                                                                                name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                                ng-model="answer[question.name][position][field.name]"
+                                                                                ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
+                                                                                ng-disabled="controller.formatObjects[controller.currentNavItem].readonly">
+                                                                                <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}">
+                                                                                    {{pair.value}}
+                                                                                </md-option>
+                                                                            </md-select>
+                                                                        </div>
                                                                         <md-icon ng-if="question.hint">
                                                                             <img src="img/help.png" style="width:140%" />
                                                                         </md-icon>
@@ -420,12 +433,27 @@
                                                             <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
                                                                 <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
                                                                     <label>{{field.tag}}</label>
-                                                                    <input name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
-                                                                        ng-model="answer[question.name][position][field.name]"
-                                                                        ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                        ng-required="field.required"
-                                                                        class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
-                                                                        type="field.type">
+                                                                    <div ng-if="field.type != 'reference'">
+                                                                        <input 
+                                                                            name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                            ng-model="answer[question.name][position][field.name]"
+                                                                            ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                            ng-required="field.required"
+                                                                            class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
+                                                                            type="field.type">
+                                                                    </div>
+                                                                    <div ng-if="field.type == 'reference'">
+                                                                        <md-select  
+                                                                            name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                            ng-model="answer[question.name][position][field.name]"
+                                                                            ng-required="field.required"
+                                                                            ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                            style="margin-top: 0">
+                                                                            <md-option ng-repeat="pair in controller.references[field.reference]" value="{{pair.key}}">
+                                                                                {{pair.value}}
+                                                                            </md-option>
+                                                                        </md-select>
+                                                                    </div>
                                                                     <md-icon ng-if="question.hint">
                                                                         <img src="img/help.png" style="width:140%" />
                                                                     </md-icon>
@@ -438,20 +466,12 @@
                                                             </div>
                                                         </div>
                                                         <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
-<<<<<<< HEAD
-                                                                <!-- <md-button ng-show="position != 0 && (position == answer[question.name].length-1)" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name)" style="text-align:left"> -->
-
-                                                                <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
-                                                                    <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
-                                                                </md-button>
-                                                            </div>
-=======
                                                             <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
                                                                 <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
                                                             </md-button>
                                                         </div>
->>>>>>> bugfix
                                                     </div>
+                                                    <!-- Botón de agregar nuevo grupo de respuestas -->
                                                     <div>
                                                         <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name)" style="text-align:left margin-top:10px">
                                                             <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
@@ -507,7 +527,7 @@
                 </div>
                 <!-- Botones de guardar cambios-->
                 <div style="text-align: center">
-                    <md-button ng-show="controller.showCreate" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.create()">
+                    <md-button ng-show="controller.showCreate" class="md-raised md-primary float-right floatButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid, controller.formatObjects[controller.currentNavItem].formName) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.create()">
                          <md-icon md-svg-icon="img/icons/save.svg"></md-icon>Guardar y continuar
                     </md-button>
                     <md-button ng-show="controller.showRegister && (controller.currentNavItem =='FNI')" class="md-raised md-primary float-right formButton" aria-label="Guardar" type="submit" ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()">
