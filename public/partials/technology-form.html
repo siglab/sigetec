@@ -319,12 +319,12 @@
                                                         </md-icon>
                                                     </span>
                                                     <md-chips ng-model="answer[question.name]" 
-                                                              name="{{question.name + groupKey}}" 
-                                                              placeholder="Adiciona {{question.tag | lowercase}}" 
-                                                              style="margin-bottom: 30px" 
-                                                              ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'"
-                                                              ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                              ng-required="question.required">
+                                                        name="{{question.name + groupKey}}" 
+                                                        placeholder="Adiciona {{question.tag | lowercase}}" 
+                                                        style="margin-bottom: 30px" 
+                                                        ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'"
+                                                        ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                        ng-required="question.required">
                                                     </md-chips>
                                                 </div>
                                                 <div ng-if="!question.prerequisite">
@@ -466,14 +466,14 @@
                                                             </div>
                                                         </div>
                                                         <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
-                                                            <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, position)" style="text-align:left">
+                                                            <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, answerKey, position)" style="text-align:left">
                                                                 <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
                                                             </md-button>
                                                         </div>
                                                     </div>
                                                     <!-- Botón de agregar nuevo grupo de respuestas -->
                                                     <div>
-                                                        <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name)" style="text-align:left margin-top:10px">
+                                                        <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name, answerKey)" style="text-align:left margin-top:10px">
                                                             <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
                                                         </md-button>
                                                     </div>

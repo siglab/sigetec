@@ -201,19 +201,30 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     };
 
     context.addAnswers = function(questionGroupName){
-        context.answers[questionGroupName].push({});
+        var definedKeys = Object.keys(context.answers[questionGroupName][0]);
+        var objToAdd = {};
+        for (var i = 0; i < definedKeys.length; i++) {
+            if ((typeof context.answers[questionGroupName][0][definedKeys[i]]) == 'object') {
+                if (context.answers[questionGroupName][0][definedKeys[i]][0] && ((typeof context.answers[questionGroupName][0][definedKeys[i]][0]) == 'object')) {
+                    objToAdd[definedKeys[i]] = [{}];
+                }else{
+                   objToAdd[definedKeys[i]] = []; 
+                }
+            }
+        }
+        context.answers[questionGroupName].push(objToAdd);
     };
 
     context.removeAnswers = function(questionGroupName, index){
         context.answers[questionGroupName].splice(index, 1);
     };
 
-    context.addArrayData = function(questionGroupName, questionName){
-        context.answers[questionGroupName][0][questionName].push({});
+    context.addArrayData = function(questionGroupName, questionName, index){
+        context.answers[questionGroupName][index][questionName].push({});
     };
 
-    context.removeArrayData = function(questionGroupName, questionName, index){
-        context.answers[questionGroupName][0][questionName].splice(index, 1);
+    context.removeArrayData = function(questionGroupName, questionName, index, position){
+        context.answers[questionGroupName][index][questionName].splice(position, 1);
     };
     
     context.uploadFile = function() {
