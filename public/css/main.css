@@ -127,7 +127,7 @@ h5{
 }
 
 .md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary.md-raised, .md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab:hover {
-    background-color: #eb1e00;
+    background-color: #D51B23;
 }
 
 .bar-chart > svg {
@@ -295,6 +295,10 @@ button.md-accent {
 
 md-backdrop{
     position: fixed;
+}
+
+.form_section:hover {
+    background-color: rgb(57,73,171) !important;
 }
 
 /*.ng-untouched ~ .md-input-messages-animation {
