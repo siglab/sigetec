@@ -398,7 +398,7 @@
                                                                                     name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
                                                                                     ng-model="answer[question.name][position][field.name]"
                                                                                     ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
-                                                                                    ng-disabled="controller.formatObjects[controller.currentNavItem].readonly">
+                                                                                    ng-disabled="controller.formatObjects[controller.currentNavItem].readonly" style="margin-top: 0; margin-bottom: 0">
                                                                                     <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}">
                                                                                         {{pair.value}}
                                                                                     </md-option>
@@ -407,7 +407,7 @@
                                                                             <md-icon ng-if="question.hint">
                                                                                 <img src="img/help.png" style="width:140%" />
                                                                             </md-icon>
-                                                                            <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
+                                                                            <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + fieldKey + '\'].$error')">
                                                                                 <div ng-message="required">
                                                                                     Se requiere de este campo para continuar.
                                                                                 </div>
@@ -454,7 +454,7 @@
                                                                                 ng-model="answer[question.name][position][field.name]"
                                                                                 ng-required="field.required"
                                                                                 ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                                style="margin-top: 0">
+                                                                                style="margin-top: 0; margin-bottom: 0">
                                                                                 <md-option ng-repeat="pair in controller.references[field.reference]" value="{{pair.key}}">
                                                                                     {{pair.value}}
                                                                                 </md-option>
@@ -463,7 +463,7 @@
                                                                         <md-icon ng-if="question.hint">
                                                                             <img src="img/help.png" style="width:140%" />
                                                                         </md-icon>
-                                                                        <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')">
+                                                                        <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + fieldKey + '\'].$error')">
                                                                             <div ng-message="required">
                                                                                 Se requiere de este campo para continuar.
                                                                             </div>
