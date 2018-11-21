@@ -106,7 +106,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             angular.forEach(format.questionGroups, function(questionGroup){
                 context.answers[questionGroup.name] = [{}];
                 angular.forEach(questionGroup.questions, function(question){
-                    //console.log(question);
                     if(question.type === "tags"){
                         context.answers[questionGroup.name][0][question.name] = [];
                     }
@@ -490,7 +489,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 technology.status = context.technologyStatus;
                 // technology.status = 'En diligencia';
                 context.setBasicData(technology, basicData);
-                // console.log(technology);
                 var technologiesReference = firebase.database().ref().child("technologies");
                 var technologies = $firebaseArray(technologiesReference);
                 technologies.$add(technology).then(function(reference){
@@ -539,13 +537,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             technologyLog.at = new Date().getTime();
             technologyLog.answers = angular.copy(context.answers);
             var validationError = false;
-            // console.log('Estas son las respuestas');
-            // console.log(technologiesDetail.answers);
             angular.forEach(technologiesDetail.answers , function(questionGroup, qgKey){
                 angular.forEach(questionGroup, function(group, gKey){
                     angular.forEach(group, function(answer, aKey){
-                        // console.log('group:' + group);
-                        // console.log('answer:' + answer);
                         if(Object.prototype.toString.call(answer) === '[object Date]'){
                             technologiesDetail.answers[qgKey][gKey][aKey] = answer.getTime();
                         }
@@ -573,8 +567,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.setBasicData = function(technology, basicData){
         angular.forEach(basicData, function(question, key){
             var answer = context.answers[question.questionGroup][0][question.questionName];
-            // console.log(context.answers[question.questionGroup]);
-            // console.log(question.questionGroup+' : '+question.questionName+'=>'+answer);
             if(answer != undefined){
                 if(Object.prototype.toString.call(answer) === '[object Date]'){
                     technology[question.questionName] = answer.getTime();
@@ -586,7 +578,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     context.changeStatus = function(status){
-        console.log(status);
         context.technologyStatus = status;
         context.save();
     }
@@ -614,15 +605,34 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
 
     context.prerequisitesChecker = function (questionGroup, prerequisiteQuestions){
-        if (!prerequisiteQuestions) {
-            return true;    
-        }else{
-            for (var i = 0; i < prerequisiteQuestions.length; i++) {
-                if(context.answers.prerequisites[questionGroup] && context.answers.prerequisites[questionGroup][prerequisiteQuestions[i].name] == prerequisiteQuestions[i].value){
-                    return true;
+        if (questionGroup) {
+            // If it has a questionGroup (for those questions group that has prerequisites questions defined on its own group)
+            if (!prerequisiteQuestions) {
+                return true;    
+            }else{
+                var resolution = true;
+                for (var i = 0; i < prerequisiteQuestions.length; i++) {
+                    if(!(context.answers.prerequisites[questionGroup] && context.answers.prerequisites[questionGroup][prerequisiteQuestions[i].name] == prerequisiteQuestions[i].value)){
+                        resolution = false;
+                        break;
+                    }
                 }
+                return resolution;
             }
-            return false;
+        }else{
+            // If it hasn't a questionGroup (for those questions group that has prerequisites questions defined in other question groups)
+            if (!prerequisiteQuestions) {
+                return true;    
+            }else{
+                var resolution = true;
+                for (var i = 0; i < prerequisiteQuestions.length; i++) {
+                    if(!(context.answers[prerequisiteQuestions[i].questionGroup] && context.answers[prerequisiteQuestions[i].questionGroup][0][prerequisiteQuestions[i].fieldName] && context.answers[prerequisiteQuestions[i].questionGroup][0][prerequisiteQuestions[i].fieldName] == prerequisiteQuestions[i].value)){
+                        resolution = false;
+                        break;
+                    }
+                }
+                return resolution;
+            }
         }
     }
 
