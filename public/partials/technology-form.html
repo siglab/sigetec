@@ -405,8 +405,8 @@
                                                                         <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
                                                                             <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
                                                                                 <label>{{field.tag}}</label>
-                                                                                <div ng-if="field.type != 'reference'">
-                                                                                    <input name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                                <div ng-if="field.type != 'reference' && field.type != 'number'">
+                                                                                    <input name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
                                                                                         ng-model="answer[question.name][position][field.name]"
                                                                                         ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                                                         ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
@@ -415,7 +415,7 @@
                                                                                 </div>
                                                                                 <div ng-if="field.type == 'reference'">
                                                                                     <md-select  
-                                                                                        name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                                        name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
                                                                                         ng-model="answer[question.name][position][field.name]"
                                                                                         ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
                                                                                         ng-disabled="controller.formatObjects[controller.currentNavItem].readonly" style="margin-top: 0; margin-bottom: 0">
@@ -424,13 +424,22 @@
                                                                                         </md-option>
                                                                                     </md-select>
                                                                                 </div>
-                                                                                <md-icon ng-if="question.hint">
+                                                                                <input ng-if="field.type == 'number'" name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                    ng-model="answer[question.name][position][field.name]"
+                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                    ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
+                                                                                    type="number" step="any"
+                                                                                    min="{{field.min}}" max="{{field.max}}">
+                                                                                <md-icon ng-if="field.icon" style="font-size: 1rem">
+                                                                                    {{field.icon}}
+                                                                                </md-icon>
+                                                                                <md-icon ng-if="field.hint">
                                                                                     <img src="img/help.png" style="width:140%" />
                                                                                 </md-icon>
-                                                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + fieldKey + '\'].$error')">
-                                                                                    <div ng-message="required">
-                                                                                        Se requiere de este campo para continuar.
-                                                                                    </div>
+                                                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + position + '\'].$error')" multiple md-auto-hide="false">
+                                                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                                                    <div ng-message="min">El valor mínimo permitido es de {{field.min}}.</div>
+                                                                                    <div ng-message="max">El valor máximo permitido es de {{field.max}}.</div>
                                                                                 </div>
                                                                             </md-input-container>
                                                                         </div>
@@ -459,9 +468,9 @@
                                                                     <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
                                                                         <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
                                                                             <label>{{field.tag}}</label>
-                                                                            <div ng-if="field.type != 'reference'">
+                                                                            <div ng-if="field.type != 'reference' && field.type != 'number'">
                                                                                 <input 
-                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
                                                                                     ng-model="answer[question.name][position][field.name]"
                                                                                     ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                                                                     ng-required="field.required"
@@ -470,7 +479,7 @@
                                                                             </div>
                                                                             <div ng-if="field.type == 'reference'">
                                                                                 <md-select  
-                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + fieldKey}}"
+                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
                                                                                     ng-model="answer[question.name][position][field.name]"
                                                                                     ng-required="field.required"
                                                                                     ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
@@ -480,13 +489,24 @@
                                                                                     </md-option>
                                                                                 </md-select>
                                                                             </div>
-                                                                            <md-icon ng-if="question.hint">
+                                                                            <div ng-if="field.type == 'number'">
+                                                                                <input ng-if="field.type == 'number'" name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                    ng-model="answer[question.name][position][field.name]"
+                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                    ng-required="field.required"
+                                                                                    type="number" step="any"
+                                                                                    min="{{field.min}}" max="{{field.max}}">
+                                                                                <md-icon ng-if="field.icon" style="font-size: 16px">
+                                                                                    {{field.icon}}
+                                                                                </md-icon>
+                                                                            </div>
+                                                                            <md-icon ng-if="field.hint">
                                                                                 <img src="img/help.png" style="width:140%" />
                                                                             </md-icon>
-                                                                            <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + fieldKey + '\'].$error')">
-                                                                                <div ng-message="required">
-                                                                                    Se requiere de este campo para continuar.
-                                                                                </div>
+                                                                            <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + position + '\'].$error')">
+                                                                                <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                                                <div ng-message="min">El valor mínimo permitido es de {{field.min}}.</div>
+                                                                                <div ng-message="max">El valor máximo permitido es de {{field.max}}.</div>
                                                                             </div>
                                                                         </md-input-container>
                                                                     </div>
