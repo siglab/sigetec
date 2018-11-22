@@ -163,12 +163,18 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     var answers = technologiesRequestedDetail.answers;
                     angular.forEach(answers, function(answer, name){
                         //var answersWithDate = answer.slice();
-                        var answersWithDate = answer;
+                        var answersWithDate = context.answers[name];
+                        // var answersWithDate = {};
                         angular.forEach(answer, function(group, gKey){
                             angular.forEach(group, function(answer, aKey){
                                 var testDate = new RegExp('^\\d{13}$').test(answer);
                                 if(testDate){
                                     answersWithDate[gKey][aKey] = new Date(answer);
+                                }else{
+                                    if (typeof(gKey)=='string') {
+                                        answersWithDate[gKey] = {};                                        
+                                    }
+                                    answersWithDate[gKey][aKey] = answer;
                                 }
                             });
                         });
