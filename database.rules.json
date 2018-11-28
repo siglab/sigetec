@@ -4,6 +4,9 @@
     ".write": "auth != null",
     "technologies": {
       ".indexOn": ["status"]
+   	},
+   	"reminders": {
+   		".indexOn": ["reminderDate"]
    	}
   }
 }

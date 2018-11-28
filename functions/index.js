@@ -17,6 +17,7 @@ const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
 
 // Cloud functions
+// Email notifications when a technology is registered or returned
 exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyId}')
     .onWrite((change, context) => {
       // Grab the current value of what was written to the Realtime Database.
@@ -75,7 +76,8 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
       });
     }
 );
-
+// Api points
+// Get technologies api point for technologies list for sigetec home page table.
 exports.getTechnologies = functions.https.onRequest((req,res)=>{
   cors(req,res,() => {
     var db = admin.database();
@@ -107,6 +109,47 @@ exports.getTechnologies = functions.https.onRequest((req,res)=>{
         //   res.status(500).json({error: error});
         // })
       }
+    });
+  });
+});
+
+// Run remainders api point for sigetec.
+exports.runRemainders = functions.https.onRequest((req,res)=>{
+  cors(req,res,() => {
+    var db = admin.database();
+    var ref = db.ref("/reminders");
+    ref.orderByChild("reminderDate").once('value', function(data) {
+      var response = {};
+      var reminders = data.val();
+      var uuids = Object.keys(reminders);
+      var today = new Date();
+      var todayRemainders = [];
+      for (var i = 0; i < uuids.length ; i++) {
+        var reminderDate = new Date(reminders[uuids[i]].reminderDate);
+        // Sumar 86400000 a today.setHours(0,0,0,0) para sumar 24 horas a la fecha.
+        if (today.setHours(0,0,0,0)==reminderDate.setHours(0,0,0,0)) {
+          response[uuids[i]] = {};
+          response[uuids[i]] = reminders[uuids[i]];
+        }
+      }
+
+     res.status(200).json(response);
+
+
+
+        // var detailsPromises = [];
+        // for (var i = 0; i < uuids.length ; i++) {
+        //   detailsPromises.push(
+        //     db.ref('/technologies-detail/' + reminders[uuids[i]]['technologyId'])
+        //     .once('value')
+        //   );
+        // }
+        // return Promise.all(detailsPromises).then(snap =>  {
+        //   for (var k = 0; k < snap.length; k++) {
+        //     reminders[uuids[k]]['details'] = snap[k];
+        //   }
+        //   res.status(200).json(reminders);
+        // })
     });
   });
 });
