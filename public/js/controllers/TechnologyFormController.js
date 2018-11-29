@@ -673,4 +673,163 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         } 
     }
 
+    context.newReminder = function (model) {
+        if (model) {
+            try {
+                var reminderDate = new Date(model).getTime();
+                var today = new Date().getTime();
+                var reminderId = "";
+                var reminder = {};
+                reminder.createdAt = today;
+                reminder.createdBy = $rootScope.userEmail;
+                reminder.status = 'pending';
+                reminder.reminderDate = reminderDate;
+                var remindersReference = firebase.database().ref().child("reminders");
+                var reminders = $firebaseArray(remindersReference);
+                context.fireNotification('info', 'Creando recordatorio...');
+                reminders.$add(reminder).then(function(reference){
+                    try{
+                        // technologyId = reference.path.o[1];
+                        // context.saveDetail(technology.technologyId);
+                        // if (message == null || message == undefined ) {
+                            context.fireNotification('info', 'Recordatorio creado satisfactoriamente.');
+                        // }else{
+                        //     context.fireNotification('info', message);
+                        //     context.fileCategory = "";
+                        //     $("#document").val('');
+                        //     $scope.attachments.$setUntouched();
+                        //     $scope.attachments.$setPristine();
+                        // }
+                        // if (url == null || url == undefined) {
+                        //     $location.path('technology-form/'+technologyId);
+                        // }else{
+                        //     $location.path(url);
+                        // }
+                    }catch(e){
+                        console.log(e);
+                        context.fireNotification('error', 'No se pudo crear el recordatorio. Por favor inténta de nuevo.');
+                    }
+                }, function(error){
+                    context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                    console.log(error);
+                });
+
+
+
+
+
+                // if($routeParams.technologyId){
+                //     try{
+                //         var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
+                //         var technology = $firebaseObject(technologyReference);
+                //         technology.$loaded().then(function(){
+                //             // if (technology.status == 'Registrada' && $rootScope.userRoles.length) {
+                //                 // context.fireNotification('error', 'No es posible guardar las modificaciones en el estado actual de la tecnología.');
+                //             // }else{
+                //                 technology.updatedAt = today;
+                //                 technology.updatedBy = $rootScope.userEmail;
+                //                 if (technology.status == 'Registrada' && context.technologyStatus == 'En diligencia' && technology.registeredAt) {
+                //                   technology.registeredAt = null;  
+                //                 }
+                //                 if (context.showRegistrationDate) {
+                //                     technology.registeredAt = new Date(context.registrationDate).getTime();
+                //                 } else {
+                //                     technology.registeredAt = today
+                //                 }
+                //                 technology.status = context.technologyStatus;
+                //                 if(!technology.statusComments) technology.statusComments = [];
+                //                 technology.statusComments = context.technologyStatusComments;
+                //                 if(context.assignedTo != undefined){
+                //                     technology.assignedTo = context.assignedTo;
+                //                 }
+                //                 context.setBasicData(technology, basicData);
+                //                 technology.$save().then(function(reference){
+                //                     try {
+                //                         technologyId = $routeParams.technologyId;
+                //                         context.saveDetail(technology.technologyId);
+                //                         if (message == null || message == undefined ) {
+                //                             context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                //                         }else{
+                //                             context.fireNotification('info', message);
+                //                             context.fileCategory = "";
+                //                             $("#document").val('');
+                //                             $('form[name="attachments"]').trigger("reset");
+                //                             $scope.attachments.$setUntouched();
+                //                             $scope.attachments.$setPristine();
+                //                         }
+                //                         if (url == null || url == undefined) {
+                //                             $location.path('technology-form/'+technologyId);
+                //                         }else{
+                //                             $location.path(url);
+                //                         }                    
+                //                     }catch(e){
+                //                         console.log(e);
+                //                         context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
+                //                     }
+                //                 }, function(error){
+                //                     context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                //                 });
+                //             // }
+                //         });
+                //     }catch(e){
+                //         context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
+                //         console.log(e);
+                //     }
+                // }else{
+                //     try{
+                       
+                //         context.setBasicData(technology, basicData);
+                //         var remindersReference = firebase.database().ref().child("reminders");
+                //         var technologies = $firebaseArray(remindersReference);
+                //         technologies.$add(technology).then(function(reference){
+                //             try{
+                //                 technologyId = reference.path.o[1];
+                //                 context.saveDetail(technology.technologyId);
+                //                 if (message == null || message == undefined ) {
+                //                     context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                //                 }else{
+                //                     context.fireNotification('info', message);
+                //                     context.fileCategory = "";
+                //                     $("#document").val('');
+                //                     $scope.attachments.$setUntouched();
+                //                     $scope.attachments.$setPristine();
+                //                 }
+                //                 if (url == null || url == undefined) {
+                //                     $location.path('technology-form/'+technologyId);
+                //                 }else{
+                //                     $location.path(url);
+                //                 }
+                //             }catch(e){
+                //                 console.log(e);
+                //                 context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
+                //             }
+                //         }, function(error){
+                //             context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                //             console.log(error);
+                //         });
+                //     }catch(e){
+                //         console.log(e);
+                //         context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
+                //     }
+                // }
+
+
+
+
+
+
+
+
+
+            }catch(e){
+                console.log(e);
+                this.fireNotification('error', 'Ha ocurrido un error inesperado al crear el recordatorio. Por favor inténtalo de nuevo.')
+            }
+        }else{
+            this.fireNotification('error', 'El valor ingresado en la fecha es inválido. No es posible crear el recordatorio.')
+        }
+        console.log('Clicked!');
+        console.log(model);
+    }
+
 }]);

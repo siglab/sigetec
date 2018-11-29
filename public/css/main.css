@@ -305,3 +305,7 @@ md-backdrop{
     height: 0 !important;
     opacity: 0 !important;
 }*/
+
+.md-datepicker-input-container {
+    width: 70%
+}

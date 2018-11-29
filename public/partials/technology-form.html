@@ -468,7 +468,7 @@
                                                                     <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
                                                                         <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
                                                                             <label>{{field.tag}}</label>
-                                                                            <div ng-if="field.type != 'reference' && field.type != 'number'">
+                                                                            <div ng-if="field.type != 'reference' && field.type != 'number' && field.type != 'long-text' && field.type != 'date'">
                                                                                 <input 
                                                                                     name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
                                                                                     ng-model="answer[question.name][position][field.name]"
@@ -500,8 +500,30 @@
                                                                                     {{field.icon}}
                                                                                 </md-icon>
                                                                             </div>
+                                                                            <div ng-if="field.type == 'long-text'">
+                                                                                <textarea 
+                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                    ng-model="answer[question.name][position][field.name]" 
+                                                                                    rows="3" 
+                                                                                    md-select-on-focus
+                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                    ng-required="field.required"
+                                                                                    class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched">
+                                                                                </textarea>
+                                                                            </div>
+                                                                            <div ng-if="field.type == 'date'">
+                                                                                <md-datepicker name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                    ng-model="answer[question.name][position][field.name]"
+                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
+                                                                                    ng-required="field.required"
+                                                                                    style="margin-top: 12px">
+                                                                                </md-datepicker>
+                                                                            </div>
                                                                             <md-icon ng-if="field.hint">
                                                                                 <img src="img/help.png" style="width:140%" />
+                                                                            </md-icon>
+                                                                            <md-icon ng-if="field.type == 'date'">
+                                                                                <img src="img/icons/clock.svg" style="width:140%; cursor: pointer;" / ng-click="controller.newReminder(answer[question.name][position][field.name])">
                                                                             </md-icon>
                                                                             <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + position + '\'].$error')">
                                                                                 <div ng-message="required">Se requiere de este campo para continuar.</div>
