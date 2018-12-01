@@ -167,14 +167,30 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         // var answersWithDate = {};
                         angular.forEach(answer, function(group, gKey){
                             angular.forEach(group, function(answer, aKey){
-                                var testDate = new RegExp('^\\d{13}$').test(answer);
-                                if(testDate){
-                                    answersWithDate[gKey][aKey] = new Date(answer);
-                                }else{
-                                    if (typeof(gKey)=='string') {
-                                        answersWithDate[gKey] = {};                                        
+                                if(Object.prototype.toString.call(answer) === '[object Array]'){
+                                    if (answer[0] && (Object.prototype.toString.call(answer[0]) === '[object Object]')) {
+                                        angular.forEach(answer, function(answersGroup, agKey){
+                                            answersWithDate[gKey][aKey][agKey] = {};
+                                            angular.forEach(answersGroup, function(groupAnswer, gaKey){
+                                                var testDate = new RegExp('^\\d{13}$').test(groupAnswer);
+                                                if(testDate){
+                                                    answersWithDate[gKey][aKey][agKey][gaKey] = new Date(groupAnswer);
+                                                }else{
+                                                    answersWithDate[gKey][aKey][agKey][gaKey] = groupAnswer;
+                                                }
+                                            });       
+                                        });
                                     }
-                                    answersWithDate[gKey][aKey] = answer;
+                                }else{
+                                    var testDate = new RegExp('^\\d{13}$').test(answer);
+                                    if(testDate){
+                                        answersWithDate[gKey][aKey] = new Date(answer);
+                                    }else{
+                                        if (typeof(gKey)=='string') {
+                                            answersWithDate[gKey] = {};                                        
+                                        }
+                                        answersWithDate[gKey][aKey] = answer;
+                                    }
                                 }
                             });
                         });
@@ -531,7 +547,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         // $rootScope.infoMessage = "La tecnologia fue almacenada correctamnete.";
     };
     
-    context.saveDetail = function( key ){
+    context.saveDetail = function(key){
         try{
             var technologiesDetailReference = firebase.database().ref().child("technologies-detail/"+key);
             var technologiesLogReference = firebase.database().ref().child("technologies-log");
@@ -548,6 +564,16 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     angular.forEach(group, function(answer, aKey){
                         if(Object.prototype.toString.call(answer) === '[object Date]'){
                             technologiesDetail.answers[qgKey][gKey][aKey] = answer.getTime();
+                        }else if(Object.prototype.toString.call(answer) === '[object Array]'){
+                            if (answer[0] && (Object.prototype.toString.call(answer[0]) === '[object Object]')) {
+                                angular.forEach(answer, function(answersGroup, agKey){
+                                    angular.forEach(answersGroup, function(groupAnswer, gaKey){
+                                        if(Object.prototype.toString.call(groupAnswer) === '[object Date]'){
+                                            technologiesDetail.answers[qgKey][gKey][aKey][agKey][gaKey] = groupAnswer.getTime();
+                                        }
+                                    });       
+                                });
+                            }
                         }
                         if(answer.$invalid){
                             validationError = true;
@@ -673,154 +699,40 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         } 
     }
 
-    context.newReminder = function (model) {
+    context.newReminder = function (model, message, questionGroup, answerKey, questionName, position) {
         if (model) {
             try {
-                var reminderDate = new Date(model).getTime();
-                var today = new Date().getTime();
-                var reminderId = "";
-                var reminder = {};
-                reminder.createdAt = today;
-                reminder.createdBy = $rootScope.userEmail;
-                reminder.status = 'pending';
-                reminder.reminderDate = reminderDate;
-                var remindersReference = firebase.database().ref().child("reminders");
-                var reminders = $firebaseArray(remindersReference);
-                context.fireNotification('info', 'Creando recordatorio...');
-                reminders.$add(reminder).then(function(reference){
-                    try{
-                        // technologyId = reference.path.o[1];
-                        // context.saveDetail(technology.technologyId);
-                        // if (message == null || message == undefined ) {
-                            context.fireNotification('info', 'Recordatorio creado satisfactoriamente.');
-                        // }else{
-                        //     context.fireNotification('info', message);
-                        //     context.fileCategory = "";
-                        //     $("#document").val('');
-                        //     $scope.attachments.$setUntouched();
-                        //     $scope.attachments.$setPristine();
-                        // }
-                        // if (url == null || url == undefined) {
-                        //     $location.path('technology-form/'+technologyId);
-                        // }else{
-                        //     $location.path(url);
-                        // }
-                    }catch(e){
-                        console.log(e);
-                        context.fireNotification('error', 'No se pudo crear el recordatorio. Por favor inténta de nuevo.');
-                    }
-                }, function(error){
-                    context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
-                    console.log(error);
-                });
-
-
-
-
-
-                // if($routeParams.technologyId){
-                //     try{
-                //         var technologyReference = firebase.database().ref().child("technologies/"+$routeParams.technologyId);
-                //         var technology = $firebaseObject(technologyReference);
-                //         technology.$loaded().then(function(){
-                //             // if (technology.status == 'Registrada' && $rootScope.userRoles.length) {
-                //                 // context.fireNotification('error', 'No es posible guardar las modificaciones en el estado actual de la tecnología.');
-                //             // }else{
-                //                 technology.updatedAt = today;
-                //                 technology.updatedBy = $rootScope.userEmail;
-                //                 if (technology.status == 'Registrada' && context.technologyStatus == 'En diligencia' && technology.registeredAt) {
-                //                   technology.registeredAt = null;  
-                //                 }
-                //                 if (context.showRegistrationDate) {
-                //                     technology.registeredAt = new Date(context.registrationDate).getTime();
-                //                 } else {
-                //                     technology.registeredAt = today
-                //                 }
-                //                 technology.status = context.technologyStatus;
-                //                 if(!technology.statusComments) technology.statusComments = [];
-                //                 technology.statusComments = context.technologyStatusComments;
-                //                 if(context.assignedTo != undefined){
-                //                     technology.assignedTo = context.assignedTo;
-                //                 }
-                //                 context.setBasicData(technology, basicData);
-                //                 technology.$save().then(function(reference){
-                //                     try {
-                //                         technologyId = $routeParams.technologyId;
-                //                         context.saveDetail(technology.technologyId);
-                //                         if (message == null || message == undefined ) {
-                //                             context.fireNotification('info', 'Información guardada satisfactoriamente.');
-                //                         }else{
-                //                             context.fireNotification('info', message);
-                //                             context.fileCategory = "";
-                //                             $("#document").val('');
-                //                             $('form[name="attachments"]').trigger("reset");
-                //                             $scope.attachments.$setUntouched();
-                //                             $scope.attachments.$setPristine();
-                //                         }
-                //                         if (url == null || url == undefined) {
-                //                             $location.path('technology-form/'+technologyId);
-                //                         }else{
-                //                             $location.path(url);
-                //                         }                    
-                //                     }catch(e){
-                //                         console.log(e);
-                //                         context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
-                //                     }
-                //                 }, function(error){
-                //                     context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
-                //                 });
-                //             // }
-                //         });
-                //     }catch(e){
-                //         context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
-                //         console.log(e);
-                //     }
-                // }else{
-                //     try{
-                       
-                //         context.setBasicData(technology, basicData);
-                //         var remindersReference = firebase.database().ref().child("reminders");
-                //         var technologies = $firebaseArray(remindersReference);
-                //         technologies.$add(technology).then(function(reference){
-                //             try{
-                //                 technologyId = reference.path.o[1];
-                //                 context.saveDetail(technology.technologyId);
-                //                 if (message == null || message == undefined ) {
-                //                     context.fireNotification('info', 'Información guardada satisfactoriamente.');
-                //                 }else{
-                //                     context.fireNotification('info', message);
-                //                     context.fileCategory = "";
-                //                     $("#document").val('');
-                //                     $scope.attachments.$setUntouched();
-                //                     $scope.attachments.$setPristine();
-                //                 }
-                //                 if (url == null || url == undefined) {
-                //                     $location.path('technology-form/'+technologyId);
-                //                 }else{
-                //                     $location.path(url);
-                //                 }
-                //             }catch(e){
-                //                 console.log(e);
-                //                 context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
-                //             }
-                //         }, function(error){
-                //             context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
-                //             console.log(error);
-                //         });
-                //     }catch(e){
-                //         console.log(e);
-                //         context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
-                //     }
-                // }
-
-
-
-
-
-
-
-
-
+                if($routeParams.technologyId){
+                    context.fireNotification('info', 'Creando recordatorio...');
+                    var reminderDate = new Date(model).getTime();
+                    var today = new Date().getTime();
+                    var reminderId = "";
+                    var reminder = {};
+                    reminder.createdAt = today;
+                    reminder.createdBy = $rootScope.userEmail;
+                    reminder.status = 'pending';
+                    reminder.reminderDate = reminderDate;
+                    reminder.relatedTechnology = $routeParams.technologyId;
+                    if(message) reminder.message = message;
+                    var remindersReference = firebase.database().ref().child("reminders");
+                    var reminders = $firebaseArray(remindersReference);
+                    reminders.$add(reminder).then(function(reference){
+                        try{
+                            reminderId = reference.path.o[1];
+                            context.answers[questionGroup][answerKey][questionName][position]['reminderId'] = reminderId;
+                            console.log(context.answers[questionGroup][answerKey][questionName][position]);
+                            context.save('Recordatorio creado satisfactoriamente.');
+                        }catch(e){
+                            console.log(e);
+                            context.fireNotification('error', 'No se pudo crear el recordatorio. Por favor inténta de nuevo.');
+                        }
+                    }, function(error){
+                        context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                        console.log(error);
+                    });
+                }else{
+                    context.fireNotification('error', 'Para crear un recordatorio debes haber guardado al menos una vez la información de tu tecnología.');
+                }
             }catch(e){
                 console.log(e);
                 this.fireNotification('error', 'Ha ocurrido un error inesperado al crear el recordatorio. Por favor inténtalo de nuevo.')
