@@ -473,7 +473,7 @@
                                                                                     <img src="img/help.png" style="width:140%; cursor:pointer" />
                                                                                 </md-icon>
                                                                             </span>
-                                                                            <md-icon ng-if="field.type == 'date'">
+                                                                            <md-icon ng-if="field.type == 'date' && !answer[question.name][position]['reminderId']">
                                                                                 <img src="img/icons/clock.svg" style="width:140%; cursor: pointer;" ng-click="controller.newReminder(answer[question.name][position][field.name], answer[question.name][position]['reminder-text'], questionGroup.name, answerKey, question.name, position)"/>
                                                                             </md-icon>
                                                                             <div ng-if="field.type != 'reference' && field.type != 'number' && field.type != 'long-text' && field.type != 'date'">
@@ -535,7 +535,7 @@
                                                                         </md-input-container>
                                                                     </div>
                                                                 </div>
-                                                                <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
+                                                                <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly && controller.removeOptionChecker(position, reponseGroup)">
                                                                     <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, answerKey, position)" style="text-align:left">
                                                                         <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
                                                                     </md-button>

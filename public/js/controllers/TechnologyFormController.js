@@ -744,4 +744,13 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         console.log(model);
     }
 
+    context.removeOptionChecker = function (position, responseGroup){
+        console.log(position, responseGroup);
+        if (responseGroup['reminderId']) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }]);
