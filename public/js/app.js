@@ -18,7 +18,8 @@ var sigetecApp = angular.module('SigetecApp',
     'TechnologiesController',
     'ReportController',
     'firebase',
-    'datatables'
+    'datatables',
+    'ngMaterialCollapsible'
   ]
 );
 

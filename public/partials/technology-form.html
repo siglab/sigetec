@@ -117,7 +117,7 @@
                                 <div ng-repeat="(answerKey, answer) in controller.answers[questionGroup.name]" class="formgroup">
                                     <md-content layout-padding style="margin-top: 25px; border-radius:10px">
                                         <div class="row" style="width: 100%">
-                                            <div class="form-group {{question.size || 'col-md-12'}}" ng-repeat="question in questionGroup.questions">
+                                            <div class="form-group {{question.size || 'col-md-12'}}" ng-repeat="(qKey, question) in questionGroup.questions">
                                                 <div ng-switch on="question.type">
                                                     <div ng-switch-when="text">
                                                         <div ng-if="question.prerequisite">
@@ -397,156 +397,172 @@
                                                     <div ng-switch-when="array">
                                                         <div ng-if="question.prerequisite">
                                                             <div ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}'">
-                                                                <label style="color: #75797d; opacity: 0.85; font-size: 0.85em">
-                                                                    {{question.tag}}
-                                                                </label>
-                                                                <div ng-repeat="(position, reponseGroup) in answer[question.name]" style="margin: 1em; background-color: #fafafa; border-left: 6px solid #eb1e00;border-radius: 4px; box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);">
-                                                                    <div class="row" flex-gt-sm style="padding-top: 0.7em; margin: auto;">
-                                                                        <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
-                                                                            <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
-                                                                                <label>{{field.tag}}</label>
-                                                                                <div ng-if="field.type != 'reference' && field.type != 'number'">
-                                                                                    <input name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                        ng-model="answer[question.name][position][field.name]"
-                                                                                        ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                                        ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
-                                                                                        class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
-                                                                                        type="field.type">
+                                                                <md-collapsible class="md-popout multiple-open">
+                                                                    <md-collapsible-item class="active" style="margin: 1em; background-color: #fafafa; border-left: 6px solid #D51B23; border-radius: 4px; box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);"> 
+                                                                        <md-collapsible-header style="background-color: #D51B23;"> 
+                                                                            <div style="color: white; margin-top: 0.6rem; margin-bottom: 0.5rem; font-size: 1.5rem">
+                                                                                {{question.tag }}
+                                                                            </div>
+                                                                        </md-collapsible-header>
+                                                                        <md-collapsible-body>
+                                                                            <div ng-repeat="(position, reponseGroup) in answer[question.name]" style="margin: 1em; background-color: #fafafa; border-left: 6px solid #eb1e00;border-radius: 4px; box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);">
+                                                                                <div class="row" flex-gt-sm style="padding-top: 0.7em; margin: auto;">
+                                                                                    <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
+                                                                                        <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
+                                                                                            <label>{{field.tag}}</label>
+                                                                                            <div ng-if="field.type != 'reference' && field.type != 'number'">
+                                                                                                <input name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                    ng-model="answer[question.name][position][field.name]"
+                                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                                    ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
+                                                                                                    class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
+                                                                                                    type="field.type">
+                                                                                            </div>
+                                                                                            <div ng-if="field.type == 'reference'">
+                                                                                                <md-select  
+                                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                    ng-model="answer[question.name][position][field.name]"
+                                                                                                    ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
+                                                                                                    ng-disabled="controller.formatObjects[controller.currentNavItem].readonly" style="margin-top: 0; margin-bottom: 0">
+                                                                                                    <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}">
+                                                                                                        {{pair.value}}
+                                                                                                    </md-option>
+                                                                                                </md-select>
+                                                                                            </div>
+                                                                                            <input ng-if="field.type == 'number'" name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                ng-model="answer[question.name][position][field.name]"
+                                                                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                                ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
+                                                                                                type="number" step="any"
+                                                                                                min="{{field.min}}" max="{{field.max}}">
+                                                                                            <md-icon ng-if="field.icon" style="font-size: 1rem">
+                                                                                                {{field.icon}}
+                                                                                            </md-icon>
+                                                                                            <md-icon ng-if="field.hint">
+                                                                                                <img src="img/help.png" style="width:140%" />
+                                                                                            </md-icon>
+                                                                                            <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + position + '\'].$error')" multiple md-auto-hide="false">
+                                                                                                <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                                                                <div ng-message="min">El valor mínimo permitido es de {{field.min}}.</div>
+                                                                                                <div ng-message="max">El valor máximo permitido es de {{field.max}}.</div>
+                                                                                            </div>
+                                                                                        </md-input-container>
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div ng-if="field.type == 'reference'">
-                                                                                    <md-select  
-                                                                                        name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                        ng-model="answer[question.name][position][field.name]"
-                                                                                        ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
-                                                                                        ng-disabled="controller.formatObjects[controller.currentNavItem].readonly" style="margin-top: 0; margin-bottom: 0">
-                                                                                        <md-option ng-repeat="pair in controller.references[question.reference]" value="{{pair.key}}">
-                                                                                            {{pair.value}}
-                                                                                        </md-option>
-                                                                                    </md-select>
+                                                                                <!-- Botón de eliminar último grupo adicionado -->
+                                                                                <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
+                                                                                    <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, answerKey, position)" style="text-align:left">
+                                                                                        <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
+                                                                                    </md-button>
                                                                                 </div>
-                                                                                <input ng-if="field.type == 'number'" name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                    ng-model="answer[question.name][position][field.name]"
-                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                                    ng-required="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{question.prerequisite.value.toString() | lowercase}}' && field.required"
-                                                                                    type="number" step="any"
-                                                                                    min="{{field.min}}" max="{{field.max}}">
-                                                                                <md-icon ng-if="field.icon" style="font-size: 1rem">
-                                                                                    {{field.icon}}
-                                                                                </md-icon>
-                                                                                <md-icon ng-if="field.hint">
-                                                                                    <img src="img/help.png" style="width:140%" />
-                                                                                </md-icon>
-                                                                                <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + position + '\'].$error')" multiple md-auto-hide="false">
-                                                                                    <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                                                                    <div ng-message="min">El valor mínimo permitido es de {{field.min}}.</div>
-                                                                                    <div ng-message="max">El valor máximo permitido es de {{field.max}}.</div>
-                                                                                </div>
-                                                                            </md-input-container>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- Botón de eliminar último grupo adicionado -->
-                                                                    <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly">
-                                                                        <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, answerKey, position)" style="text-align:left">
-                                                                            <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
-                                                                        </md-button>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- Botón de agregar nuevo grupo de respuestas -->
-                                                                <div>
-                                                                    <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name, answerKey)" style="text-align:left margin-top:10px">
-                                                                        <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
-                                                                    </md-button>
-                                                                </div>
+                                                                            </div>
+                                                                            <!-- Botón de agregar nuevo grupo de respuestas -->
+                                                                            <div>
+                                                                                <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name, answerKey)" style="text-align:left margin-top:10px">
+                                                                                    <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
+                                                                                </md-button>
+                                                                            </div>
+                                                                        </md-collapsible-body>
+                                                                    </md-collapsible-item>
+                                                                </md-collapsible>
                                                             </div>
                                                         </div>
                                                         <div ng-if="!question.prerequisite">
-                                                            <label style="color: #75797d; opacity: 0.85; font-size: 0.85em">
-                                                                {{question.tag}}
-                                                            </label>
-                                                            <div ng-repeat="(position, reponseGroup) in answer[question.name]" style="margin: 1em; background-color: #fafafa; border-left: 6px solid #eb1e00;border-radius: 4px; box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);">
-                                                                <div class="row" flex-gt-sm style="padding-top: 0.7em; margin: auto;">
-                                                                    <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields">
-                                                                        <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
-                                                                            <label>{{field.tag}}</label>
-                                                                            <span ng-if="field.hint" class="float-right" angular-popover direction="left" template="{{field.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px; z-index: 1000">
-                                                                                <md-icon class="float-right">
-                                                                                    <img src="img/help.png" style="width:140%; cursor:pointer" />
-                                                                                </md-icon>
-                                                                            </span>
-                                                                            <md-icon ng-if="field.type == 'date' && !answer[question.name][position]['reminderId']">
-                                                                                <img src="img/icons/clock.svg" style="width:140%; cursor: pointer;" ng-click="controller.newReminder(answer[question.name][position][field.name], answer[question.name][position]['reminder-text'], questionGroup.name, answerKey, question.name, position)"/>
-                                                                            </md-icon>
-                                                                            <div ng-if="field.type != 'reference' && field.type != 'number' && field.type != 'long-text' && field.type != 'date'">
-                                                                                <input 
-                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                    ng-model="answer[question.name][position][field.name]"
-                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                                    ng-required="field.required"
-                                                                                    class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
-                                                                                    type="field.type">
+                                                            <md-collapsible class="md-popout multiple-open">
+                                                                <md-collapsible-item class="active" style="margin: 1em; background-color: #fafafa; border-left: 6px solid #D51B23; border-radius: 4px; box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);"> 
+                                                                    <md-collapsible-header style="background-color: #D51B23;"> 
+                                                                        <div style="color: white; margin-top: 0.6rem; margin-bottom: 0.5rem; font-size: 1.5rem">
+                                                                            {{question.tag }}
+                                                                        </div>
+                                                                    </md-collapsible-header>
+                                                                    <md-collapsible-body>
+                                                                        <div ng-repeat="(position, reponseGroup) in answer[question.name]" style="margin: 1em; background-color: #fafafa; border-left: 6px solid #eb1e00;border-radius: 4px; box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);">
+                                                                            <div class="row" flex-gt-sm style="padding-top: 0.7em; margin: auto;">
+                                                                                <div class="form-group {{field.size || 'col-md-12'}}" ng-repeat="(fieldKey, field) in question.fields" style="display: flex; align-items: center;">
+                                                                                    <md-input-container flex-gt-sm style="display: block; margin-top: 1.5em; margin-bottom: -1em;">
+                                                                                        <label>{{field.tag}}</label>
+                                                                                        <span ng-if="field.hint" class="float-right" angular-popover direction="left" template="{{field.hint}}" style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px; z-index: 1000">
+                                                                                            <md-icon class="float-right">
+                                                                                                <img src="img/help.png" style="width:140%; cursor:pointer" />
+                                                                                            </md-icon>
+                                                                                        </span>
+                                                                                        <md-icon ng-if="field.type == 'date' && !answer[question.name][position]['reminderId']">
+                                                                                            <img src="img/icons/clock.svg" style="width:140%; cursor: pointer;" ng-click="controller.newReminder(answer[question.name][position][field.name], answer[question.name][position]['reminder-text'], questionGroup.name, answerKey, question.name, position)"/>
+                                                                                        </md-icon>
+                                                                                        <div ng-if="field.type != 'reference' && field.type != 'number' && field.type != 'long-text' && field.type != 'date'">
+                                                                                            <input 
+                                                                                                name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                ng-model="answer[question.name][position][field.name]"
+                                                                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                                ng-required="field.required"
+                                                                                                class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" 
+                                                                                                type="field.type">
+                                                                                        </div>
+                                                                                        <div ng-if="field.type == 'reference'">
+                                                                                            <md-select  
+                                                                                                name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                ng-model="answer[question.name][position][field.name]"
+                                                                                                ng-required="field.required"
+                                                                                                ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                                style="margin-top: 0; margin-bottom: 0">
+                                                                                                <md-option ng-repeat="pair in controller.references[field.reference]" value="{{pair.key}}">
+                                                                                                    {{pair.value}}
+                                                                                                </md-option>
+                                                                                            </md-select>
+                                                                                        </div>
+                                                                                        <div ng-if="field.type == 'number'">
+                                                                                            <input ng-if="field.type == 'number'" name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                ng-model="answer[question.name][position][field.name]"
+                                                                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
+                                                                                                ng-required="field.required"
+                                                                                                type="number" step="any"
+                                                                                                min="{{field.min}}" max="{{field.max}}">
+                                                                                            <md-icon ng-if="field.icon" style="font-size: 16px">
+                                                                                                {{field.icon}}
+                                                                                            </md-icon>
+                                                                                        </div>
+                                                                                        <div ng-if="field.type == 'long-text'">
+                                                                                            <textarea 
+                                                                                                name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                ng-model="answer[question.name][position][field.name]" 
+                                                                                                rows="2" 
+                                                                                                md-select-on-focus
+                                                                                                ng-readonly="controller.formatObjects[controller.currentNavItem].readonly || !controller.removeOptionChecker(position, reponseGroup)"
+                                                                                                ng-required="field.required"
+                                                                                                class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched">
+                                                                                            </textarea>
+                                                                                        </div>
+                                                                                        <div ng-if="field.type == 'date'">
+                                                                                            <md-datepicker name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
+                                                                                                ng-model="answer[question.name][position][field.name]"
+                                                                                                ng-disabled="controller.formatObjects[controller.currentNavItem].readonly || !controller.removeOptionChecker(position, reponseGroup)" 
+                                                                                                ng-required="field.required"
+                                                                                                style="margin-top: 12px">
+                                                                                            </md-datepicker>
+                                                                                        </div>
+                                                                                        <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + position + '\'].$error')">
+                                                                                            <div ng-message="required">Se requiere de este campo para continuar.</div>
+                                                                                            <div ng-message="min">El valor mínimo permitido es de {{field.min}}.</div>
+                                                                                            <div ng-message="max">El valor máximo permitido es de {{field.max}}.</div>
+                                                                                        </div>
+                                                                                    </md-input-container>
+                                                                                </div>
                                                                             </div>
-                                                                            <div ng-if="field.type == 'reference'">
-                                                                                <md-select  
-                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                    ng-model="answer[question.name][position][field.name]"
-                                                                                    ng-required="field.required"
-                                                                                    ng-disabled="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                                    style="margin-top: 0; margin-bottom: 0">
-                                                                                    <md-option ng-repeat="pair in controller.references[field.reference]" value="{{pair.key}}">
-                                                                                        {{pair.value}}
-                                                                                    </md-option>
-                                                                                </md-select>
+                                                                            <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly && controller.removeOptionChecker(position, reponseGroup)">
+                                                                                <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, answerKey, position)" style="text-align:left">
+                                                                                    <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
+                                                                                </md-button>
                                                                             </div>
-                                                                            <div ng-if="field.type == 'number'">
-                                                                                <input ng-if="field.type == 'number'" name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                    ng-model="answer[question.name][position][field.name]"
-                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                                    ng-required="field.required"
-                                                                                    type="number" step="any"
-                                                                                    min="{{field.min}}" max="{{field.max}}">
-                                                                                <md-icon ng-if="field.icon" style="font-size: 16px">
-                                                                                    {{field.icon}}
-                                                                                </md-icon>
-                                                                            </div>
-                                                                            <div ng-if="field.type == 'long-text'">
-                                                                                <textarea 
-                                                                                    name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                    ng-model="answer[question.name][position][field.name]" 
-                                                                                    rows="2" 
-                                                                                    md-select-on-focus
-                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
-                                                                                    ng-required="field.required"
-                                                                                    class="md-input ng-empty ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched">
-                                                                                </textarea>
-                                                                            </div>
-                                                                            <div ng-if="field.type == 'date'">
-                                                                                <md-datepicker name="{{question.name + '-' + field.name + groupKey + '-' + position}}"
-                                                                                    ng-model="answer[question.name][position][field.name]"
-                                                                                    ng-readonly="controller.formatObjects[controller.currentNavItem].readonly" 
-                                                                                    ng-required="field.required"
-                                                                                    style="margin-top: 12px">
-                                                                                </md-datepicker>
-                                                                            </div>
-                                                                            <div ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + '-' + field.name + groupKey + '-' + position + '\'].$error')">
-                                                                                <div ng-message="required">Se requiere de este campo para continuar.</div>
-                                                                                <div ng-message="min">El valor mínimo permitido es de {{field.min}}.</div>
-                                                                                <div ng-message="max">El valor máximo permitido es de {{field.max}}.</div>
-                                                                            </div>
-                                                                        </md-input-container>
-                                                                    </div>
-                                                                </div>
-                                                                <div ng-show="!controller.formatObjects[controller.currentNavItem].readonly && controller.removeOptionChecker(position, reponseGroup)">
-                                                                    <md-button ng-show="position != 0" class="md-raised md-primary float-rigth" aria-label="add" ng-click="controller.removeArrayData(questionGroup.name, question.name, answerKey, position)" style="text-align:left">
-                                                                        <md-icon md-svg-icon="img/icons/remove.svg"></md-icon> Quitar {{question.tag}}
-                                                                    </md-button>
-                                                                </div>
-                                                            </div>
-                                                            <!-- Botón de agregar nuevo grupo de respuestas -->
-                                                            <div>
-                                                                <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name, answerKey)" style="text-align:left margin-top:10px">
-                                                                    <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
-                                                                </md-button>
-                                                            </div>
+                                                                        </div>
+                                                                        <!-- Botón de agregar nuevo grupo de respuestas -->
+                                                                        <div>
+                                                                            <md-button class="md-raised md-primary" aria-label="add" ng-click="controller.addArrayData(questionGroup.name, question.name, answerKey)" style="text-align:left margin-top:10px">
+                                                                                <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Adicionar {{question.tag}}
+                                                                            </md-button>
+                                                                        </div>
+                                                                    </md-collapsible-body>
+                                                                </md-collapsible-item>
+                                                            </md-collapsible>
                                                         </div>
                                                     </div>
                                                 </div>

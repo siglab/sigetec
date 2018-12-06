@@ -1,7 +1,7 @@
 'use strict';
 
 var technologyFormController = angular.module('TechnologyFormController', 
-                                    ['ngMaterial', 'firebase', 'angularUUID2','angular-popover', 'ngMessages', 'ui-notification']);
+                                    ['ngMaterial', 'firebase', 'angularUUID2','angular-popover', 'ngMessages', 'ui-notification', 'ngMaterialCollapsible']);
 technologyFormController.config(['$mdIconProvider', function($mdIconProvider) {
         $mdIconProvider.icon('md-close', 'img/icons/ic_close_24px.svg', 24);
       }]);
@@ -720,7 +720,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         try{
                             reminderId = reference.path.o[1];
                             context.answers[questionGroup][answerKey][questionName][position]['reminderId'] = reminderId;
-                            console.log(context.answers[questionGroup][answerKey][questionName][position]);
                             context.save('Recordatorio creado satisfactoriamente.');
                         }catch(e){
                             console.log(e);
@@ -740,12 +739,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         }else{
             this.fireNotification('error', 'El valor ingresado en la fecha es inválido. No es posible crear el recordatorio.')
         }
-        console.log('Clicked!');
-        console.log(model);
     }
 
     context.removeOptionChecker = function (position, responseGroup){
-        console.log(position, responseGroup);
         if (responseGroup['reminderId']) {
             return false;
         }else{
