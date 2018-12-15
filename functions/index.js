@@ -130,10 +130,14 @@ exports.runRemainders = functions.https.onRequest((req,res)=>{
         if (today.setHours(0,0,0,0)==reminderDate.setHours(0,0,0,0)) {
           response[uuids[i]] = {};
           response[uuids[i]] = reminders[uuids[i]];
+
         }
       }
 
-     res.status(200).json(response);
+
+      // sendEmail(technology['createdBy'], subject, message)
+
+      res.status(200).json(response);
 
 
 
