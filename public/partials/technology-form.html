@@ -100,8 +100,11 @@
         md-nav-click="goto(format.name)"
         name="{{ format.name }}"
         ng-show="format.showTab"
+        style="margin-left: 2px;
+        border-radius: 3px;
+        background-color: #D51B23;"
       >
-        {{ format.name }}
+        <span style="color:white">{{ format.name }}</span>
       </md-nav-item>
     </md-nav-bar>
     <!-- <md-tabs md-selected="controller.currentNavItem" md-border-bottom md-autoselect md-swipe-conten>
