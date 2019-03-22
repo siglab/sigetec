@@ -1,6 +1,6 @@
 'use strict';
 
-var technologyFormController = angular.module('TechnologyFormController', 
+var technologyFormController = angular.module('TechnologyFormController',
                                     ['ngMaterial', 'firebase', 'angularUUID2','angular-popover', 'ngMessages', 'ui-notification', 'ngMaterialCollapsible']);
 technologyFormController.config(['$mdIconProvider', function($mdIconProvider) {
         $mdIconProvider.icon('md-close', 'img/icons/ic_close_24px.svg', 24);
@@ -115,6 +115,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 });
             });
         });
+        // Carga de información de tecnología solicitada
         if($routeParams.technologyId){
             var technologyRequestedReference = firebase.database()
                 .ref()
@@ -158,6 +159,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 var detailRequestedReference = firebase.database()
                     .ref()
                     .child("technologies-detail/"+technologyRequested.technologyId);
+                // Carga de detalles de la tecnología
                 var technologiesRequestedDetail = $firebaseObject(detailRequestedReference);
                 technologiesRequestedDetail.$loaded().then(function(){
                     var answers = technologiesRequestedDetail.answers;
@@ -169,25 +171,42 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                             angular.forEach(group, function(answer, aKey){
                                 if(Object.prototype.toString.call(answer) === '[object Array]'){
                                     if (answer[0] && (Object.prototype.toString.call(answer[0]) === '[object Object]')) {
+                                        if(!answersWithDate[gKey]){
+                                            answersWithDate[gKey] = {};
+                                        }
                                         angular.forEach(answer, function(answersGroup, agKey){
+                                            if (Object.prototype.toString.call(answers[name][gKey][aKey]) === '[object Array]' && !answersWithDate[gKey][aKey]) {
+                                                answersWithDate[gKey][aKey] = [];
+                                            } else if (Object.prototype.toString.call(answers[name][gKey][aKey]) === '[object Object]' && !answersWithDate[gKey][aKey]) {
+                                                answersWithDate[gKey][aKey] = {};
+                                            }
                                             answersWithDate[gKey][aKey][agKey] = {};
                                             angular.forEach(answersGroup, function(groupAnswer, gaKey){
                                                 var testDate = new RegExp('^\\d{13}$').test(groupAnswer);
                                                 if(testDate){
                                                     answersWithDate[gKey][aKey][agKey][gaKey] = new Date(groupAnswer);
-                                                }else{
+                                                } else {
                                                     answersWithDate[gKey][aKey][agKey][gaKey] = groupAnswer;
                                                 }
-                                            });       
+                                            });
                                         });
+                                    } else if (answer[0] && (Object.prototype.toString.call(answer[0]) === '[object String]')) {
+                                        answersWithDate[gKey][aKey] = answer;
                                     }
                                 }else{
+                                    if (!answersWithDate[gKey]) {
+                                        if (Object.prototype.toString.call(answers[name][gKey]) === '[object Array]') {
+                                            answersWithDate[gKey] = [];
+                                        } else if (Object.prototype.toString.call(answers[name][gKey]) === '[object Object]') {
+                                            answersWithDate[gKey] = {};
+                                        }
+                                    }
                                     var testDate = new RegExp('^\\d{13}$').test(answer);
                                     if(testDate){
                                         answersWithDate[gKey][aKey] = new Date(answer);
                                     }else{
                                         if (typeof(gKey)=='string') {
-                                            answersWithDate[gKey] = {};                                        
+                                            answersWithDate[gKey] = {};
                                         }
                                         answersWithDate[gKey][aKey] = answer;
                                     }
@@ -443,6 +462,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     };
     
     context.save = function(message=null, url=null){
+        console.log(context.answers);
         var today = new Date().getTime();
         var technologyId = "";
         if($routeParams.technologyId){
@@ -456,7 +476,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         technology.updatedAt = today;
                         technology.updatedBy = $rootScope.userEmail;
                         if (technology.status == 'Registrada' && context.technologyStatus == 'En diligencia' && technology.registeredAt) {
-                          technology.registeredAt = null;  
+                          technology.registeredAt = null;
                         }
                         if (context.showRegistrationDate) {
                             technology.registeredAt = new Date(context.registrationDate).getTime();
@@ -488,7 +508,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                                     $location.path('technology-form/'+technologyId);
                                 }else{
                                     $location.path(url);
-                                }                    
+                                }
                             }catch(e){
                                 console.log(e);
                                 context.fireNotification('error', 'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
@@ -546,9 +566,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         }
         // $rootScope.infoMessage = "La tecnologia fue almacenada correctamnete.";
     };
-    
+
     context.saveDetail = function(key){
-        try{
+        try {
             var technologiesDetailReference = firebase.database().ref().child("technologies-detail/"+key);
             var technologiesLogReference = firebase.database().ref().child("technologies-log");
             var technologiesDetail = $firebaseObject(technologiesDetailReference);
@@ -571,7 +591,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                                         if(Object.prototype.toString.call(groupAnswer) === '[object Date]'){
                                             technologiesDetail.answers[qgKey][gKey][aKey][agKey][gaKey] = groupAnswer.getTime();
                                         }
-                                    });       
+                                    });
                                 });
                             }
                         }
@@ -581,7 +601,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     });
                 });
             });
-            if(!validationError){
+            if (!validationError) {
                 technologiesDetail.$save();
                 technologiesLog.$add(technologyLog);
             }else{
