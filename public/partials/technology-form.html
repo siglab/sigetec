@@ -94,6 +94,7 @@
     <md-nav-bar
       md-selected-nav-item="controller.currentNavItem"
       nav-bar-aria-label="navigation links"
+      id="form-nav"
     >
       <md-nav-item
         ng-repeat="format in controller.formats"
@@ -978,7 +979,9 @@
                                         </div>
                                       </div>
                                       <!-- Botón de agregar nuevo grupo de respuestas -->
-                                      <div>
+                                      <div
+                                        ng-show="!controller.formatObjects[controller.currentNavItem].readonly"
+                                      >
                                         <md-button
                                           class="md-raised md-primary"
                                           aria-label="add"
@@ -1202,7 +1205,9 @@
                                       </div>
                                     </div>
                                     <!-- Botón de agregar nuevo grupo de respuestas -->
-                                    <div>
+                                    <div
+                                      ng-show="!controller.formatObjects[controller.currentNavItem].readonly"
+                                    >
                                       <md-button
                                         class="md-raised md-primary"
                                         aria-label="add"
@@ -1309,8 +1314,15 @@
             </md-input-container>
           </md-content>
         </div>
-        <!-- Botones de guardar cambios-->
+        <!-- Botones de guardar cambios e ir arriba-->
         <div style="text-align: center">
+          <md-button ng-click="controller.goToTop()" class="md-raised md-primary float-right floatButton"
+            style="height: 55px; max-height: 55px; min-height: 55px; width: 55px;
+              max-width: 55px; min-width: 55px; bottom: 80px; z-index: 99; padding: 6px 0;
+              border-radius: 30px;"
+          >
+            <md-icon class="material-icons">keyboard_arrow_up</md-icon>
+          </md-button>
           <md-button
             ng-show="controller.showCreate"
             class="md-raised md-primary float-right floatButton"

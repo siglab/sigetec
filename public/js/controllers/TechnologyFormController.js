@@ -769,4 +769,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         }
     }
 
+    context.goToTop = function (){
+        $('html, body').animate({scrollTop:$('#form-nav').position().top}, 'slow');
+    }
+
 }]);
