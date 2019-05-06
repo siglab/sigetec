@@ -2,3 +2,18 @@
 # para el proyecto de SIGETEC.
 #
 #
+.DS_Store
+**/.DS_Store
+firestore.indexes.json                                                                                                  
+firestore.rules                                                                                                         
+functions/.eslintrc.json                                                                                                
+functions/node_modules/                                                                                                 
+functions/package-lock.json                                                                                             
+node_modules/                                                                                                           
+storage.rules 
+functions/node_modules/
+.firebaserc
+.firebase/
+firebase.json
+firebase-debug.log
+/public/js/config/*

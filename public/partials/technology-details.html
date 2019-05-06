@@ -1,0 +1,45 @@
+<md-dialog aria-label="Technology Details" style="min-width: 50%">
+  <form ng-cloak>
+    <md-toolbar style="color:#75797d">
+      <div class="md-toolbar-tools">
+        <h2>Detalles de tecnologia</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <img src="img/delete.png" style="width:100%; opacity: 0.5" />
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <span class="badge" style="background-color: #D51B23; font-size: 15px">Nombre de la tenología</span>
+        <h2 style="margin-left: 1%; margin-top:8px; color: #75797d">
+          {{selectedTechnology.name}}
+        </h2>
+        <span class="badge" style="background-color: #D51B23; font-size: 15px">Descripción</span>
+        <p style="margin-left: 1%; margin-top:8px; color: #75797d">
+          {{selectedTechnology.details.answers.basic[0].description || 'Sin descripción' }}
+        </p> 
+        <span class="badge" style="background-color: #D51B23; font-size: 15px">Tipo de invención</span>
+        <p style="margin-left: 1%; margin-top:8px; color: #75797d; text-transform: capitalize;">
+          {{selectedTechnology['technology-type']}}
+        </p>
+        <span class="badge" style="background-color: #D51B23; font-size: 15px">Nombre de investigador principal</span>        
+        <p style="margin-left: 1%; margin-top:8px; color: #75797d">
+          {{selectedTechnology.details.answers['group-principal-researcher'][0]['nombre-apellidos']}}
+        </p>
+        <span class="badge" style="background-color: #D51B23; font-size: 15px">Email investigador principal</span>
+        <p style="margin-left: 1%; margin-top:8px; color: #75797d">
+          {{selectedTechnology.details.answers['group-principal-researcher'][0]['principal-researcher-email']}}
+        </p>        
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button ng-click="cancel()">
+        Cerrar
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+

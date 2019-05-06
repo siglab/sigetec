@@ -1,0 +1,30 @@
+<div ng-controller="FormatsController as controller" class="container-fluid" >
+    <h2>Administracion de Formatos</h2>
+    <br/>
+    <md-content layout-gt-sm="row" layout-padding>
+        <div layout="row">
+            <md-input-container>
+                <label>Formatos JSON</label>
+                <md-select ng-model="controller.selectedFormat" ng-change="controller.onChangeFormat()">
+                    <md-option ng-repeat="format in controller.formats" value="{{format.index}}">{{format.name}}</md-option>
+                </md-select>
+            </md-input-container>
+            <md-button class="md-raised md-primary pull-right" aria-label="Eliminar" ng-click="controller.delete()">
+                 Eliminar
+            </md-button>
+            <md-input-container>
+                <label>Nuevo formato</label>
+                <input ng-model="controller.newFormat" >
+            </md-input-container>
+            <md-button class="md-raised md-primary pull-right" aria-label="Crear" ng-click="controller.create()">
+                 Crear
+            </md-button>
+        </div>
+    </md-content>
+    <md-input-container class="md-block">
+        <textarea ng-model="controller.selectedFormatJson" md-maxlength="3000" rows="20" md-select-on-focus></textarea>
+    </md-input-container>
+    <md-button class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.save()" style="text-align:left">
+        <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar
+    </md-button>
+</div>

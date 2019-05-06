@@ -1,0 +1,22 @@
+<div ng-controller="TechnologiesController as controller" class="container-fluid" >
+    <h2>Tecnologias</h2>
+    <div ng-show="controller.noTechnologies" class="alert alert-info">
+        <p>No hay tecnologias registradas.</p>
+    </div>
+    <div ng-hide="infoMessage != ''" class="alert alert-info">
+        <p>{{infoMessage}}</p>
+    </div>
+    <br />
+    <md-content class="md-padding" layout-xs="column" layout="row">
+        <md-list flex>
+            <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies" ng-click="controller.editTechnology(technology)">
+                <div style="border-left: solid 2pt #333; padding-left: 3pt;" class="md-list-item-text" layout="column">
+                    <h3>{{technology.name | limitTo: 120}}</h3>
+                    <p><i>Creada por {{technology.createdBy}} el {{technology.createdAt}}, asignada a {{technology.assignedTo}}</i></p>
+                    <p>{{technology.description | limitTo: 130}}</p>
+                </div>
+                <span class="md-secondary badge">{{technology.status}}</span>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>

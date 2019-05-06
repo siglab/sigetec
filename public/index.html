@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html ng-app="SigetecApp">
+    <head>
+        <meta charset="utf-8">
+        <title>SIGETec - Sistema Integrado de Gestión Estratégica de Tecnologías</title>
+        <!-- Bootstrap styles -->
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" > -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+        <!-- Angular Material style sheet -->
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css">
+        <!-- Angular popover style sheet -->
+        <link rel="stylesheet" href="css/angular-popover.css" >
+        <!-- Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+        <!-- Font -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+        <!-- Animation styles-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+        <link rel="stylesheet" href="https://unpkg.com/@bootstrapstudio/bootstrap-better-nav/dist/bootstrap-better-nav.min.css">
+        <!-- Notifications styles -->
+        <link rel="stylesheet" href="css/angular-ui-notification.min.css">
+        <!-- JQuery datatable style sheet -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+        <!-- Material collapsible styles -->
+        <link rel="stylesheet" href="css/collapsible.min.css" />
+        <!-- Application styles -->
+        <link rel="stylesheet" href="css/styles.min.css">
+        <link rel="stylesheet" href="css/main.css" >
+        <!-- JQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- JQuery datatable -->
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <!-- AngularJS Material Dependencies -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-messages.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-resource.min.js"></script> 
+        <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.10 used here -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.js"></script>
+        <!-- Angular datatables -->
+        <script src="js/lib/angular-datatables.min.js"></script>
+        <!-- Bootstrap -->
+        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+        <script src="js/lib/angular-popover.min.js"></script>
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-storage.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+        <!-- Firebase config file -->
+        <script src="js/config/firebase-config.js"></script>
+        <!-- Angular Firebase -->
+        <script src="https://cdn.firebase.com/libs/angularfire/2.1.0/angularfire.min.js"></script>
+        <!-- d3 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+        <!-- nvd3 -->
+        <script src="js/lib/nv.d3.min.js"></script>
+        <!-- angular-nvd3 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.9/angular-nvd3.min.js"></script>
+        <!-- Google SignIn -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <script src="js/lib/ng-google-signin.min.js"></script>
+        <!-- UUID generator -->
+        <script src="js/lib/angular-uuid2.min.js"></script>
+        <!-- Animation scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+        <script src="https://unpkg.com/@bootstrapstudio/bootstrap-better-nav@1.3.2/dist/bootstrap-better-nav.min.js"></script>
+        <!-- Notifications script -->
+        <script src="js/lib/angular-ui-notification.min.js"></script>
+        <!-- Material collapsible panel scripts -->
+        <script src="js/lib/collapsible.min.js"></script>
+        <script src="js/lib/collapsibleDirective.min.js"></script>
+        <!-- Api routes config file -->
+        <script src="js/config/api-points.js"></script>
+        <!-- App Controllers -->
+        <script src="js/controllers/MainController.js"></script>
+        <script src="js/controllers/DashboardController.js"></script>
+        <script src="js/controllers/TechnologyFormController.js"></script>
+        <script src="js/controllers/HomeController.js"></script>
+        <script src="js/controllers/RolesController.js"></script>
+        <script src="js/controllers/ReferencesController.js"></script>
+        <script src="js/controllers/FormatsController.js"></script>
+        <script src="js/controllers/TechnologiesController.js"></script>
+        <script src="js/controllers/ReportController.js"></script>
+        <script src="js/app.js"></script>
+    </head>
+    
+    <body>
+        <div ng-controller="MainController as controller">
+            <!-- Application Top navbar -->
+            <md-toolbar class="md-hue-2" ng-show="isLoggedin" ng-cloak>
+                <div class="md-toolbar-tools">
+                    <md-button ng-show="isLoggedin" class="md-icon-button" aria-label="Settings" ng-click="controller.toggleSidebar()">
+                        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+                    </md-button>
+                    <h2 flex md-truncate>
+                        <div class="d-none d-md-block">
+                            <img src="img/SIGETEC_Logo.jpg" alt="SIGETEC" style="max-height: 64px; max-width: 150px;">
+                            <img src="img/logo-univalle.png" class="logo-img-responsive" alt="Universidad del Valle">
+                        </div>
+                    </h2>
+                    <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left; margin-right: 1%; background-color: #D51B23;">
+                        {{userName}} <md-icon md-svg-icon="img/icons/login.svg"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <!-- UV Home Top navbar -->
+            <md-toolbar id="header" class=md-hue-2 ng-show="!isLoggedin" ng-cloak style="border-bottom: none !important; box-shadow: none !important">
+                <div id="topDiv">
+                    <div class="row" id="uvTopbar">
+                        <div class="col-auto col-12 col-xs-12 col-sm-12o col-md-auto">
+                            <div id="uvLogo" style="margin:auto;display:block;"></div>
+                        </div>
+                        <div class="col float-right mx-auto col-sm-12 col-md-auto col-xs-12 col-12" style="padding:5px;">
+                            <div id="uvLinks" style="color:white;">
+                                <ul class="list-unstyled d-flex justify-content-center" id="uvLinksMenuLg">
+                                    <li class="uvLink"><a href="http://atencionalciudadano.univalle.edu.co/" target="_blank" style="color:white;">Atención ciudadanía</a></li>
+                                    <li class="uvLink"><a href="http://portaldeninos.univalle.edu.co/" target="_blank" style="color:white;">Portal infantil<br></a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/directorio-univalle" target="_blank" style="color:white;">Directorio</a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/index.php/correo-electronico-institucional" target="_blank" style="color:white;">Correo</a></li>
+                                    <li class="uvLink"><a href="http://biblioteca.univalle.edu.co/" target="_blank" style="color:white;">Biblioteca</a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/index.php/mapa-del-sitio" target="_blank" style="color:white;">Mapa del sitio</a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/english/index.html" target="_blank" style="color:white;">English version</a></li>
+                                </ul>
+                                <ul class="list-unstyled d-flex justify-content-center" id="uvLinksMenuSm1">
+                                    <li class="uvLink"><a href="http://atencionalciudadano.univalle.edu.co/" target="_blank" style="color:white;">Atención ciudadanía</a></li>
+                                    <li class="uvLink"><a href="http://portaldeninos.univalle.edu.co/" target="_blank" style="color:white;">Portal infantil<br></a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/directorio-univalle" target="_blank" style="color:white;">Directorio</a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/index.php/correo-electronico-institucional" target="_blank" style="color:white;">Correo</a></li>
+                                </ul>
+                                <ul class="list-unstyled d-flex justify-content-center" id="uvLinksMenuSm2">
+                                    <li class="uvLink"><a href="http://biblioteca.univalle.edu.co/" target="_blank" style="color:white;">Biblioteca</a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/index.php/mapa-del-sitio" target="_blank" style="color:white;">Mapa del sitio</a></li>
+                                    <li class="uvLink"><a href="http://www.univalle.edu.co/english/index.html" target="_blank" style="color:white;">English version</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <nav class="navbar navbar-light navbar-expand-md">
+                                <div class="container-fluid"><a class="navbar-brand" href="#" data-aos="fade-right" data-aos-delay="200" data-aos-once="true" id="navbarLogo"></a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                                    <div class="collapse navbar-collapse" id="navcol-1">
+                                        <ul class="nav navbar-nav ml-auto" style="margin-right:5%;font-size:13px;">
+                                            <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;">   <a class="nav-link" href="#" onclick="return false;" ng-show="!isLoggedin">Tecnologías registradas en SIGETec</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation" id="navContact">
+                                                <a class="nav-link" href="#" onclick="return false;" ng-show="!isLoggedin">Contacto</a>
+                                            </li>
+                                        </ul>
+                                        <button aria-label="Ingresar" class="btn btn-primary btn-sm homeBtn loginHomeBtn type="button" ng-show="!isLoggedin">
+                                            <i class="icon ion-log-in"></i>
+                                            &nbsp;Ingresar&nbsp;
+                                        </button>
+                                       <!--  <button aria-label="Salir" ng-click="controller.closeSession()" class="btn btn-primary btn-sm homeBtn" type="button" ng-show="isLoggedin">
+                                            <i class="icon ion-log-in"></i>
+                                            &nbsp;Salir&nbsp;
+                                        </button> -->
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </md-toolbar>
+            <!-- Content -->
+            <div layout="column" class="appContent" ng-cloak>
+                <section layout="row" flex>
+                    <!-- Navigation left sidebar -->
+                    <md-sidenav class="md-sidenav-left" md-component-id="mainMenu" md-whiteframe="4" style="position: fixed">
+                        <md-toolbar class="md-theme-indigo">
+                            <h1 class="md-toolbar-tools">
+                                <img src="img/SIGETEC_Logo.jpg" class="hidden-sm hidden-xs" alt="SIGETEC" style="margin: 10%; max-height: 64px; max-width: 150px;">
+                            </h1>
+                        </md-toolbar>
+                        <md-content layout-margin>
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showRoles()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Roles</h3>
+                                    <p>Administracion de roles</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showFormats()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Formatos</h3>
+                                    <p>Administracion de Formatos</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showReferences()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Valores de referencia</h3>
+                                    <p>Administracion de listados de valores</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showTechnologies()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Tecnologias</h3>
+                                    <p>Listado de tecnologias.</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showReports()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Informes</h3>
+                                    <p>Listado de informes.</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item class="md-2-line" ng-click="controller.showDashboard()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Dashboard</h3>
+                                    <p>Tablero de control.</p>
+                                </div>
+                            </md-list-item>
+                            <md-list-item class="md-2-line" ng-click="controller.closeSession()">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>Cerrar sesión</h3>
+                                    <p>Cierra tu sesión de usuario aquí.</p>
+                                </div>
+                            </md-list-item>
+                        </md-content>
+                    </md-sidenav>
+                    <!-- <md-content flex layout-padding> -->
+                    <md-content style="width: 100%">
+                        <div layout="column" layout-align="top center">
+                            <ng-view style="height: 100%; width: 100%;" autoscroll="true"></ng-view> 
+                        </div>
+                    </md-content>
+                </section>
+            </div>
+            <!-- Footer -->
+            <div class="footer" ng-cloak>
+                <p class="text-center" style="padding:0;margin:0;">SIGETec - Versión en desarrollo (v03.2019). &nbsp;<a href="http://viceinvestigaciones.univalle.edu.co/universidad-empresa-otri">Oficina de Transferencia de Resultados de Investigación (OTRI)</a>&nbsp;<br></p>
+            </div>
+        </div>
+    </body>
+</html>

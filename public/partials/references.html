@@ -1,0 +1,11 @@
+<div ng-controller="ReferencesController as controller" class="container-fluid" >
+    <h2>Administracion de Tablas de valores </h2>
+    <br/>
+    <md-input-container class="md-block">
+      <label>Tablas de valores JSON</label>
+      <textarea ng-model="controller.definition" md-maxlength="1000" rows="20" md-select-on-focus></textarea>
+    </md-input-container>
+    <md-button class="md-raised md-primary pull-right" aria-label="Guardar" ng-click="controller.save()" style="text-align:left">
+        <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar
+    </md-button>
+</div>

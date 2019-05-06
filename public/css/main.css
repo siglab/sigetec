@@ -1,0 +1,320 @@
+body {
+    font-family: Roboto, Arial, sans-serif;
+    background-color: #FFF;
+    color: rgba(0,0,0,0.87);
+    /*height: auto !important*/
+}
+
+a {
+    color: rgb(3,155,229);
+}
+
+.header {
+    background-color: #fff; 
+    height: 50px; 
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
+}
+
+.message {
+    /*max-width: 1050px;*/
+    margin: 40px auto;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
+    border-radius: 10px;
+    background: rgb(250, 250, 250);;
+    padding: 16px 24px;
+}
+
+.message h1 {
+    font-size: 22px;
+    font-weight: 500;
+    text-align: center;
+    margin: 0 0 16px;
+}
+
+.message p {
+    font-weight: 300;
+    line-height: 150%;
+}
+
+.message ul {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    text-align: center;
+}
+
+.message li a {
+    display: inline-block;
+    padding: 8px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    background: rgb(3,155,229);
+    color: white;
+    border: 1px solid rgb(3,155,229);
+    border-radius: 3px;
+    font-size: 14px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+}
+
+.tab-container{
+    border-bottom: solid #ccc 1pt;
+    background-color: #f7f7f7;
+}
+
+.tab {
+    padding: 7pt;
+    font-size: 12pt;
+    font-weight: 300;
+}
+
+.selected {
+    color: rgb(16,108,200);
+    border-bottom: solid rgb(255,82,82) 3pt;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    color: #333;
+    background-color: #FFF;
+}
+
+md-toolbar.md-default-theme.md-hue-2:not(.md-menu-toolbar), md-toolbar.md-hue-2:not(.md-menu-toolbar) {
+    background-color: #fff;
+    border-bottom: solid 2px #D51B23;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+}
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+    background-color: #fff;
+    border-bottom: solid 2px #D51B23;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #FFF;
+}
+
+.headerbar {
+    background-color: #eb1e00;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFF;
+}
+
+.navbar-default .navbar-brand:hover {
+    color: #FFF;
+}
+
+h3{
+    color: #E71C24;
+}
+
+h4{
+    color: #E71C24;
+}
+
+h5{
+    color: #E71C24;
+}
+
+.navbar-nav>li {
+    color: #FFF;
+}
+
+.md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary.md-raised, .md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab {
+    background-color: #eb1e00;
+}
+
+.md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary.md-raised, .md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab:hover {
+    background-color: #D51B23;
+}
+
+.bar-chart > svg {
+    padding-left: 10px;
+}
+
+.angular-popover {
+    width: 400px;
+    min-height: 100px;
+}
+
+.angular-popover-template {
+    padding: 5pt;
+    margin: 5pt;
+}
+
+.logo-img-responsive {
+    height: auto;
+    width: auto;
+    max-height: 64px;
+    max-width: 230px;
+}
+
+line.nv-force-link{
+    stroke: #333;
+    stroke-opacity: 0.7;
+}
+
+md-content.md-default-theme, md-content {
+    background-color: #fff;
+}
+
+md-card.md-default-theme, md-card {
+    background-color: rgb(250,250,250);
+}
+    
+.ng-hide.ng-hide-animate {
+    display: none !important;
+}
+
+.ng-show.ng-show-animate {
+    display: none !important;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    background-color:#303030;color:#fff;
+    font-size:13px
+}
+
+.footer a {
+    color:#F9AE40
+}
+
+.appContent {
+    width: 100%;
+    height: 100%; 
+    padding-bottom: 19px
+}
+
+#loaderDiv {
+  background-color: #D51B23;
+  text-align: center;
+  height: 100%;
+  width: 100%
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2000;
+  margin: -75px 0 0 -75px;
+  width: 120px;
+  height: 120px;
+  display: inline-block;
+}
+
+md-checkbox.md-checked .md-icon {
+    background-color: rgba(64, 161, 255, 0.9);
+}
+
+.md-chip-input-container, .md-chip-input-container div, .md-chip-input-container input {
+    width: 100%
+}
+
+.ui-notification .message {
+    margin: 10px 10px 10px 10px;
+    box-shadow: none !important;
+    border-radius: 0px !important;
+    background: none;
+    padding: 0px !important;
+}
+
+.ui-notification.error {
+    background: #D51B23;
+}
+
+.badge {
+    color: white;
+    background-color: #D51B23;
+}
+
+.formgroup {
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
+    border-radius:10px
+}
+
+.formButton {
+    text-align:left;
+    display: block;
+    text-align: center;                    
+    border: 2px solid white;
+    border-radius: 10px;
+    outline: 0;
+    cursor: pointer;
+    font-weight: 500
+}
+
+.floatButton {
+    text-align:left;
+    display: block;
+    text-align: center;
+    position: fixed;
+    bottom: 27px;
+    right: 30px;
+    z-index: 20;
+    border: 2px solid white;
+    border-radius: 10px;
+    outline: 0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+button.md-accent {
+    color: rgb(63,81,181) !important;
+    background: default !important;
+}
+
+.angular-popover-container{
+    top: 35px !important;
+    bottom: 35px !important
+}
+
+.dataTables_length {
+    color: #75797d !important;
+}
+
+.dataTables_length select {
+    color: #75797d !important;
+}
+
+.dataTables_filter {
+    color: #75797d !important;
+}
+
+.dataTables_info {
+    color: #75797d !important;
+}
+
+md-backdrop{
+    position: fixed;
+}
+
+.form_section:hover {
+    background-color: rgb(57,73,171) !important;
+}
+
+/*.ng-untouched ~ .md-input-messages-animation {
+    height: 0 !important;
+    opacity: 0 !important;
+}*/
+
+.md-datepicker-input-container {
+    width: 70%
+}
+
+md-nav-bar.md-default-theme md-nav-ink-bar, md-nav-bar md-nav-ink-bar {
+    color: white;
+    background: white;
+}
+
+/* li.md-nav-item.ng-scope.ng-isolate-scope:hover {
+    background-color: rgb(57,73,171) !important;
+} */

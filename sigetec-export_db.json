@@ -1,0 +1,916 @@
+{
+  "formats" : [ {
+    "allowedRole" : "all",
+    "name" : "Información Basica",
+    "questionGroups" : [ {
+      "name" : "basic",
+      "questions" : [ {
+        "help" : "Escriba el nombre preliminar de la invención",
+        "name" : "name",
+        "required" : "",
+        "tag" : "Nombre preliminar de la invencion, desarrollo o resultado",
+        "type" : "text"
+      }, {
+        "name" : "description",
+        "required" : "",
+        "tag" : "Descripción",
+        "type" : "text"
+      }, {
+        "name" : "program",
+        "reference" : "program",
+        "required" : true,
+        "tag" : "Facultad",
+        "type" : "reference"
+      }, {
+        "help" : "Tipo invención",
+        "name" : "technology-type",
+        "reference" : "technology-type",
+        "required" : "true",
+        "tag" : "Tipo de invención",
+        "type" : "reference"
+      } ],
+      "tag" : "Información Basica",
+      "type" : "single"
+    } ]
+  }, {
+    "allowedRole" : "admin",
+    "name" : "FNI",
+    "questionGroups" : [ {
+      "name" : "group-principal-researcher",
+      "questions" : [ {
+        "name" : "principal-researcher-email",
+        "required" : "",
+        "tag" : "Email",
+        "type" : "email"
+      }, {
+        "depends" : "principal-researcher-email like univalle.edu.co",
+        "name" : "nombre-apellidos",
+        "required" : "",
+        "tag" : "Nombres y apellidos",
+        "type" : "text"
+      }, {
+        "depends" : "principal-researcher-email like univalle.edu.co",
+        "name" : "phone",
+        "required" : "",
+        "tag" : "Telefono",
+        "type" : "text"
+      }, {
+        "depends" : "principal-researcher-email like univalle.edu.co",
+        "name" : "identification",
+        "required" : "",
+        "tag" : "Numero de Identificación",
+        "type" : "text"
+      }, {
+        "name" : "nivel-formacion",
+        "required" : "",
+        "tag" : "Nivel de formación",
+        "type" : "text"
+      }, {
+        "name" : "relacion-universidad",
+        "required" : "",
+        "tag" : "Relación con la universidad",
+        "type" : "text"
+      } ],
+      "tag" : "Datos del investigador principal",
+      "type" : "single"
+    }, {
+      "name" : "group-coresearcher",
+      "questions" : [ {
+        "name" : "coresearcher-email",
+        "required" : "",
+        "tag" : "Email",
+        "type" : "email"
+      }, {
+        "depends" : "coresearcher-email like univalle.edu.co",
+        "name" : "nombre-apellidos",
+        "required" : "",
+        "tag" : "Nombres y apellidos",
+        "type" : "text"
+      }, {
+        "depends" : "coresearcher-email like univalle.edu.co",
+        "name" : "phone",
+        "required" : "",
+        "tag" : "Telefono",
+        "type" : "text"
+      }, {
+        "depends" : "coresearcher-email like univalle.edu.co",
+        "name" : "identification",
+        "required" : "",
+        "tag" : "Numero de Identificación",
+        "type" : "text"
+      }, {
+        "name" : "nivel-formacion",
+        "required" : "",
+        "tag" : "Nivel de formación",
+        "type" : "text"
+      }, {
+        "name" : "relacion-universidad",
+        "required" : "",
+        "tag" : "Relación con la universidad",
+        "type" : "text"
+      } ],
+      "tag" : "Datos del coinvestigador",
+      "type" : "array"
+    }, {
+      "name" : "group-keywords",
+      "questions" : [ {
+        "name" : "spanish-keywords",
+        "required" : "",
+        "tag" : "Palabras clave en español",
+        "type" : "long-text"
+      }, {
+        "name" : "english-keywords",
+        "required" : "",
+        "tag" : "Palabras clave en ingles",
+        "type" : "long-text"
+      } ],
+      "tag" : "Palabras Clave",
+      "type" : "single"
+    }, {
+      "name" : "group-market-potential",
+      "questions" : [ {
+        "name" : "interested-customer",
+        "required" : "",
+        "tag" : "Tiene un cliente interesado en la invención",
+        "type" : "text"
+      }, {
+        "depends" : "interested-customer like si",
+        "name" : "customer-mention",
+        "required" : "",
+        "tag" : "Mencione los clientes",
+        "type" : "text"
+      }, {
+        "name" : "sectors",
+        "required" : "",
+        "tag" : "En cual de los siguientes sectores estratégicos y/o área técnica de aplicación se enmarca su desarrollo",
+        "type" : "text"
+      }, {
+        "name" : "other-sectors",
+        "required" : "",
+        "tag" : "En caso de que su tecnología se enmarque en otras agrupaciones, en la pregunta anterior, especifique cual sector estratégico",
+        "type" : "text"
+      } ],
+      "tag" : "Potencial de mercado",
+      "type" : "single"
+    }, {
+      "name" : "group-entrance-walls",
+      "questions" : [ {
+        "name" : "walls",
+        "options" : [ "Si", "No" ],
+        "required" : "",
+        "tag" : "Considera que su tecnología tiene barreras de implementación o de entrada al mercado",
+        "type" : "select"
+      }, {
+        "depends" : "walls like Si",
+        "name" : "environmental-walls",
+        "required" : "",
+        "tag" : "Barreras Ambientales",
+        "type" : "text"
+      }, {
+        "depends" : "walls like Si",
+        "name" : "social-walls",
+        "required" : "",
+        "tag" : "Barreras Socio - Culturales",
+        "type" : "text"
+      }, {
+        "depends" : "walls like Si",
+        "name" : "economical-walls",
+        "required" : "",
+        "tag" : "Barreras Económicas",
+        "type" : "text"
+      }, {
+        "depends" : "walls like Si",
+        "name" : "tecnical-walls",
+        "required" : "",
+        "tag" : "Barreras Técnicas",
+        "type" : "text"
+      } ],
+      "tag" : "Barreras de entrada",
+      "type" : "single"
+    }, {
+      "name" : "research-group",
+      "questions" : [ {
+        "name" : "research-line",
+        "required" : "",
+        "tag" : "Linea de investigación",
+        "type" : "text"
+      }, {
+        "name" : "name",
+        "required" : "",
+        "tag" : "Nombre",
+        "type" : "text"
+      }, {
+        "name" : "program",
+        "required" : "",
+        "tag" : "Programa",
+        "type" : "text"
+      }, {
+        "name" : "faculty",
+        "required" : "",
+        "tag" : "Facultad",
+        "type" : "text"
+      } ],
+      "tag" : "Grupo de investigación",
+      "type" : "single"
+    }, {
+      "name" : "research-group-aditional",
+      "questions" : [ {
+        "name" : "work-nature",
+        "required" : "",
+        "tag" : "Determine la naturaleza del trabajo",
+        "type" : "text"
+      }, {
+        "name" : "Determine la naturaleza del trabajo",
+        "required" : "",
+        "tag" : "Nombre",
+        "type" : "text"
+      }, {
+        "name" : "program",
+        "required" : "",
+        "tag" : "Programa",
+        "type" : "text"
+      }, {
+        "name" : "faculty",
+        "required" : "",
+        "tag" : "Facultad",
+        "type" : "text"
+      } ],
+      "tag" : "Información adicional del Grupo de investigación",
+      "type" : "single"
+    }, {
+      "name" : "finantial-source",
+      "questions" : [ {
+        "name" : "univalle",
+        "required" : "",
+        "tag" : "Universidad del valle",
+        "type" : "check"
+      }, {
+        "name" : "colciencias",
+        "required" : "",
+        "tag" : "Colciencias",
+        "type" : "check"
+      }, {
+        "name" : "empresa",
+        "required" : "",
+        "tag" : "Empresa",
+        "type" : "check"
+      }, {
+        "name" : "nombre-empresa",
+        "required" : "",
+        "tag" : "Nombre Empresa",
+        "type" : "text"
+      }, {
+        "name" : "otras",
+        "required" : "",
+        "tag" : "Otras entidades",
+        "type" : "check"
+      }, {
+        "name" : "nombre-otras",
+        "required" : "",
+        "tag" : "Nombres Otras entidades",
+        "type" : "text"
+      }, {
+        "name" : "inversion",
+        "required" : "",
+        "tag" : "Inversión de los investigadores en tiempo y dinero",
+        "type" : "text"
+      } ],
+      "tag" : "Fuente de financiación",
+      "type" : "single"
+    }, {
+      "name" : "contribucion",
+      "questions" : [ {
+        "name" : "substitutos",
+        "required" : "",
+        "tag" : "Existen tecnologías sustitutas y/o semejantes que resuelvan el mismo problema técnico?",
+        "type" : "text"
+      }, {
+        "name" : "substitutos-detalle",
+        "required" : "",
+        "tag" : "Cuántas y cuáles?",
+        "type" : "text"
+      }, {
+        "name" : "interested-costumer",
+        "required" : "",
+        "tag" : "Tiene un cliente interesado en la invención?",
+        "type" : "text"
+      }, {
+        "name" : "interested-costumer-detail",
+        "required" : "",
+        "tag" : "Cuántos y cuáles?",
+        "type" : "text"
+      }, {
+        "name" : "need",
+        "required" : "",
+        "tag" : "Otras entidades",
+        "type" : "check"
+      }, {
+        "name" : "application",
+        "required" : "",
+        "tag" : "Cuál es la aplicación industrial y/o beneficio social?",
+        "type" : "text"
+      }, {
+        "name" : "advantages",
+        "required" : "",
+        "tag" : "Que ventajas y desventajas presenta la tecnología en relación a otras",
+        "type" : "text"
+      } ],
+      "tag" : "Aporte de la invencion al area de conocimiento",
+      "type" : "single"
+    }, {
+      "name" : "technology-status",
+      "questions" : [ {
+        "name" : "development-status",
+        "required" : "",
+        "tag" : "En que estado de desarrollo se encuentra la tecnologia?",
+        "type" : "text"
+      }, {
+        "name" : "required-time",
+        "required" : "",
+        "tag" : "Cuanto tiempo necesita la tecnología para pasar al siguiente estado",
+        "type" : "text"
+      } ],
+      "tag" : "Estado de la tecnología",
+      "type" : "single"
+    }, {
+      "name" : "novelty-degree",
+      "questions" : [ {
+        "name" : "patent-number",
+        "required" : "",
+        "tag" : "Indique el numero de posibles afectaciones de patentes a su tecnología",
+        "type" : "text"
+      }, {
+        "name" : "papers-number",
+        "required" : "",
+        "tag" : "Indique el numero de publicaciones relacionadas con las tecnologías sustitutas",
+        "type" : "text"
+      }, {
+        "name" : "release",
+        "required" : "",
+        "tag" : "Usted ha presentado algún tipo de divulgación de su tecnología/desarrollo",
+        "type" : "text"
+      }, {
+        "name" : "extension",
+        "required" : "",
+        "tag" : "Es la tecnología una extensión o continuación de otros resultados de investigación ya radicados en la OTRI",
+        "type" : "text"
+      }, {
+        "name" : "impact-local",
+        "required" : "",
+        "tag" : "Su tecnología tendrá un impacto local",
+        "type" : "text"
+      }, {
+        "name" : "impact-departamental",
+        "required" : "",
+        "tag" : "Su tecnología tendrá un impacto departamental",
+        "type" : "text"
+      }, {
+        "name" : "impact-regional",
+        "required" : "",
+        "tag" : "Su tecnología tendrá un impacto regional",
+        "type" : "text"
+      }, {
+        "name" : "impact-national",
+        "required" : "",
+        "tag" : "Su tecnología tendrá un impacto nacional",
+        "type" : "text"
+      }, {
+        "name" : "impact-international",
+        "required" : "",
+        "tag" : "Su tecnología tendrá un impacto internacional",
+        "type" : "text"
+      } ],
+      "tag" : "Grado de novedad de la tecnología",
+      "type" : "single"
+    }, {
+      "name" : "publication",
+      "questions" : [ {
+        "name" : "publication-type",
+        "required" : "",
+        "tag" : "Tipo de publicación",
+        "type" : "text"
+      }, {
+        "name" : "publication-site",
+        "required" : "",
+        "tag" : "Lugar",
+        "type" : "text"
+      }, {
+        "name" : "publication-date",
+        "required" : "",
+        "tag" : "Fecha",
+        "type" : "date"
+      } ],
+      "tag" : "Divulgaciones presentadas que pueden afectar la propiedad intelectual",
+      "type" : "array"
+    }, {
+      "name" : "related-publications",
+      "questions" : [ {
+        "name" : "related-publication-type",
+        "required" : "",
+        "tag" : "Tipo de publicación",
+        "type" : "text"
+      }, {
+        "name" : "related-publication-name",
+        "required" : "",
+        "tag" : "Nombre",
+        "type" : "text"
+      }, {
+        "name" : "related-publication-author",
+        "required" : "",
+        "tag" : "Autor",
+        "type" : "text"
+      }, {
+        "name" : "related-publication-date",
+        "required" : "",
+        "tag" : "Fecha",
+        "type" : "date"
+      } ],
+      "tag" : "Publicaciones relacionadas con su resultado de investigación",
+      "type" : "array"
+    }, {
+      "name" : "observations",
+      "questions" : [ {
+        "name" : "observations",
+        "required" : "",
+        "tag" : "Observaciones adicionales",
+        "type" : "long-text"
+      } ],
+      "tag" : "Observaciones Adicionales",
+      "type" : "single"
+    } ]
+  }, {
+    "name" : "Evaluación",
+    "questionGroups" : [ {
+      "name" : "preliminar-search",
+      "questions" : [ {
+        "name" : "preliminar-search-comment",
+        "required" : "",
+        "tag" : "Comentario",
+        "type" : "long-text"
+      } ],
+      "tag" : "Busqueda preliminar de novedad",
+      "type" : "single"
+    }, {
+      "name" : "commercial-prefeasibility",
+      "questions" : [ {
+        "name" : "commercial-prefeasibility-comment",
+        "required" : "",
+        "tag" : "Comentario",
+        "type" : "long-text"
+      } ],
+      "tag" : "Pre-factibilidad comercial",
+      "type" : "single"
+    }, {
+      "name" : "evaluation-result",
+      "questions" : [ {
+        "name" : "evaluation-result-search",
+        "required" : "",
+        "tag" : "Búsqueda preliminar de novedad",
+        "type" : "long-text"
+      }, {
+        "name" : "evaluation-result-prefeasibility",
+        "required" : "",
+        "tag" : "Pre-factibilidad comercial",
+        "type" : "long-text"
+      }, {
+        "name" : "evaluation-result",
+        "required" : "",
+        "tag" : "Resultado",
+        "type" : "text"
+      } ],
+      "tag" : "Resultado de la Evaluación",
+      "type" : "single"
+    } ]
+  }, {
+    "name" : "Comercialización",
+    "questionGroups" : [ {
+      "name" : "commercialization-plan",
+      "questions" : [ {
+        "name" : "minimun-value",
+        "required" : "",
+        "tag" : "Valor mìnimo estimado para la tecnología",
+        "type" : "long-text"
+      }, {
+        "name" : "executive-summary",
+        "required" : "",
+        "tag" : "Resumen ejecutivo",
+        "type" : "long-text"
+      }, {
+        "name" : "costumer-list",
+        "required" : "",
+        "tag" : "Listado de clientes",
+        "type" : "long-text"
+      } ],
+      "tag" : "Plan de comercializacion",
+      "type" : "single"
+    }, {
+      "name" : "market-study",
+      "questions" : [ {
+        "name" : "surrounding-analysis",
+        "required" : "",
+        "tag" : "Análisis del entorno",
+        "type" : "long-text"
+      }, {
+        "name" : "market-profile",
+        "required" : "",
+        "tag" : "Perfil del mercado",
+        "type" : "long-text"
+      }, {
+        "name" : "trends",
+        "required" : "",
+        "tag" : "Tendencias",
+        "type" : "long-text"
+      }, {
+        "name" : "perspectives",
+        "required" : "",
+        "tag" : "Perspectivas",
+        "type" : "long-text"
+      }, {
+        "name" : "market-size",
+        "required" : "",
+        "tag" : "Cálculo del tamaño del mercado",
+        "type" : "long-text"
+      }, {
+        "name" : "supply-analysis",
+        "required" : "",
+        "tag" : "Análisis de la Oferta",
+        "type" : "long-text"
+      } ],
+      "tag" : "Estudio de mercado",
+      "type" : "single"
+    }, {
+      "name" : "bussiness-model",
+      "questions" : [ {
+        "name" : "bussiness-model",
+        "required" : "",
+        "tag" : "Modelo de negocio",
+        "type" : "long-text"
+      } ],
+      "tag" : "Modelo de negocio",
+      "type" : "single"
+    } ]
+  }, {
+    "name" : "Licenciamiento",
+    "questionGroups" : [ {
+      "name" : "discharge",
+      "questions" : [ {
+        "name" : "contract-type",
+        "required" : "",
+        "tag" : "Tipo de contrato",
+        "type" : "text"
+      }, {
+        "name" : "discharge-type-option",
+        "required" : "",
+        "tag" : "Tipo de licenciamiento - opción",
+        "type" : "text"
+      }, {
+        "name" : "discharge-type-exclusive",
+        "required" : "",
+        "tag" : "Tipo de licenciamiento - licencia exclusiva",
+        "type" : "text"
+      }, {
+        "name" : "discharge-type-noexclusive",
+        "required" : "",
+        "tag" : "Tipo de licenciamiento - licencia no exclusiva",
+        "type" : "text"
+      }, {
+        "name" : "discharge-type-trial",
+        "required" : "",
+        "tag" : "Tipo de licenciamiento - licencia para evaluación",
+        "type" : "text"
+      }, {
+        "name" : "discharge-type-otro",
+        "required" : "",
+        "tag" : "Tipo de licenciamiento - otro",
+        "type" : "text"
+      } ],
+      "tag" : "Licenciamiento y transferencia de tecnología",
+      "type" : "single"
+    }, {
+      "name" : "discharge-contract",
+      "questions" : [ {
+        "name" : "discharge-person",
+        "required" : "",
+        "tag" : "Nombre de la persona Jurídica/natural para la cual fue Licenciada/Transferida la tecnología",
+        "type" : "long-text"
+      }, {
+        "name" : "discharge-date",
+        "required" : "",
+        "tag" : "Fecha del Licenciamiento / Transferencia (AAAA/MM/DD)",
+        "type" : "date"
+      }, {
+        "name" : "discharge-validity",
+        "required" : "",
+        "tag" : "Vigencia del Licenciamiento / Contrato de Transferencia (AAAA/MM/DD)",
+        "type" : "date"
+      }, {
+        "name" : "discharge-term",
+        "required" : "",
+        "tag" : "Plazo de vigencia del licenciamiento / Contrato de Transferencia (# Meses)",
+        "type" : "text"
+      }, {
+        "name" : "discharge-subject",
+        "required" : "",
+        "tag" : "Descripción del objeto del Licenciamiento / Contrato Transferencia",
+        "type" : "long-text"
+      }, {
+        "name" : "person-incharge-unit",
+        "required" : "",
+        "tag" : "Unidad académica",
+        "type" : "text"
+      }, {
+        "name" : "person-incharge-address",
+        "required" : "",
+        "tag" : "Dirección de residencia",
+        "type" : "text"
+      }, {
+        "name" : "person-incharge-phone",
+        "required" : "",
+        "tag" : "Teléfono",
+        "type" : "text"
+      }, {
+        "name" : "person-incharge-email",
+        "required" : "",
+        "tag" : "Correo electrónico",
+        "type" : "text"
+      }, {
+        "name" : "otri-incharge-name",
+        "required" : "",
+        "tag" : "Nombre del profesional de la OTRI responsable por la Licenciamiento/ Contrato de Transferencia",
+        "type" : "text"
+      }, {
+        "name" : "otri-incharge-phone",
+        "required" : "",
+        "tag" : "Teléfono",
+        "type" : "text"
+      }, {
+        "name" : "royalty-term",
+        "required" : "",
+        "tag" : "Plazo para el pago de las regalías",
+        "type" : "date"
+      }, {
+        "name" : "royalty-last-payment",
+        "required" : "",
+        "tag" : "Fecha de ultimo pago de regalias",
+        "type" : "date"
+      }, {
+        "name" : "royaltie-ammount",
+        "required" : "",
+        "tag" : "Monto acumulado",
+        "type" : "text"
+      }, {
+        "name" : "royalty-next-payment",
+        "required" : "",
+        "tag" : "Fecha del proximo pago de regalias",
+        "type" : "date"
+      }, {
+        "name" : "royaltie-next-ammount",
+        "required" : "",
+        "tag" : "Monto proximo pago",
+        "type" : "text"
+      } ],
+      "tag" : "Licenciamiento/Contrato de transferencia",
+      "type" : "array"
+    } ]
+  }, {
+    "name" : "Protección",
+    "questionGroups" : [ {
+      "name" : "shares",
+      "questions" : [ {
+        "name" : "shares-researcher-name",
+        "required" : "",
+        "tag" : "Nombre Investigador",
+        "type" : "text"
+      }, {
+        "name" : "shares-researcher-ammount",
+        "required" : "",
+        "tag" : "Participacion Investigador",
+        "type" : "text"
+      } ],
+      "tag" : "Porcentaje de participacion de los inventores",
+      "type" : "array"
+    }, {
+      "name" : "national-patent",
+      "questions" : [ {
+        "name" : "patent-nature",
+        "required" : "",
+        "tag" : "Naturaleza de la invención",
+        "type" : "text"
+      }, {
+        "name" : "patent-status",
+        "required" : "",
+        "tag" : "Estado de la tecnologia",
+        "type" : "text"
+      }, {
+        "name" : "finantiation-source-univalle",
+        "required" : "",
+        "tag" : "Fuente de financiación - Univalle",
+        "type" : "text"
+      }, {
+        "name" : "finantiation-source-colciencias",
+        "required" : "",
+        "tag" : "Fuente de financiación - Colciencias",
+        "type" : "text"
+      }, {
+        "name" : "finantiation-source-empresa",
+        "required" : "",
+        "tag" : "Fuente de financiación - Empresa",
+        "type" : "text"
+      }, {
+        "name" : "finantiation-source-empresa-name",
+        "required" : "",
+        "tag" : "Nombre de la empresa",
+        "type" : "text"
+      }, {
+        "name" : "financed-ammount",
+        "required" : "",
+        "tag" : "Monto Financiado",
+        "type" : "long-text"
+      } ],
+      "tag" : "Patente Nacional",
+      "type" : "single"
+    }, {
+      "name" : "sic-procedure",
+      "questions" : [ {
+        "name" : "payment-date-sic",
+        "required" : "",
+        "tag" : "Fecha de pago",
+        "type" : "date"
+      }, {
+        "name" : "payment-value-sic",
+        "required" : "",
+        "tag" : "Valor de pago (anualidad)",
+        "type" : "date"
+      }, {
+        "name" : "payment-show-pct",
+        "required" : "",
+        "tag" : "Fecha de pago",
+        "type" : "date"
+      }, {
+        "name" : "ammount-show-pct",
+        "required" : "",
+        "tag" : "Valor presentación PCT",
+        "type" : "text"
+      }, {
+        "name" : "limit-date-national",
+        "required" : "",
+        "tag" : "Fecha límite fase nacional",
+        "type" : "date"
+      }, {
+        "name" : "publication-date-sic",
+        "required" : "",
+        "tag" : "Fecha de publicación",
+        "type" : "text"
+      } ],
+      "tag" : "Tramite ante la SIC",
+      "type" : "single"
+    } ]
+  } ],
+  "references" : {
+    "definition" : {
+      "genero" : [ {
+        "key" : "M",
+        "value" : "Masculino"
+      }, {
+        "key" : "F",
+        "value" : "Femenino"
+      } ],
+      "program" : [ {
+        "key" : "AI",
+        "value" : "Artes integradas"
+      }, {
+        "key" : "ciencias",
+        "value" : "Ciencias"
+      }, {
+        "key" : "ingenieria",
+        "value" : "Ingenieria"
+      } ]
+    }
+  },
+  "roles" : {
+    "definition" : [ {
+      "rolName" : "admin",
+      "users" : [ "gelkio@gmail.com", "stefaniavalenciabecerra@gmail.com", "fortiz@institutoprospectiva.org", "vanessa.zamora@correounivalle.edu.co", "julian.rodriguez@correounivalle.edu.co" ]
+    } ]
+  },
+  "technologies" : {
+    "-Kh4NdrZGQPO9Nb7IPeW" : {
+      "createdAt" : 1491517742612,
+      "createdBy" : "gelkio@gmail.com",
+      "description" : "Prueba",
+      "name" : "Tecnologia de modificada por Julien",
+      "principal-researcher-email" : "gelkio@gmail.com",
+      "program" : "ingenieria",
+      "technologyId" : "5ec64d1c-f0d2-4a67-9955-77cc42c307bf",
+      "updatedAt" : 1494865734571,
+      "updatesBy" : "gelkio@gmail.com"
+    },
+    "-KkBw47RwOPAbMvRyLPn" : {
+      "createdAt" : 1494865695328,
+      "createdBy" : "gelkio@gmail.com",
+      "description" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+      "name" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+      "principal-researcher-email" : "carmen.forero@correounivalle.edu.co",
+      "program" : "ciencias",
+      "technologyId" : "5aae9a77-6548-45d2-8257-8e8685bd8fd3",
+      "updatedAt" : 1495672723494,
+      "updatesBy" : "julian.rodriguez@correounivalle.edu.co"
+    },
+    "-KkBx0UmbB2SFuJR0e-V" : {
+      "createdAt" : 1494865942574,
+      "createdBy" : "gelkio@gmail.com",
+      "description" : "Dispositivo de almacenamiento celular - BIODACI",
+      "name" : "BIODACI",
+      "principal-researcher-email" : "carolinaortega35@gmail.com",
+      "program" : "ingenieria",
+      "technologyId" : "791af1b8-63b4-43de-b842-28ce66af0e3d"
+    },
+    "-KkH3IomOvIFIx2XfGDv" : {
+      "createdAt" : 1494952154227,
+      "createdBy" : "vanessa.zamora@correounivalle.edu.co",
+      "description" : "Es un proceso novedoso que permite disolver calcio (con tamaños de partículas microscópicas) en un medio acuoso, que puede usarse para el enriquecimiento de bebidas y alimentos nutracéuticos. La invención facilita el aprovechamiento del calcio en el organismo y evita la sedimentación de las partículas durante la vida útil del producto, de manera que al ingerirse no presenta ningún tipo de sabor, olor ni textura perceptible para el consumidor.",
+      "name" : "Proceso para la preparación de suspensiones de sales de calcio y método para la incorporación de calcio en bebidas alimenticias nutraceuticas y farmacéuticas",
+      "program" : "ingenieria",
+      "technologyId" : "b1b62adf-2e88-45a0-8e55-0940ee5326ab"
+    }
+  },
+  "technologies-detail" : {
+    "5aae9a77-6548-45d2-8257-8e8685bd8fd3" : {
+      "answers" : {
+        "basic" : [ {
+          "description" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+          "name" : "Material transportador de oxigeno obtenido a partir de un materia de hierro modificado con cobre",
+          "program" : "ciencias"
+        } ],
+        "group-keywords" : [ {
+          "english-keywords" : "CO2 Capture, Chemical looping combustion",
+          "spanish-keywords" : "Captura de CO2, Combustion con transportadores solidos de oxigeno"
+        } ],
+        "group-principal-researcher" : [ {
+          "identification" : "51802180",
+          "nivel-formacion" : "Doctorado",
+          "nombre-apellidos" : "Carmen Rosa Forero Amortegui",
+          "phone" : "3017027220",
+          "principal-researcher-email" : "carmen.forero@correounivalle.edu.co"
+        } ],
+        "research-group" : [ {
+          "faculty" : "Ingenieria",
+          "name" : "Ciencia y tecnologia del carbon",
+          "research-line" : "Combustion"
+        } ]
+      }
+    },
+    "5ec64d1c-f0d2-4a67-9955-77cc42c307bf" : {
+      "answers" : {
+        "basic" : [ {
+          "description" : "Prueba",
+          "name" : "Tecnologia de modificada por Julien",
+          "program" : "ingenieria"
+        } ],
+        "discharge-contract" : [ {
+          "discharge-date" : 1498453200000
+        } ],
+        "group-principal-researcher" : [ {
+          "nombre-apellidos" : "Gelver Vargas",
+          "principal-researcher-email" : "gelkio@gmail.com"
+        } ]
+      }
+    },
+    "791af1b8-63b4-43de-b842-28ce66af0e3d" : {
+      "answers" : {
+        "basic" : [ {
+          "description" : "Dispositivo de almacenamiento celular - BIODACI",
+          "name" : "BIODACI",
+          "program" : "ingenieria"
+        } ],
+        "group-principal-researcher" : [ {
+          "identification" : "1085266302",
+          "nivel-formacion" : "Ingeniera",
+          "nombre-apellidos" : "Carolina Ortega portilla",
+          "phone" : "3212122",
+          "principal-researcher-email" : "carolinaortega35@gmail.com"
+        } ],
+        "research-group" : [ {
+          "faculty" : "Ingenieria",
+          "name" : "Recubrimientos duros y aplicaciones industriales - RDAI",
+          "program" : "Ingenieria de materiales",
+          "research-line" : "Biocompatibilidad"
+        } ]
+      }
+    },
+    "b1b62adf-2e88-45a0-8e55-0940ee5326ab" : {
+      "answers" : {
+        "basic" : [ {
+          "description" : "Es un proceso novedoso que permite disolver calcio (con tamaños de partículas microscópicas) en un medio acuoso, que puede usarse para el enriquecimiento de bebidas y alimentos nutracéuticos. La invención facilita el aprovechamiento del calcio en el organismo y evita la sedimentación de las partículas durante la vida útil del producto, de manera que al ingerirse no presenta ningún tipo de sabor, olor ni textura perceptible para el consumidor.",
+          "name" : "Proceso para la preparación de suspensiones de sales de calcio y método para la incorporación de calcio en bebidas alimenticias nutraceuticas y farmacéuticas",
+          "program" : "ingenieria"
+        } ],
+        "documents" : [ {
+          "name" : "MODELO DE NEGOCIO SALES DE CALCIO-Ruben-1.pdf",
+          "ref" : "documents/1494949855297",
+          "url" : "https://firebasestorage.googleapis.com/v0/b/sigetec-6cb58.appspot.com/o/documents%2F1494949855297?alt=media&token=8e71b6a6-bb6e-46a1-b0d6-d232f4c05444"
+        } ]
+      }
+    }
+  }
+}
