@@ -3,6 +3,7 @@ body {
     background-color: #FFF;
     color: rgba(0,0,0,0.87);
     /*height: auto !important*/
+    line-height: 1.3 !important;
 }
 
 a {
@@ -190,7 +191,7 @@ md-card.md-default-theme, md-card {
 .appContent {
     width: 100%;
     height: 100%; 
-    padding-bottom: 19px
+    padding-bottom: 16.8px
 }
 
 #loaderDiv {
@@ -213,6 +214,10 @@ md-card.md-default-theme, md-card {
 
 md-checkbox.md-checked .md-icon {
     background-color: rgba(64, 161, 255, 0.9);
+}
+
+md-checkbox {
+    margin-bottom: 0px !important;
 }
 
 .md-chip-input-container, .md-chip-input-container div, .md-chip-input-container input {
@@ -318,3 +323,43 @@ md-nav-bar.md-default-theme md-nav-ink-bar, md-nav-bar md-nav-ink-bar {
 /* li.md-nav-item.ng-scope.ng-isolate-scope:hover {
     background-color: rgb(57,73,171) !important;
 } */
+
+.form-group {
+    margin-bottom: 0px !important;
+}
+
+.md-button {
+    font-size: 0.85rem !important;
+}
+
+md-input-container {
+    margin-top: 10px !important;
+}
+
+md-collapsible-header {
+    display: flex !important;
+}
+
+label {
+    margin-bottom: 0 !important;
+}
+
+.md-chips {
+    font-size: 0.9rem !important;
+}
+
+md-icon.md-datepicker-calendar-icon {
+    margin-top: 10px !important;
+}
+
+button.goUpButton:hover {
+    animation-iteration-count: infinite;
+}
+
+img.helpIcon:hover {
+    animation-iteration-count: infinite;
+}
+
+md-toolbar.appTopBar {
+    position: fixed;
+}

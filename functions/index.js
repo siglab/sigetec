@@ -11,7 +11,7 @@ admin.initializeApp();
 // 1. https://www.google.com/settings/security/lesssecureapps
 // 2. https://accounts.google.com/DisplayUnlockCaptcha
 // For other types of transports such as Sendgrid see https://nodemailer.com/transports/
-// TODO: Configure the `gmail.email` and `gmail.password` Google Cloud environment variables.
+// TODO: Configure the 'gmail.email' and  'gmail.password' Google Cloud environment variables.
 const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
@@ -173,7 +173,7 @@ function sendEmail(email, subject, message){
       console.log('New change status email sent to:', email);
     });
   }catch(e){
-    console.log('Ocurrió un erro:');
+    console.log('Ocurrió un error:');
     console.log(e);
   }
 };

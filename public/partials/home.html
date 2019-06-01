@@ -1,5 +1,4 @@
-<div id="homeDiv" ng-controller="HomeController as controller">
-
+<div id="homeDiv" ng-controller="HomeController as controller" style="margin-top: -60px">
     <!-- Patents and technologies new table -->
     <!-- <div style="width:80%; margin-left: 10%; margin-top: 2%">
         <md-toolbar class="md-table-toolbar md-default">
@@ -128,9 +127,9 @@
                                 <tbody>
                                     <tr ng-repeat="technology in controller.technologiesArray" style="color: rgb(105, 105, 107); font-size: 14px">
                                         <td>{{ technology.technologyId }}</td>
-                                        <td style="width: 25%">{{ technology.name }}</td>
-                                        <td style="width: 25%">{{ (technology.details.answers.basic[0].description | limitTo:100) || 'Sin descripción' }}</td>
-                                        <td style="width: 22%">{{ technology['principal-researcher-email'] }}</td>
+                                        <td style="width: 25%; text-align: center">{{ technology.name }}</td>
+                                        <td style="width: 25%; text-align: center">{{ (technology.details.answers.basic[0].description | limitTo:100) || 'Sin descripción' }}</td>
+                                        <td style="width: 22%; text-align: center">{{ technology['principal-researcher-email'] }}</td>
                                         <td>
                                             <div style="vertical-align: top; text-align: center;">
                                                 <span ng-show="{{technology['granted-date'] != undefined}}" class="badge" style="background-color: #D51B23;">Patente</span>

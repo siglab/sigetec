@@ -95,7 +95,7 @@
     <body>
         <div ng-controller="MainController as controller">
             <!-- Application Top navbar -->
-            <md-toolbar class="md-hue-2" ng-show="isLoggedin" ng-cloak>
+            <md-toolbar class="md-hue-2 appTopBar" ng-show="isLoggedin" ng-cloak>
                 <div class="md-toolbar-tools">
                     <md-button ng-show="isLoggedin" class="md-icon-button" aria-label="Settings" ng-click="controller.toggleSidebar()">
                         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
@@ -228,14 +228,14 @@
                     <!-- <md-content flex layout-padding> -->
                     <md-content style="width: 100%">
                         <div layout="column" layout-align="top center">
-                            <ng-view style="height: 100%; width: 100%;" autoscroll="true"></ng-view> 
+                            <ng-view style="height: 100%; width: 100%; margin-top: 66px" autoscroll="true"></ng-view> 
                         </div>
                     </md-content>
                 </section>
             </div>
             <!-- Footer -->
             <div class="footer" ng-cloak>
-                <p class="text-center" style="padding:0;margin:0;">SIGETec - Versión en desarrollo (v03.2019). &nbsp;<a href="http://viceinvestigaciones.univalle.edu.co/universidad-empresa-otri">Oficina de Transferencia de Resultados de Investigación (OTRI)</a>&nbsp;<br></p>
+                <p class="text-center" style="padding:0;margin:0;">SIGETec - Versión en desarrollo (v05.2019). &nbsp;<a href="http://viceinvestigaciones.univalle.edu.co/universidad-empresa-otri">Oficina de Transferencia de Resultados de Investigación (OTRI)</a>&nbsp;<br></p>
             </div>
         </div>
     </body>

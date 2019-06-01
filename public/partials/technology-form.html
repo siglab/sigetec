@@ -6,21 +6,21 @@
   <!-- Estado de tecnología -->
   <div class="row" style="margin-top: 15px" ng-cloak>
     <div class="col-md-10">
-      <h4 ng-if="controller.answers['basic'][0].name">
+      <h5 ng-if="controller.answers['basic'][0].name">
         Título de tu tecnología:
         <u>{{ controller.answers['basic'][0].name }}</u>
-      </h4>
+      </h5>
     </div>
     <div class="col-md-2">
       <div class="float-right" style="text-align: center">
         <span
           class="badge"
-          style="margin-top: 20px; font-size: 12pt; padding: 5pt; background-color: #D51B23; color: white; font-weight: normal"
+          style="margin-top: 20px; font-size: 0.9rem; padding: 5pt; background-color: #D51B23; color: white; font-weight: normal"
         >
           Estado: {{ controller.technologyStatus }}
         </span>
         <div ng-if="controller.technologyStatus == 'Registrada'">
-          <p style="font-size: 0.8rem;">
+          <p style="font-size: 0.75rem;">
             Esta tecnología no puede ser modificada en el estado actual
           </p>
         </div>
@@ -32,7 +32,7 @@
     <!-- Título y opciones de personal de OTRI -->
     <div class="row">
       <div class="col-md-6">
-        <h3>Formato Tecnología</h3>
+        <h4>Formato de Tecnología</h4>
       </div>
       <div class="col-md-6">
         <div class="float-rigth">
@@ -127,26 +127,23 @@
             ng-if="controller.prerequisitesChecker(null, questionGroup.prerequisites.otherGroupQuestions)"
           >
             <h3
-              style="padding-top: 0.3rem; padding-bottom: 0.05rem; background-color: #D51B23; margin-top: 1rem; color: white; border-radius: 8px; margin-bottom: 0.1rem; font-size: 1.2rem; cursor: pointer"
+              style="padding-top: 2px; padding-bottom: 2px; background-color: #D51B23; margin-top: 8px; color: white; border-radius: 8px; margin-bottom: 8px; font-size: 1rem; cursor: pointer; min-height: 50px; padding-left: 15px; display:flex; align-items: center;"
               data-toggle="collapse"
               href="#{{ groupKey }}"
               class="form_section"
             >
-              <div style="margin: 1rem">
                 {{ questionGroup.tag }}
-              </div>
             </h3>
             <div
               id="{{ groupKey }}"
               class="panel-collapse expanded collapse show"
-              style="margin-top: -0.8rem"
             >
               <!-- Preguntas pre-requisitos para mostrar grupo de preguntas -->
               <div class="formgroup">
                 <md-content
                   ng-if="questionGroup.prerequisites.ownGroupQuestions"
                   layout-padding
-                  style="margin-top: 25px; border-radius:10px"
+                  style="border-radius:10px"
                 >
                   <div
                     ng-repeat="prerequisiteQuestion in questionGroup.prerequisites.ownGroupQuestions"
@@ -191,7 +188,7 @@
                 >
                   <md-content
                     layout-padding
-                    style="margin-top: 25px; border-radius:10px"
+                    style="border-radius:10px; margin-top:10px"
                   >
                     <div class="row" style="width: 100%">
                       <div
@@ -223,7 +220,7 @@
                                   name="{{ question.name + groupKey }}"
                                 />
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -246,7 +243,7 @@
                                   name="{{ question.name + groupKey }}"
                                 />
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -270,7 +267,7 @@
                                 name="{{ question.name + groupKey }}"
                               />
                               <md-icon ng-if="question.hint"
-                                ><img src="img/help.png" style="width:140%"
+                                ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                               /></md-icon>
                               <div
                                 ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -316,7 +313,7 @@
                                     </div>
                                   </md-checkbox>
                                   <md-icon ng-if="question.hint"
-                                    ><img src="img/help.png" style="width:140%"
+                                    ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                   /></md-icon>
                                   <div
                                     ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -359,7 +356,7 @@
                                   </div>
                                 </md-checkbox>
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -420,6 +417,7 @@
                                     <img
                                       src="img/help.png"
                                       style="width:140%"
+                                      class="helpIcon animated pulse"
                                     />
                                   </md-icon>
                                 </span>
@@ -471,6 +469,7 @@
                                     <img
                                       src="img/help.png"
                                       style="width:140%"
+                                      class="helpIcon animated pulse"
                                     />
                                   </md-icon>
                                 </span>
@@ -502,7 +501,7 @@
                                 >
                                 </md-datepicker>
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -551,7 +550,7 @@
                                   ng-if="question.hint"
                                   class="float-right"
                                 >
-                                  <img src="img/help.png" style="width:140%" />
+                                  <img src="img/help.png" style="width:140%" class="helpIcon animated pulse" />
                                 </md-icon>
                               </span>
                               <div
@@ -589,7 +588,7 @@
                                 >
                                 </textarea>
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -616,7 +615,7 @@
                                 >
                                 </textarea>
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -660,7 +659,7 @@
                                   ng-if="question.hint"
                                   class="float-right"
                                 >
-                                  <img src="img/help.png" style="width:140%" />
+                                  <img src="img/help.png" style="width:140%" class="helpIcon animated pulse"/>
                                 </md-icon>
                               </span>
                               <md-chips
@@ -695,7 +694,7 @@
                                 style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;"
                               >
                                 <md-icon class="float-right">
-                                  <img src="img/help.png" style="width:140%" />
+                                  <img src="img/help.png" style="width:140%" class="helpIcon animated pulse" />
                                 </md-icon>
                               </span>
                               <md-chips
@@ -750,7 +749,7 @@
                                   >{{ question.icon }}</md-icon
                                 >
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -790,7 +789,7 @@
                                   >{{ question.icon }}</md-icon
                                 >
                                 <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%"
+                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
                                 /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
@@ -830,7 +829,7 @@
                                       style="background-color: #D51B23;"
                                     >
                                       <div
-                                        style="color: white; margin-top: 0.6rem; margin-bottom: 0.5rem; font-size: 1.5rem"
+                                        style="color: white"
                                       >
                                         {{ question.tag }}
                                       </div>
@@ -853,7 +852,7 @@
                                           >
                                             <md-input-container
                                               flex-gt-sm
-                                              style="display: block; margin-bottom: -1em;"
+                                              style="min-height: 58px"
                                             >
                                               <label>{{ field.tag }}</label>
                                               <div
@@ -937,6 +936,7 @@
                                                 <img
                                                   src="img/help.png"
                                                   style="width:140%"
+                                                  class="helpIcon animated pulse"
                                                 />
                                               </md-icon>
                                               <div
@@ -1009,7 +1009,7 @@
                                     style="background-color: #D51B23;"
                                   >
                                     <div
-                                      style="color: white; margin-top: 0.6rem; margin-bottom: 0.5rem; font-size: 1.5rem"
+                                      style="color: white"
                                     >
                                       {{ question.tag }}
                                     </div>
@@ -1033,7 +1033,7 @@
                                         >
                                           <md-input-container
                                             flex-gt-sm
-                                            style="display: block; margin-bottom: -1em;"
+                                            style="min-height: 58px"
                                           >
                                             <label>{{ field.tag }}</label>
                                             <span
@@ -1048,6 +1048,7 @@
                                                 <img
                                                   src="img/help.png"
                                                   style="width:140%; cursor:pointer"
+                                                  class="helpIcon animated pulse"
                                                 />
                                               </md-icon>
                                             </span>
@@ -1225,6 +1226,74 @@
                               </md-collapsible>
                             </div>
                           </div>
+                          <!-- Tipo attachments -->
+                          <div ng-switch-when="attachments">
+                            <div ng-if="!question.prerequisite">
+                              <!-- Attachments list -->
+                              <h4 style="color: #75797d;">Archivos adjuntos:</h4>
+                              <div ng-if="answer[question.name].length > 0" ng-repeat="attachment in answer[question.name]">
+                                <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+                                  <md-card-title>
+                                    <md-card-title-text>
+                                      <span class="md-headline">Título de archivo: {{attachment.name}}</span>
+                                      <span class="md-subhead">Cargado por {{attachment.uploadedBy}} en {{attachment.uploadedAt}}<br> Tipo de archivo: {{attachment.fileType}}</span>
+                                    </md-card-title-text>
+                                    <md-card-title-media>
+                                      <!-- <div class="md-media-sm card-media"></div> -->
+                                    </md-card-title-media>
+                                  </md-card-title>
+                                  <md-card-actions layout="row" layout-align="end center">
+                                    <a href="{{ attachment.url }}" target="_blank" style="text-decoration: none; color: white; background-color: #D51B23; border-radius: 5px; margin-right: 3px;">
+                                      <md-button>Ver</md-button>
+                                    </a>
+                                    <md-button>Eliminar</md-button>
+                                  </md-card-actions>
+                                </md-card>
+                              </div>
+                              <div ng-if="!answer[question.name] || answer[question.name].length == 0" style="text-align: center">
+                                  <h5 style="color: #75797d;">No existen archivos adjuntos en esta sección.</h5>
+                              </div>
+                              <div ng-if="(question.maxFiles && answer[question.name].length < question.maxFiles) || !question.maxFiles">
+                                <md-content class="layout-padding _md formgroup" style="margin:8px">
+                                  <!-- <h5>Adjuntar nuevo documento:</h5> -->
+                                  <div style="color: #75797d;">
+                                    Adjunte aquí un nuevo documento para esta sección.
+                                  </div>
+                                  <div class="row" style="width: 100%">
+                                    <input
+                                      type="file"
+                                      name="{{answerKey}}-{{question.name}}-file"
+                                      class="inputimg col-md-6"
+                                      id="{{answerKey}}-{{question.name}}-file"
+                                      style="margin-top: 18px"
+                                    />
+                                    <!-- <md-input-container
+                                      class="md-block col-md-6"
+                                      flex-gt-sm
+                                      style="margin-left: 13px"
+                                    >
+                                      <label>Tipo de documento</label>
+                                      <md-select
+                                        ng-model="controller.fileCategory"
+                                        name="type"
+                                      >
+                                        <md-option value="article">Artículo</md-option>
+                                        <md-option value="brochure">Brochure</md-option>
+                                        <md-option value="other">Otro</md-option>
+                                      </md-select>
+                                    </md-input-container> -->
+                                  </div>
+                                  <md-button
+                                    ng-click="controller.uploadAttachment(answerKey + '-' + question.name + '-' + 'file', question.name, answerKey, questionGroup.name)"
+                                    class="md-raised md-primary float-right formButton"
+                                    style="margin: 0; padding: 0px; padding-left: 5px; padding-right: 5px;"
+                                  >
+                                    Adjuntar documento
+                                  </md-button>
+                                </md-content>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <!-- Botón quitar -->
@@ -1294,7 +1363,7 @@
         >
           <md-content
             class="layout-padding"
-            style="margin-top: 25px; border-radius:10px"
+            style="border-radius:10px"
           >
             <md-input-container
               class="md-block col-md-6"
@@ -1316,7 +1385,7 @@
         </div>
         <!-- Botones de guardar cambios e ir arriba-->
         <div style="text-align: center">
-          <md-button ng-click="controller.goToTop()" class="md-raised md-primary float-right floatButton"
+          <md-button ng-click="controller.goToTop()" class="animated bounce delay-3s md-raised md-primary float-right floatButton goUpButton"
             style="height: 55px; max-height: 55px; min-height: 55px; width: 55px;
               max-width: 55px; min-width: 55px; bottom: 80px; z-index: 99; padding: 6px 0;
               border-radius: 30px;"
@@ -1338,11 +1407,11 @@
             class="md-raised md-primary float-right formButton"
             aria-label="Guardar"
             type="submit"
-            ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()"
+            ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid, controller.formatObjects[controller.currentNavItem].formName) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.register()"
           >
             Registrar esta tecnología
           </md-button>
-          <md-button
+          <!-- <md-button
             ng-show="!controller.showCreate && !controller.formatObjects[controller.currentNavItem].readonly"
             class="md-raised md-primary float-right floatButton"
             aria-label="Guardar"
@@ -1350,25 +1419,33 @@
             ng-click="controller.checker($eval(controller.formatObjects[controller.currentNavItem].formName).$valid, controller.formatObjects[controller.currentNavItem].formName) && $eval(controller.formatObjects[controller.currentNavItem].formName).$valid && controller.save()"
           >
             <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar cambios
+          </md-button> -->
+          <md-button
+            ng-show="!controller.showCreate && !controller.formatObjects[controller.currentNavItem].readonly"
+            class="md-raised md-primary float-right floatButton"
+            aria-label="Guardar"
+            ng-click="controller.save(null,null, false)"
+          >
+            <md-icon md-svg-icon="img/icons/save.svg"></md-icon> Guardar cambios
           </md-button>
         </div>
       </form>
     </div>
   </div>
-  <br />
   <!-- Archivos adjuntos -->
   <div
     class="message"
-    style="margin-top: -15px; margin-bottom: 50px"
-    ng-show="(controller.currentNavItem != 'Información Basica')"
+    ng-show="controller.currentNavItem != 'Información Básica'"
+    style="margin-top: 0"
   >
     <div>
-      <h3>Documentos adjuntos:</h3>
+      <h5>Documentos adjuntos</h5>
+      <p style="color: #75797d">Adjunta aquí todos los documentos que consideres necesarios para complementar la información de la tecnología a registrar.</p>
       <md-content class="layout-padding _md formgroup">
-        <h5>Documentos agregados previamente:</h5>
+        <h5>Documentos agregados previamente</h5>
         <div
           ng-if="controller.answers.documents.length == 0 || !controller.answers.documents"
-          style="color: #75797d;"
+          style="color: #75797d; text-align: center"
         >
           Esta tecnología no tiene documentos adjuntos
         </div>
@@ -1434,10 +1511,9 @@
         style="margin-top: 10px"
       >
         <md-content class="layout-padding _md formgroup">
-          <h5>Adjuntar nuevo documento:</h5>
+          <h5>Nuevo documento adjunto</h5>
           <div style="color: #75797d;">
-            Adjunte aquí todos los documentos que considere necesarios para
-            registrar su tecnología.
+            Selecciona un nuevo documento a adjuntar en tu tecnología y da click en "Adjuntar este documento".
           </div>
           <div class="row" style="width: 100%">
             <input
@@ -1475,7 +1551,7 @@
             class="md-raised md-primary float-right formButton"
             style="margin: 0; padding: 0px; padding-left: 5px; padding-right: 5px;"
           >
-            Adjuntar documento
+            Adjuntar este documento
           </md-button>
         </md-content>
       </form>
