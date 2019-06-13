@@ -1440,7 +1440,7 @@
   >
     <div>
       <h5>Documentos adjuntos</h5>
-      <p style="color: #75797d">Adjunta aquí todos los documentos que consideres necesarios para complementar la información de la tecnología a registrar.</p>
+      <p style="color: #75797d" ng-show="!controller.formatObjects[controller.currentNavItem].readonly">Adjunta aquí todos los documentos que consideres necesarios para complementar la información de la tecnología. No será posible adjuntar más documentos una vez registres la tecnología.</p>
       <md-content class="layout-padding _md formgroup">
         <h5>Documentos agregados previamente</h5>
         <div
@@ -1509,11 +1509,12 @@
         ng-submit="(attachments.$valid) && controller.uploadFile()"
         name="attachments"
         style="margin-top: 10px"
+        ng-show="!controller.formatObjects[controller.currentNavItem].readonly"
       >
         <md-content class="layout-padding _md formgroup">
           <h5>Nuevo documento adjunto</h5>
           <div style="color: #75797d;">
-            Selecciona un nuevo documento a adjuntar en tu tecnología y da click en "Adjuntar este documento".
+            Selecciona un nuevo documento a adjuntar en tu tecnología y da click en el botón "adjuntar este documento".
           </div>
           <div class="row" style="width: 100%">
             <input
