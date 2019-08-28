@@ -311,9 +311,8 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
     
     context.uploadFile = function() {
-        // console.log(questionName);
         context.fireNotification('info', 'Cargando archivo. Esto puede tardar un momento...');
-        var ref = 'documents/'+ new Date().getTime();
+        var ref = 'documents/' + new Date().getTime()+'_' + document.getElementById('document').files[0].name;
         var documentsReference = firebase.storage().ref().child(ref);
         var sFileName = $("#document").val();
         if (sFileName.length > 0) {
