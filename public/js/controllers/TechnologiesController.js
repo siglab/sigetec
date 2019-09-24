@@ -19,30 +19,31 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
     
     var technologiesReference = firebase.database().ref().child("technologies").orderByChild('createdAt');
     var technologies = $firebaseArray(technologiesReference);
-        
+    
     technologies.$loaded().then(function(){
         context.technologies = [];
-
         angular.forEach(technologies, function(technology, key){
-            if($rootScope.allowedStatusView.find(function(status){ return status == technology.status; })){
+            // if($rootScope.allowedStatusView.find(function(status){ return status == technology.status; })){
+            //     context.addTechnology(technology);
+            // }
+            if (technology.status == 'Registrada') {
                 context.addTechnology(technology);
-            }
+            } 
         });
-        angular.forEach(technologies, function(technology, key){
-            if(technology.assignedTo == $rootScope.userEmail){
-                context.addTechnology(technology);
-            }
-        });
-        var shareReference = firebase.database().ref().child("share");
-        var share = $firebaseArray(shareReference);
-        share.$loaded().then(function(){
-            angular.forEach(technologies, function(technology, key){
-                if($rootScope.allowedStatusView.find(function(status){ return status == technology.status; })){
-                    context.addTechnology(technology);
-                }
-            });
-        });
-
+        // angular.forEach(technologies, function(technology, key){
+        //     if(technology.assignedTo == $rootScope.userEmail){
+        //         context.addTechnology(technology);
+        //     }
+        // });
+        // var shareReference = firebase.database().ref().child("share");
+        // var share = $firebaseArray(shareReference);
+        // share.$loaded().then(function(){
+        //     angular.forEach(technologies, function(technology, key){
+        //         if($rootScope.allowedStatusView.find(function(status){ return status == technology.status; })){
+        //             context.addTechnology(technology);
+        //         }
+        //     });
+        // });
         if(context.technologies.length > 0){
             context.technologies.reverse();
         }else{

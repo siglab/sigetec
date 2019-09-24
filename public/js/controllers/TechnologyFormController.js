@@ -44,11 +44,15 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     context.showAssign = false;
     context.showRegister = false;
     context.showCreate = false;
+    context.showPDFGenerator = false;
     context.showRegistrationDate = false;
     context.technologyStatus = "En diligencia";
     context.registrationDate = null;
     context.technologyStatusComments = [];
-    context.fileCategory = "";  
+    context.fileCategory = "";
+    context.pdfInfo = {
+        formats: {},
+    };
     if ($routeParams.technologyId) {
         context.currentNavItem = "FNI";
         // context.showCreate = false;
@@ -116,6 +120,23 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     }
                 });
             });
+            // Para generar el PDF
+            if (format['formName'] == 'basic' || format['formName'] == 'fni') {
+                context.pdfInfo.formats[format.name]={};
+                context.pdfInfo.formats[format.name]['data'] = {};
+                angular.forEach(format.questionGroups, function (questionGroup){
+                    context.pdfInfo.formats[format.name]['data'][questionGroup.name] = {};
+                    context.pdfInfo.formats[format.name]['data'][questionGroup.name]['tag'] = questionGroup.tag;
+                    context.pdfInfo.formats[format.name]['data'][questionGroup.name]['type'] = questionGroup.type;
+                    context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'] = {};
+                    context.pdfInfo.formats[format.name]['data'][questionGroup.name]['answers'] = {};
+                    for (let index = 0; index < questionGroup.questions.length; index++) {
+                        context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'][questionGroup.questions[index]['name']] = {};
+                        context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'][questionGroup.questions[index]['name']]['tag'] = questionGroup.questions[index]['tag'];
+                        context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'][questionGroup.questions[index]['name']]['type'] = questionGroup.questions[index]['type'];
+                    }
+                });
+            }
         });
         // Carga de información de tecnología solicitada
         if($routeParams.technologyId){
@@ -147,7 +168,10 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                     }
                     if ($rootScope.permissions.indexOf('showAssign') >= 0) {
                         context.showAssign = true;
-                    }                    
+                    }
+                    if ($rootScope.permissions.indexOf('showPDFGenerator') >= 0) {
+                        context.showPDFGenerator = true;
+                    }                        
                 }
                 if ($rootScope.permissions.indexOf('showRegistrationDate') >= 0) {
                     context.showRegistrationDate = true;
@@ -229,6 +253,15 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
             //     context.showCreate = true;
             // }
         }
+        // Crea la información del archivo PDF
+        var pdfInfoObjKeys = Object.keys(context.pdfInfo.formats);
+        angular.forEach(context.answers, function(answer, key){
+            for (let index = 0; index < pdfInfoObjKeys.length; index++) {
+                if (context.pdfInfo.formats[pdfInfoObjKeys[index]]['data'][key]) {
+                    context.pdfInfo.formats[pdfInfoObjKeys[index]]['data'][key]['answers'] = answer;
+                }
+            }
+        });
     });
                                
     context.rolesChecker = function(formatAllowedRoles){
@@ -819,6 +852,162 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
 
     context.goToTop = function (){
         $('html, body').animate({scrollTop:$('#form-nav').position().top}, 'slow');
+    }
+
+    context.generatePDF = function(){
+        var formatKeys = ['Información Básica', 'FNI'];
+        var pdfContent = [];
+        var questionsOrder = {};
+        var fileTitle = "Technology File";
+        angular.forEach(context.formats, function(format){
+            if (format['formName'] == 'basic' || format['formName'] == 'fni') {
+                questionsOrder[format.name] = [];
+                questionsOrder[format.name] = format.questionGroups;
+            }
+        });
+        angular.forEach(formatKeys, function(formatName){
+            pdfContent.push({
+                text: formatName,
+                style: 'header'
+            });
+            angular.forEach(questionsOrder[formatName], function(questionGroup){
+                if(context.pdfInfo['formats'][formatName]['data'][questionGroup.name]){
+                    pdfContent.push({
+                        text: 'Sección: '+ questionGroup.tag + '',
+                        style: 'section'
+                    });
+                    var answersGroupAdded = false;
+                    angular.forEach(context.pdfInfo['formats'][formatName]['data'][questionGroup.name]['answers'], function(answersGroup){
+                        angular.forEach(questionGroup.questions, function(question){
+                            var somethingAdded = false;
+                            if (answersGroup[question.name]) {
+                                var realQuestion = question.tag; 
+                                if (questionGroup.name == 'basic' && question.name == 'name') {
+                                    fileTitle = 'Tecnología - '+ answersGroup[question.name].charAt(0).toUpperCase() + answersGroup[question.name].slice(1) + '.pdf';
+                                }
+                                if (realQuestion.indexOf('aquí')>=0) {
+                                    realQuestion = realQuestion.replace('aquí','');
+                                    realQuestion = realQuestion.charAt(0).toUpperCase() + realQuestion.slice(1);
+                                }
+                                if (realQuestion.indexOf(':') >=0) {
+                                    realQuestion = realQuestion.replace(':','');
+                                }
+                                pdfContent.push({
+                                    text: realQuestion + ': ',
+                                    style: 'subheader'
+                                });    
+                                if (typeof(answersGroup[question.name]) == 'string') {
+                                    pdfContent.push({
+                                        text: answersGroup[question.name].charAt(0).toUpperCase() + answersGroup[question.name].slice(1),
+                                        style: ['quote', 'small']
+                                    });
+                                    somethingAdded =true;        
+                                } else if (typeof(answersGroup[question.name]) == 'boolean'){
+                                    if (answersGroup[question.name]) {
+                                        pdfContent.push({
+                                            text: 'Si / Acepto / Check',
+                                            style: ['quote', 'small']
+                                        });    
+                                    }else{
+                                        pdfContent.push({
+                                            text: 'No / No Acepto',
+                                            style: ['quote', 'small']
+                                        });
+                                    }
+                                    somethingAdded =true;
+                                } else if(typeof(answersGroup[question.name]) == 'number') {
+                                    pdfContent.push({
+                                        text: answersGroup[question.name].toString(10),
+                                        style: ['quote', 'small']
+                                    });
+                                    somethingAdded =true;
+                                } else {
+                                    angular.forEach(answersGroup[question.name], function(object){
+                                        if(Object.prototype.toString.call(object) == '[object String]'){
+                                            pdfContent.push({
+                                                text: object.charAt(0).toUpperCase() + object.slice(1),
+                                                style: ['quote', 'small']
+                                            });
+                                            somethingAdded =true;  
+                                        } else {
+                                            angular.forEach(question.fields, function(field){
+                                                if(object[field.name]){
+                                                    pdfContent.push({
+                                                        text: field.tag + ': ',
+                                                        style: 'arrayGroupSubheader'
+                                                    });
+                                                    if (typeof(object[field.name]) == 'string') {
+                                                        pdfContent.push({
+                                                            text: object[field.name].charAt(0).toUpperCase() + object[field.name].slice(1),
+                                                            style: ['arrayGroupSubQuote', 'small']
+                                                        });
+                                                        somethingAdded =true;
+                                                    } else if (typeof(object[field.name]) == 'number') {
+                                                        pdfContent.push({
+                                                            text: object[field.name].toString(10),
+                                                            style: ['arrayGroupSubQuote', 'small']
+                                                        });
+                                                        somethingAdded =true;
+                                                    }
+                                                } 
+                                            });
+                                        }    
+                                    });
+                                }
+                                if (!somethingAdded) {
+                                    pdfContent.pop();
+                                }
+                            }
+                            if (somethingAdded) {
+                                answersGroupAdded = true;
+                            }
+                        });
+                    });
+                    if (!answersGroupAdded) {
+                        pdfContent.pop();
+                    }
+                }
+            });
+        });
+        var docDefinition = {
+            content: pdfContent,
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 10, 0,5],
+                },
+                section: {
+                    fontSize: 14,
+                    bold: true,
+                    margin: [5, 5, 0,5],
+                },
+                subheader: {
+                    fontSize: 12,
+                    bold: true,
+                    margin: [5, 0, 0,0],
+                },
+                quote: {
+                    italics: true,
+                    margin: [5, 2, 0, 5],
+                    alignment: 'justify'
+                },
+                arrayGroupSubheader: {
+                    fontSize: 12,
+                    bold: true,
+                    margin: [15, 0, 0,0],
+                },
+                arrayGroupSubQuote: {
+                    italics: true,
+                    margin: [15, 2, 0, 5],
+                    alignment: 'justify'
+                },
+                small: {
+                    fontSize: 10
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).download(fileTitle);
     }
 
 }]);

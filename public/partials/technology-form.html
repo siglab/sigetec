@@ -53,6 +53,11 @@
                   >Retornar a investigador</md-button
                 >
               </md-menu-item>
+              <md-menu-item ng-show="controller.showPDFGenerator">
+                <md-button ng-click="controller.generatePDF()"
+                  >Generar PDF</md-button
+                >
+              </md-menu-item>
               <md-menu-item ng-show="controller.showAssign">
                 <md-button ng-click="controller.showAssignDialog()"
                   >Asignar a personal OTRI</md-button
