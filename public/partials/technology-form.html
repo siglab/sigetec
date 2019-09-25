@@ -204,6 +204,29 @@
                           <!-- Tipo texto -->
                           <div ng-switch-when="text">
                             <div ng-if="question.prerequisite">
+                              <span
+                                ng-if="question.hint"
+                                class="float-right"
+                                angular-popover
+                                direction="left"
+                                template="{{ question.hint }}"
+                                style="position: relative; cursor: pointer; color: #75797d; font-size: 14px;"
+                                ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{
+                                  question.prerequisite.value.toString()
+                                    | lowercase
+                                }}'"
+                              >
+                                <md-icon
+                                  ng-if="question.hint"
+                                  class="float-right"
+                                >
+                                  <img
+                                    src="img/help.png"
+                                    style="width:140%"
+                                    class="helpIcon animated pulse"
+                                  />
+                                </md-icon>
+                              </span>
                               <md-input-container
                                 class="md-block"
                                 flex-gt-sm
@@ -224,9 +247,6 @@
                                   type="text"
                                   name="{{ question.name + groupKey }}"
                                 />
-                                <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
-                                /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
                                 >
@@ -237,7 +257,27 @@
                               </md-input-container>
                             </div>
                             <div ng-if="!question.prerequisite">
-                              <md-input-container class="md-block" flex-gt-sm>
+                              <span
+                                ng-if="question.hint"
+                                class="float-right"
+                                angular-popover
+                                direction="left"
+                                template="{{ question.hint }}"
+                                style="display: flex; position: relative; cursor: pointer; color: #75797d; font-size: 14px;"
+                                container="body"
+                              >
+                                <md-icon
+                                  ng-if="question.hint"
+                                  class="float-right"
+                                >
+                                  <img
+                                    src="img/help.png"
+                                    style="width:140%"
+                                    class="helpIcon animated pulse"
+                                  />
+                                </md-icon>
+                              </span>
+                              <md-input-container class="md-block" flex-gt-sm  ng-class="question.hint ? 'with-help-icon' : ''">
                                 <label>{{ question.tag }}</label>
                                 <input
                                   ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
@@ -247,9 +287,6 @@
                                   type="text"
                                   name="{{ question.name + groupKey }}"
                                 />
-                                <md-icon ng-if="question.hint"
-                                  ><img src="img/help.png" style="width:140%" class="helpIcon animated pulse"
-                                /></md-icon>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
                                 >
@@ -380,6 +417,29 @@
                           <!-- Tipo select -->
                           <div ng-switch-when="select">
                             <div ng-if="question.prerequisite">
+                              <span
+                                ng-if="question.hint"
+                                class="float-right"
+                                angular-popover
+                                direction="left"
+                                template="{{ question.hint }}"
+                                style="position: relative; cursor: pointer; color: #75797d; font-size: 14px;"
+                                ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{
+                                  question.prerequisite.value.toString()
+                                    | lowercase
+                                }}'"
+                              >
+                                <md-icon
+                                  ng-if="question.hint"
+                                  class="float-right"
+                                >
+                                  <img
+                                    src="img/help.png"
+                                    style="width:140%"
+                                    class="helpIcon animated pulse"
+                                  />
+                                </md-icon>
+                              </span>
                               <md-input-container
                                 class="md-block"
                                 flex-gt-sm
@@ -403,29 +463,6 @@
                                     {{ option }}
                                   </md-option>
                                 </md-select>
-                                <span
-                                  ng-if="question.hint"
-                                  class="float-right"
-                                  angular-popover
-                                  direction="left"
-                                  template="{{ question.hint }}"
-                                  style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;"
-                                  ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{
-                                    question.prerequisite.value.toString()
-                                      | lowercase
-                                  }}'"
-                                >
-                                  <md-icon
-                                    ng-if="question.hint"
-                                    class="float-right"
-                                  >
-                                    <img
-                                      src="img/help.png"
-                                      style="width:140%"
-                                      class="helpIcon animated pulse"
-                                    />
-                                  </md-icon>
-                                </span>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
                                 >
@@ -436,10 +473,29 @@
                               </md-input-container>
                             </div>
                             <div ng-if="!question.prerequisite">
+                              <span
+                                ng-if="question.hint"
+                                class="float-right"
+                                angular-popover
+                                direction="left"
+                                template="{{ question.hint }}"
+                                style="position: relative; cursor: pointer; color: #75797d; font-size: 14px;"
+                              >
+                                <md-icon
+                                  ng-if="question.hint"
+                                  class="float-right"
+                                >
+                                  <img
+                                    src="img/help.png"
+                                    style="width:140%"
+                                    class="helpIcon animated pulse"
+                                  />
+                                </md-icon>
+                              </span>
                               <md-input-container
                                 class="md-block"
                                 flex-gt-sm
-                                style="margin-bottom: 30px"
+                                style="margin-bottom: 30px; margin-right: 40px; margin-top: 2% !important"
                               >
                                 <label>{{ question.tag }}</label>
                                 <md-select
@@ -455,35 +511,15 @@
                                     {{ option }}
                                   </md-option>
                                 </md-select>
-                                <span
-                                  ng-if="question.hint"
-                                  class="float-right"
-                                  angular-popover
-                                  direction="left"
-                                  template="{{ question.hint }}"
-                                  style="position: relative; cursor: pointer; margin-top: 2%; margin-bottom: 2%; color: #75797d; font-size: 14px;"
-                                  ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{
-                                    question.prerequisite.value.toString()
-                                      | lowercase
-                                  }}'"
-                                >
-                                  <md-icon
-                                    ng-if="question.hint"
-                                    class="float-right"
-                                  >
-                                    <img
-                                      src="img/help.png"
-                                      style="width:140%"
-                                      class="helpIcon animated pulse"
-                                    />
-                                  </md-icon>
-                                </span>
                                 <div
                                   ng-messages="$eval(controller.formatObjects[controller.currentNavItem].formName + '[\'' + question.name + groupKey + '\'].$error')"
                                 >
                                   <div ng-message="required">
                                     Se requiere de este campo para continuar.
                                   </div>
+                                </div>
+                                <div ng-if="question.message" id="{{question.name + '_' + groupKey + '_' +'message'}}" style="color: #75797d; font-size: 0.9rem; margin-top: 8px;">
+                                  {{controller.messageToHTMLConverter(question.name + '_' + groupKey + '_' +'message', question.message)}}
                                 </div>
                               </md-input-container>
                             </div>
@@ -670,9 +706,9 @@
                               <md-chips
                                 ng-model="answer[question.name]"
                                 name="{{ question.name + groupKey }}"
-                                placeholder="Adiciona {{
+                                placeholder="Ingresa {{
                                   question.tag | lowercase
-                                }}"
+                                }} y presiona ENTER"
                                 style="margin-bottom: 30px"
                                 ng-show="answer[question.prerequisite.fieldName] != undefined && answer[question.prerequisite.fieldName].toString().toLowerCase() == '{{
                                   question.prerequisite.value.toString()
@@ -705,9 +741,9 @@
                               <md-chips
                                 ng-model="answer[question.name]"
                                 name="{{ question.name + groupKey }}"
-                                placeholder="Adiciona {{
+                                placeholder="Ingresa {{
                                   question.tag | lowercase
-                                }}"
+                                }} y presiona ENTER"
                                 style="margin-bottom: 30px"
                                 ng-readonly="controller.formatObjects[controller.currentNavItem].readonly"
                                 ng-required="question.required"

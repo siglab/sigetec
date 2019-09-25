@@ -363,3 +363,11 @@ img.helpIcon:hover {
 md-toolbar.appTopBar {
     position: fixed;
 }
+
+.angular-popover-container {
+    z-index: 99 !important;
+}
+
+.with-help-icon {
+    width: 90%;
+}
