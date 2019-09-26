@@ -201,7 +201,7 @@
                                     <p>Administracion de listados de valores</p>
                                 </div>
                             </md-list-item>
-                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showTechnologies()">
+                            <md-list-item ng-if="userRoles.indexOf('admin') >= 0 || userRoles.indexOf('coordinator') >= 0 || userRoles.indexOf('otri-member') >= 0 || userRoles.indexOf('registrator') >= 0" class="md-2-line" ng-click="controller.showTechnologies()">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>Todas las tecnologias</h3>
                                     <p>Listado de tecnologias</p>
