@@ -333,7 +333,7 @@ md-nav-bar.md-default-theme md-nav-ink-bar, md-nav-bar md-nav-ink-bar {
 }
 
 md-input-container {
-    margin-top: 10px !important;
+    margin-top: 20px !important;
 }
 
 md-collapsible-header {
@@ -370,4 +370,20 @@ md-toolbar.appTopBar {
 
 .with-help-icon {
     width: 90%;
+}
+
+md-input-container label {
+    white-space: inherit !important;
+}
+
+md-select-value span {
+    white-space: inherit !important;
+}
+
+button {
+    white-space: inherit;
+}
+
+md-input-container.md-icon-right>label:not(.md-no-float):not(.md-container-ignore) {
+    width: 100% !important;
 }

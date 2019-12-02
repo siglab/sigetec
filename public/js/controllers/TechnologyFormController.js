@@ -1014,7 +1014,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         if (!$("#" + fieldId + '_parsed_message' ).length) {
             var messageObj = $( "#" + fieldId );
             var questionMessage = '<div id=' + fieldId + '_parsed_message>' + message + '</div>';
-            console.log(questionMessage);
             var html = $.parseHTML(questionMessage);
             messageObj.append( html );    
         }
