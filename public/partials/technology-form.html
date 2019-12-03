@@ -5,13 +5,13 @@
 >
   <!-- Estado de tecnología -->
   <div class="row" style="margin-top: 15px" ng-cloak>
-    <div class="col-md-10">
-      <h5 ng-if="controller.answers['basic'][0].name">
+    <div class="col-md-9" style="display: flex;">
+      <h5 ng-if="controller.answers['basic'][0].name" style="margin: auto; margin-left: 0;">
         Título de tu tecnología:
         <u>{{ controller.answers['basic'][0].name }}</u>
       </h5>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="float-right" style="text-align: center">
         <span
           class="badge"
@@ -20,8 +20,14 @@
           Estado: {{ controller.technologyStatus }}
         </span>
         <div ng-if="controller.technologyStatus == 'Registrada'">
-          <p style="font-size: 0.75rem;">
-            Esta tecnología no puede ser modificada en el estado actual
+          <p style="font-size: 0.8rem; margin: 0;margin-top: 10px;font-weight: 600;">
+            Esta tecnología se encuentra resgistrada y no puede ser modificada en el estado actual.
+          </p>
+        </div>
+        <div ng-if="controller.technologyStatus == 'En diligencia'">
+          <p style="font-size: 0.8rem; margin: 0;margin-top: 10px;font-weight: 600;">
+            Esta tecnología no se encuentra registrada. Termine de llenar el formato de notificación de invención 
+            y haga click en el botón "Registrar esta tecnología" para remitirla al personal de la OTRI.
           </p>
         </div>
       </div>
