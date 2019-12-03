@@ -21,8 +21,9 @@ const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailP
 exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyId}')
     .onWrite((change, context) => {
       // Grab the current value of what was written to the Realtime Database.
+      const previousVer = change.before.val();
       const technology = change.after.val();
-      if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada') {
+      if (previousVer.status == 'En diligencia' && technology.status == 'Registrada') {
         const subject = 'Notificación SIGETec: Notificación de registro de nueva tecnología.';
         const message = 'La tecnología titulada "' + technology.name + 
           '" ha sido registrada exitosamente en el sistema integrado de gestión estratégica' + 
@@ -34,7 +35,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
           'Su tecnología será procesada por nuestro personal de la OTRI. \nMuchas gracias por utilizar SIGETec.' +
           '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
         sendEmail(technology['principal-researcher-email'], subject, message);
-      } else if (change.before.val().status == 'Registrada' && technology.status == 'En diligencia') {
+      } else if (previousVer.status == 'Registrada' && technology.status == 'En diligencia') {
         const subject = 'Notificación SIGETec: Notificación de retorno de tecnología registrada.';
         const message = 'La tecnología titulada "' + technology.name + 
           '" ha sido devuelta a estado "En diligencia" en el sistema integrado de gestión estratégica' + 
@@ -46,14 +47,15 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
         // sendEmail(technology['principal-researcher-email'], subject, message);
         sendEmail(technology['createdBy'], subject, message);
       }
-
       admin.database().ref('/roles/definition').once("value").then(snapshot => {
           snapshot.forEach(function(data) {
               var rol = data.val();
               if(rol.allowedStatus.notify !== undefined){
                   rol.allowedStatus.notify.forEach(function(status){
                       if(status === technology.status ){
-                          rol.users.forEach(function(user){
+                        if (rol.users && rol.users.length > 0) {
+                          rol.users.forEach(function(user) {
+                            if (user && user!=='') {
                               var subject = "";
                               var message = "";
                               if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada'){
@@ -66,14 +68,16 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                                 message = 'La tecnología titulada ' + technology.name + 'ha sido atualizada por ' +
                                   technology.updatesBy + '. \n\nEste es un mensaje autogenerado. Por favor intente responder este mensaje.'
                               }
-                              sendEmail(user, subject, message);
-                              // sendEmail(technology.createdBy, technology.name);
-                          });
+                              sendEmail(user, subject, message);    
+                            }
+                          });    
+                        }
                       }
                   });
               }
           });
       });
+      return null;
     }
 );
 // Api points
@@ -167,13 +171,13 @@ function sendEmail(email, subject, message){
     };
     mailOptions.subject = subject;
     mailOptions.text = message;
-    // mailOptions.subject = `Notificación SIGETec: La tecnologia ${technologyName || ''} fue actualizada.`;
-    // mailOptions.text = `La tecnologia ${technologyName || ''} fue actualizada!`;
     return mailTransport.sendMail(mailOptions).then(() => {
       console.log('New change status email sent to:', email);
+      return null;
     });
   }catch(e){
     console.log('Ocurrió un error:');
     console.log(e);
+    return e;
   }
 };
