@@ -387,3 +387,15 @@ button {
 md-input-container.md-icon-right>label:not(.md-no-float):not(.md-container-ignore) {
     width: 100% !important;
 }
+
+.table-title {
+    text-align: center; 
+    color: #75797d; 
+    font-size: 0.87em
+}
+
+.table-row{
+    color: rgb(105, 105, 107); 
+    font-size: 0.84em;
+    cursor: pointer;
+}

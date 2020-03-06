@@ -50,45 +50,46 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $mdDialog, $
         }
     };
 
-    var request = $http({ 
-        method: 'GET',
-        // url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
-        url: __apiRoutes.points.getTechnologies
-    });
-
-    request.then(function(response){
-        angular.forEach(response.data, function(technology){
-            context.technologiesArray.push(technology);
-            var techIndex = context.isInArray(nodes, technology["technology-type"]);
-            if(techIndex < 0){
-                techIndex = nodes.length;
-                nodes.push({"name": technology["technology-type"], "group":1});
-            }
-            var facultyIndex = context.isInArray(nodes, technology.program);
-            if( facultyIndex < 0){
-                facultyIndex = nodes.length;
-                nodes.push({"name": technology.program, "group":3});
-            }
-            var technologyIndex = nodes.length;
-            if(technology['granted-date'] == undefined){
-                nodes.push({"name": technology.name, 
-                        "group":6, 
-                        "$id":technology.$id, 
-                        "description": technology.description});
-            }else{
-                nodes.push({"name": technology.name, 
-                        "group":5, 
-                        "$id":technology.$id, 
-                        "description": technology.description});
-            }
-            links.push({"source":techIndex,"target":technologyIndex,"value":1});
-            links.push({"source":facultyIndex,"target":technologyIndex,"value":1});
+    if (context.technologiesArray && context.technologiesArray.length == 0) {
+        var request = $http({ 
+            method: 'GET',
+            // url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
+            url: __apiRoutes.points.getTechnologies
         });
-        $scope.data = {
-            "nodes":nodes,
-            "links":links
-        };
-    });
+        request.then(function(response){
+            angular.forEach(response.data, function(technology){
+                context.technologiesArray.push(technology);
+                var techIndex = context.isInArray(nodes, technology["technology-type"]);
+                if(techIndex < 0){
+                    techIndex = nodes.length;
+                    nodes.push({"name": technology["technology-type"], "group":1});
+                }
+                var facultyIndex = context.isInArray(nodes, technology.program);
+                if( facultyIndex < 0){
+                    facultyIndex = nodes.length;
+                    nodes.push({"name": technology.program, "group":3});
+                }
+                var technologyIndex = nodes.length;
+                if(technology['granted-date'] == undefined){
+                    nodes.push({"name": technology.name, 
+                            "group":6, 
+                            "$id":technology.$id, 
+                            "description": technology.description});
+                }else{
+                    nodes.push({"name": technology.name, 
+                            "group":5, 
+                            "$id":technology.$id, 
+                            "description": technology.description});
+                }
+                links.push({"source":techIndex,"target":technologyIndex,"value":1});
+                links.push({"source":facultyIndex,"target":technologyIndex,"value":1});
+            });
+            $scope.data = {
+                "nodes":nodes,
+                "links":links
+            };
+        });
+    }
     
     context.login = function () {
         var provider = new firebase.auth.GoogleAuthProvider();

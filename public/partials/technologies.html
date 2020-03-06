@@ -9,47 +9,38 @@
         <p>{{infoMessage}}</p>
     </div>
     <br />
-    <!-- <md-content class="md-padding" layout-xs="column" layout="row">
-        <md-list flex>
-            <md-list-item class="md-3-line" ng-repeat="technology in controller.technologies" ng-click="controller.editTechnology(technology)">
-                <div style="border-left: solid 2pt #333; padding-left: 3pt;" class="md-list-item-text" layout="column">
-                    <h3>{{technology.name | limitTo: 120}}</h3>
-                    <p><i>Creada por {{technology.createdBy}} el {{technology.createdAt}}, asignada a {{technology.assignedTo}}</i></p>
-                    <p>{{technology.description | limitTo: 130}}</p>
-                </div>
-                <span class="md-secondary badge">{{technology.status}}</span>
-            </md-list-item>
-        </md-list>
-    </md-content> -->
     <div class="row" style="height:100%; margin-bottom: 30px;">
         <md-content style="width: 100%; border-radius: 10px; box-shadow: 0px 2px 10px #cbc7c7; margin-left: 10px; margin-right: 10px;">
             <div style="margin:2%">
-                <table datatable="ng" class="row-border hover">
+                <!-- <table datatable="ng" class="row-border hover" id="technologyTable"> -->
+                    <table class="row-border hover" id="technologyTable">
                         <thead>
                             <tr>
-                                <th style="text-align: center; color: #75797d; font-size: 14px">Id</th>
-                                <th style="text-align: center; color: #75797d; font-size: 14px">Nombre</th>
-                                <th style="text-align: center; color: #75797d; font-size: 14px">Descripción</th>
-                                <th style="text-align: center; color: #75797d; font-size: 14px">Investigador</th>
-                                <th style="text-align: center; color: #75797d; font-size: 14px">Tipo</th>
-                                <th style="text-align: center; color: #75797d; font-size: 14px">Detalles</th>
+                                <th class="table-title">Id</th>
+                                <th class="table-title">Nombre</th>
+                                <th class="table-title">Descripción</th>
+                                <th class="table-title">Investigador</th>
+                                <th class="table-title">Fecha de registro</th>
+                                <th class="table-title">Tipo</th>
+                                <!-- <th class="table-title">Detalles</th> -->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="technology in controller.technologies" style="color: rgb(105, 105, 107); font-size: 14px">
-                                <td style="text-align: center">{{ technology.technologyId }}</td>
-                                <td style="width: 25%; text-align: center">{{ technology.name }}</td>
+                            <tr ng-repeat="technology in controller.technologies" class="table-row" ng-click="controller.editTechnology(technology)">
+                                <td style="width: 20%; text-align: center">{{ technology.technologyId }}</td>
+                                <td style="width: 20%; text-align: center">{{ technology.name }}</td>
                                 <td style="width: 25%; text-align: center">{{ (technology.description | limitTo: 130) || 'Sin descripción' }}</td>
-                                <td style="width: 22%; text-align: center">{{ technology['principal-researcher-email'] }}</td>
-                                <td>
+                                <td style="width: 20%; text-align: center">{{ technology['principal-researcher-email'] }}</td>
+                                <td style="width: 10%; text-align: center" data-sort="{{technology['registeredAt']}}">{{ controller.setTechnologyRegistrationDate(technology) }}</td>
+                                <td style="width: 5%; text-align: center">
                                     <div style="vertical-align: top; text-align: center;">
                                         <span ng-show="{{technology['granted-date'] != undefined}}" class="badge" style="background-color: #D51B23;">Patente</span>
                                         <span ng-show="{{technology['granted-date'] == undefined}}" class="badge" style="background-color: #D51B23;">Tecnología</span>
                                     </div>
                                 </td>
-                                <td style="text-align: center">
+                                <!-- <td style="width: 5%; text-align: center">
                                     <img src="img/view.png" style="width:40%; cursor: pointer" ng-click="controller.editTechnology(technology)"/>
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                 </table>
