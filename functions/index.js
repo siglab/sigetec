@@ -23,7 +23,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
       // Grab the current value of what was written to the Realtime Database.
       const previousVer = change.before.val();
       const technology = change.after.val();
-      if (previousVer.status == 'En diligencia' && technology.status == 'Registrada') {
+      if (previousVer && previousVer.status == 'En diligencia' && technology.status == 'Registrada') {
         const subject = 'Notificación SIGETec: Notificación de registro de nueva tecnología.';
         const message = 'La tecnología titulada "' + technology.name + 
           '" ha sido registrada exitosamente en el sistema integrado de gestión estratégica' + 
@@ -34,18 +34,18 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
           'Identificador generado por el sistema: ' + technology['technologyId'] + '. \n\n' +
           'Su tecnología será procesada por nuestro personal de la OTRI. \nMuchas gracias por utilizar SIGETec.' +
           '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
-        sendEmail(technology['principal-researcher-email'], subject, message);
-      } else if (previousVer.status == 'Registrada' && technology.status == 'En diligencia') {
-        const subject = 'Notificación SIGETec: Notificación de retorno de tecnología registrada.';
+        Promise.all([sendEmail(technology['principal-researcher-email'], subject, message)]);
+      } else if (previousVer && previousVer.status == 'Registrada' && technology.status == 'En diligencia') {
+        const subject = 'Notificación SigeTEC: Notificación de retorno de tecnología registrada.';
         const message = 'La tecnología titulada "' + technology.name + 
           '" ha sido devuelta a estado "En diligencia" en el sistema integrado de gestión estratégica' + 
-          ' de tegnologías (SIGETec) de la Universidad del Valle, tras haber sido inspeccionada por el personal de la OTRI. \n \n' +
+          ' de tegnologías (SigeTEC) de la Universidad del Valle, tras haber sido inspeccionada por el personal de la OTRI. \n \n' +
           'Comentarios agregados por el personal de la OTRI: \n'+
           technology.statusComments[0].message + '\n\n' + 
-          'Realice los cambios que considere necesarios en los formatos y registre nuevamente la tecnología en el sistema cuando así lo desee. \nMuchas gracias por utilizar SIGETec.' +
+          'Realice los cambios que considere necesarios en los formatos y registre nuevamente la tecnología en el sistema cuando así lo desee. \nMuchas gracias por utilizar SigeTEC.' +
           '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.';
         // sendEmail(technology['principal-researcher-email'], subject, message);
-        sendEmail(technology['createdBy'], subject, message);
+        Promise.all([sendEmail(technology['createdBy'], subject, message)]);
       }
       admin.database().ref('/roles/definition').once("value").then(snapshot => {
           snapshot.forEach(function(data) {
@@ -59,16 +59,16 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                               var subject = "";
                               var message = "";
                               if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada'){
-                                subject = 'Notificación SIGETec: Notificación de registro de tecnología.';
+                                subject = 'Notificación SigeTEC: Notificación de registro de tecnología.';
                                 message = 'La tecnología titulada "' + technology.name + 
                                   '" ha sido registrada en el sistema con el id ' + technology['technologyId'] + '.' +
                                   '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.';
                               }else{
-                                subject = 'Notificación SIGETec: Notificación de actualización de tecnología ' + technology.name;
+                                subject = 'Notificación SigeTEC: Notificación de actualización de tecnología ' + technology.name;
                                 message = 'La tecnología titulada ' + technology.name + 'ha sido atualizada por ' +
                                   technology.updatesBy + '. \n\nEste es un mensaje autogenerado. Por favor intente responder este mensaje.'
                               }
-                              sendEmail(user, subject, message);    
+                              Promise.all([sendEmail(user, subject, message)]);    
                             }
                           });    
                         }
@@ -81,7 +81,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
     }
 );
 // Api points
-// Get technologies api point for technologies list for sigetec home page table.
+// Get technologies api point for technologies list for SigeTEC home page table.
 exports.getTechnologies = functions.https.onRequest((req,res)=>{
   cors(req,res,() => {
     var db = admin.database();
@@ -107,7 +107,7 @@ exports.getTechnologies = functions.https.onRequest((req,res)=>{
             registeredTechnologies[uuids[k]]['details'] = snap[k];
           }
           res.status(200).json(registeredTechnologies);
-        })
+        });
         // .catch(error => {
         //   console.log(error.val());
         //   res.status(500).json({error: error});
@@ -117,7 +117,7 @@ exports.getTechnologies = functions.https.onRequest((req,res)=>{
   });
 });
 
-// Run remainders api point for sigetec.
+// Run remainders api point for SigeTEC.
 exports.runRemainders = functions.https.onRequest((req,res)=>{
   cors(req,res,() => {
     var db = admin.database();
@@ -137,14 +137,8 @@ exports.runRemainders = functions.https.onRequest((req,res)=>{
 
         }
       }
-
-
       // sendEmail(technology['createdBy'], subject, message)
-
       res.status(200).json(response);
-
-
-
         // var detailsPromises = [];
         // for (var i = 0; i < uuids.length ; i++) {
         //   detailsPromises.push(
@@ -164,20 +158,13 @@ exports.runRemainders = functions.https.onRequest((req,res)=>{
 
 // Functions helpers
 function sendEmail(email, subject, message){
-  try{
-    const mailOptions = {
-      from: `SIGETec <noreply@sigetec.univalle.edu.co>`,
-      to: email
-    };
-    mailOptions.subject = subject;
-    mailOptions.text = message;
-    return mailTransport.sendMail(mailOptions).then(() => {
-      console.log('New change status email sent to:', email);
-      return null;
-    });
-  }catch(e){
-    console.log('Ocurrió un error:');
-    console.log(e);
-    return e;
-  }
+  const mailOptions = {
+    from: `SigeTEC <noreply@sigetec.univalle.edu.co>`,
+    to: email
+  };
+  mailOptions.subject = subject;
+  mailOptions.text = message;
+  return mailTransport.sendMail(mailOptions).then(() => {
+    console.log('New change status email sent to:', email);
+  });
 };
