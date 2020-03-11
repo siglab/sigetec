@@ -6,13 +6,11 @@
         <p>{{infoMessage}}</p>
     </div> -->
     <md-button class="md-raised md-primary" aria-label="Crear tecnologia" ng-click="controller.newTechnology()" style="text-align:left">
-        <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Crear tecnologia
+        <md-icon md-svg-icon="img/icons/add.svg"></md-icon> Nueva tecnologia
     </md-button>
     <br />
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="100" layout="column">
-            
-
             <md-card md-theme="{{ 'default' }}" md-theme-watch>
                 <md-card-title>
                     <md-card-title-text>
@@ -33,8 +31,6 @@
                     </md-list>
                 </md-card-content>
             </md-card>
-
-
             <md-card md-theme="{{ 'default' }}" md-theme-watch ng-if="controller.showCoordinatorDashboard">
                 <md-card-title>
                     <md-card-title-text>
@@ -57,11 +53,8 @@
                     </md-list>
                 </md-card-content>
             </md-card>
-
-
         </div>
     </md-content>
-
 
     <!-- <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="100" layout="column">
@@ -88,7 +81,6 @@
         </div>
     </md-content> -->
 
-    
     <md-content class="md-padding" layout-xs="column" layout="row" ng-show="controller.showWorkerDashboard">
         <!-- <div flex-xs flex-gt-xs="60" layout="column" >
           <md-card md-theme="default" md-theme-watch>

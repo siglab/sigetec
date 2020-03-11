@@ -2,7 +2,7 @@
 <html ng-app="SigetecApp">
     <head>
         <meta charset="utf-8">
-        <title>SIGETec - Sistema Integrado de Gestión Estratégica de Tecnologías</title>
+        <title>SigeTEC - Sistema Integrado de Gestión Estratégica de Tecnologías</title>
         <!-- Bootstrap styles -->
         <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" > -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
@@ -25,6 +25,8 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
         <!-- Material collapsible styles -->
         <link rel="stylesheet" href="css/collapsible.min.css" />
+        <!-- FontAwesome -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Application styles -->
         <link rel="stylesheet" href="css/styles.min.css">
         <link rel="stylesheet" href="css/main.css" >
@@ -104,10 +106,29 @@
                     </md-button>
                     <h2 flex md-truncate>
                         <div class="d-none d-md-block">
-                            <img src="img/SIGETEC_Logo.jpg" alt="SIGETEC" style="max-height: 64px; max-width: 150px;">
+                            <img src="img/SIGETEC_Logo.jpg" alt="SIGETEC" style="max-height: 42px; max-width: 150px;">
                             <img src="img/logo-univalle.png" class="logo-img-responsive" alt="Universidad del Valle">
                         </div>
                     </h2>
+                    <div ng-if="userRoles.indexOf('admin') >= 0 || userRoles.indexOf('coordinator') >= 0" class="notification-bell-container" ng-click="controller.showNotifications()" style="cursor: pointer; outline: none;">
+                        <span ng-show="userNotifications && userNotifications.length > 0" id="notification_count">{{userNotifications.length}}</span>
+                        <a href="javascript: return false;" id="notificationLink"><i class="{{userNotifications && userNotifications.length > 0? 'fa fa-bell' : 'fa fa-bell-o' }}" style="color: #797878; margin-right:10px; font-size: 0.91em;"></i></a>
+                    </div>
+                    <div id="notificationContainer" ng-if="userRoles.indexOf('admin') >= 0 || userRoles.indexOf('coordinator') >= 0">
+                        <div id="notificationTitle">Notificaciones <span class="notifications-close-button pull-right" ng-click="controller.closeNotificationsWindow()">x</span></div>
+                        <div id="notificationsBody" class="notifications">
+                            <ul ng-show="(userNotifications && userNotifications.length > 0 || oldUserNotifications && oldUserNotifications.length > 0)">
+                                <li ng-repeat="notification in userNotifications.concat(oldUserNotifications)" ng-if="notification.type == 'new-technology'" ng-click="controller.technologyDetails(notification.data.technologyKey)">
+                                    Nueva tecnología registrada: <span ng-if="!notification.read" class="badge ng-binding pull-right" style="margin-top: 15px;">Nueva</span> <br> {{notification.data.technologyName}} <br> <span style="font-size: 0.85em; color: black;">{{controller.setNotificationDate(notification.createdAt)}}</span>
+                                </li>
+                            </ul>
+                            <div ng-hide="(userNotifications && userNotifications.length > 0 || oldUserNotifications && oldUserNotifications.length > 0)" style="display: flex; min-height: 100px;">
+                                <div class="no-notifications-message">
+                                    No tienes nuevas notificaciones.
+                                </div>
+                           </div>
+                        </div>
+                    </div>
                     <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left; margin-right: 1%; background-color: #D51B23;">
                         {{userName}} <md-icon md-svg-icon="img/icons/login.svg"></md-icon>
                     </md-button>
@@ -151,20 +172,16 @@
                                 <div class="container-fluid"><a class="navbar-brand" href="#" data-aos="fade-right" data-aos-delay="200" data-aos-once="true" id="navbarLogo"></a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                                     <div class="collapse navbar-collapse" id="navcol-1">
                                         <ul class="nav navbar-nav ml-auto" style="margin-right:5%;font-size:13px;">
-                                            <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;">   <a class="nav-link" href="#" onclick="return false;" ng-show="!isLoggedin">Tecnologías registradas en SIGETec</a>
+                                            <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;">   <a class="nav-link" href="#" onclick="return false;" ng-show="!isLoggedin">Tecnologías registradas en SigeTEC</a>
                                             </li>
                                             <li class="nav-item" role="presentation" id="navContact">
                                                 <a class="nav-link" href="#" onclick="return false;" ng-show="!isLoggedin">Contacto</a>
                                             </li>
                                         </ul>
-                                        <button aria-label="Ingresar" class="btn btn-primary btn-sm homeBtn loginHomeBtn type="button" ng-show="!isLoggedin">
+                                        <button aria-label="Ingresar" class="btn btn-primary btn-sm homeBtn loginHomeBtn" type="button" ng-show="!isLoggedin">
                                             <i class="icon ion-log-in"></i>
                                             &nbsp;Ingresar&nbsp;
                                         </button>
-                                       <!--  <button aria-label="Salir" ng-click="controller.closeSession()" class="btn btn-primary btn-sm homeBtn" type="button" ng-show="isLoggedin">
-                                            <i class="icon ion-log-in"></i>
-                                            &nbsp;Salir&nbsp;
-                                        </button> -->
                                     </div>
                                 </div>
                             </nav>

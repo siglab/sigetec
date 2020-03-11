@@ -637,7 +637,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                 context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
             }
         }
-        // $rootScope.infoMessage = "La tecnologia fue almacenada correctamnete.";
     };
 
     context.saveDetail = function(key, checkValidity=true){
@@ -674,7 +673,6 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
                         if(!checkValidity && !answer){
                             delete technologiesDetail.answers[qgKey][gKey][aKey];
                             delete technologyLog.answers[qgKey][gKey][aKey];
-                            // console.log('HOOOOOOLAAAA', technologiesDetail.answers, qgKey, gKey, aKey, technologiesDetail);
                         }
                     });
                 });
@@ -721,9 +719,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
 
     context.checker = function(valid, formName){
-
         console.log(valid, formName);
-
         if(!valid) {
             angular.forEach($scope[formName].$error, function (field) {
                 angular.forEach(field, function(errorField){
@@ -851,7 +847,7 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
     }
 
     context.goToTop = function (){
-        $('html, body').animate({scrollTop:$('#form-nav').position().top}, 'slow');
+        $('html, body').animate({scrollTop:$('#form-nav').position().top - 150}, 'slow');
     }
 
     context.generatePDF = function(){

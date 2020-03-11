@@ -63,7 +63,16 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                                 message = 'La tecnología titulada "' + technology.name + 
                                   '" ha sido registrada en el sistema con el id ' + technology['technologyId'] + '.' +
                                   '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.';
-                              }else{
+                                admin.database().ref('/bell-notifications/'+user.split('@')[0].split('.').join('')).push([{
+                                  type: 'new-technology',
+                                  read: false,
+                                  data: {
+                                    technologyName: technology.name,
+                                    technologyKey: change.after.key
+                                  },
+                                  createdAt: + new Date()
+                                }]);
+                              } else {
                                 subject = 'Notificación SigeTEC: Notificación de actualización de tecnología ' + technology.name;
                                 message = 'La tecnología titulada ' + technology.name + 'ha sido atualizada por ' +
                                   technology.updatesBy + '. \n\nEste es un mensaje autogenerado. Por favor intente responder este mensaje.'
@@ -108,10 +117,6 @@ exports.getTechnologies = functions.https.onRequest((req,res)=>{
           }
           res.status(200).json(registeredTechnologies);
         });
-        // .catch(error => {
-        //   console.log(error.val());
-        //   res.status(500).json({error: error});
-        // })
       }
     });
   });
@@ -139,19 +144,6 @@ exports.runRemainders = functions.https.onRequest((req,res)=>{
       }
       // sendEmail(technology['createdBy'], subject, message)
       res.status(200).json(response);
-        // var detailsPromises = [];
-        // for (var i = 0; i < uuids.length ; i++) {
-        //   detailsPromises.push(
-        //     db.ref('/technologies-detail/' + reminders[uuids[i]]['technologyId'])
-        //     .once('value')
-        //   );
-        // }
-        // return Promise.all(detailsPromises).then(snap =>  {
-        //   for (var k = 0; k < snap.length; k++) {
-        //     reminders[uuids[k]]['details'] = snap[k];
-        //   }
-        //   res.status(200).json(reminders);
-        // })
     });
   });
 });

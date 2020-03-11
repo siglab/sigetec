@@ -27,7 +27,7 @@ var sigetecApp = angular.module('SigetecApp',
 sigetecApp.constant('__apiRoutes', apiRoutes);
 
 sigetecApp.run(["$rootScope", "$location", function($rootScope, $location) {
-    console.log("login"+firebase.auth().currentUser);
+    console.log("login "+firebase.auth().currentUser);
     if ($rootScope.isLoggedin == undefined || !$rootScope.isLoggedin) {
         $location.path("/home");
     }
@@ -45,7 +45,6 @@ sigetecApp.run(["$rootScope", "$location", function($rootScope, $location) {
             if($location.path() == "/home"){
                 $location.path("/dashboard");
             }
-            
         }else if ($rootScope.isLoggedin == undefined || !$rootScope.isLoggedin) {
             $rootScope.userName = "Ingresar";
             $location.path("/home");

@@ -8,7 +8,7 @@ function(firebase, firebaseArray, firebaseObject){
     var serviceFactory = {};
     var data = undefined;
     
-    serviceFactory.getData(){
+    serviceFactory.getData = function(){
         return data;
     }
     

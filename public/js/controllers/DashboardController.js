@@ -83,16 +83,32 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
                 }
             });
             $rootScope.availableUsers = availableUsers;
-            // console.log('User roles: ');
-            // console.log($rootScope.userRoles);
-            // console.log("Los usuarios son: ");
-            // console.log($rootScope.availableUsers);
         });
+        if ($rootScope.userRoles.indexOf('admin') >= 0 || $rootScope.userRoles.indexOf('coordinator') >= 0) {
 
+            var notificationsReference = firebase.database().ref('/bell-notifications').child($rootScope.userEmail.split('@')[0].split('.').join(''));
+                var notifications = $firebaseArray(notificationsReference);
+                $rootScope.userNotifications = [];
+                $rootScope.oldUserNotifications = [];
+                notifications.$loaded().then(function(){
+                    if (notifications.length > 0) {
+                        notifications.forEach( notification => {
+                            if (!notification[0]['read']) {
+                                var notificationBuffer = notification[0];
+                                notificationBuffer['notificationId'] = notification.$id; 
+                                $rootScope.userNotifications.push(notificationBuffer);
+                            } else {
+                                var notificationBuffer = notification[0];
+                                notificationBuffer['notificationId'] = notification.$id; 
+                                $rootScope.oldUserNotifications.push(notificationBuffer);
+                            }
+                        });
+                    } 
+                });
+        } 
         if ($rootScope.permissions.indexOf("showRegistered") >= 0) {
             context.showCoordinatorDashboard = true;
         }
-
         // if(userRole == undefined){
         //     userRole = "researcher";
         //     context.showResearcherDashboard = true;
@@ -102,7 +118,6 @@ function($scope, $rootScope, $location, $firebase, $firebaseObject, $firebaseArr
         // if(userRole !== undefined){
         //  context.getAllowedTechnologies(userRole);
         // }
-        
         if ($rootScope.userRoles.length == 1) {
             context.getAllowedTechnologies('researcher');
         }else{
