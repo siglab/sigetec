@@ -191,7 +191,7 @@ md-card.md-default-theme, md-card {
 .appContent {
     width: 100%;
     height: 100%; 
-    padding-bottom: 16.5px
+    padding-bottom: 16px
 }
 
 #loaderDiv {
