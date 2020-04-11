@@ -23,26 +23,45 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
       // Grab the current value of what was written to the Realtime Database.
       const previousVer = change.before.val();
       const technology = change.after.val();
-
-      console.log(technology);
-
       if (previousVer && previousVer.status == 'En diligencia' && technology.status == 'Registrada') {
-        const subject = 'Notificación SIGETec: Notificación de registro de nueva tecnología.';
-        const message = 'La tecnología titulada "' + technology.name + 
+        var allEmailsQuee = [];        
+        const mainSubject = 'Notificación SigeTEC: Notificación de registro de nueva tecnología.';
+        const mainMessage = 'La tecnología titulada "' + technology.name + 
           '" ha sido registrada exitosamente en el sistema integrado de gestión estratégica' + 
-          ' de tegnologías (SIGETec) de la Universidad del Valle. \n \n' +
+          ' de tecnologías (SigeTEC) de la Universidad del Valle. \n \n' +
           'Detalles de tecnología registrada: \n'+
           'Investigador principal: ' + technology['principal-researcher-email'] + '. \n' +
           'Tipo de tecnología: ' + technology['technology-type'] + '. \n' +
           'Identificador generado por el sistema: ' + technology['technologyId'] + '. \n\n' +
-          'Su tecnología será procesada por nuestro personal de la OTRI. \nMuchas gracias por utilizar SIGETec.' +
-          '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.'
-        Promise.all([sendEmail(technology['principal-researcher-email'], subject, message)]);
+          'Su tecnología será procesada por nuestro personal de la OTRI. \nMuchas gracias por utilizar SigeTEC.' +
+          '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.';
+        const dataTreatmenSubject = 'Notificación SigeTEC: Notificación de registro de datos personales en nueva tecnología registrada.'
+        const dataTreatmentMessage = 'Se le notifica que sus datos personales fueron registrados por ' + technology['principal-researcher-email']  + 
+          ' como coinvestigador en la tecnología "' + technology.name + '"; identificada con el id ' + 
+          technology['technologyId'] + ' en el sistema integrado de gestión estratégica' + 
+          ' de tecnologías (SigeTEC), de la Oficina de Trasferencia de Resultados de Investigación (OTRI), ' +
+          'perteneciente a la Vicerrectoría de Investigaciones de la Universidad del Valle. \n\n' + 
+          'Esta tecnología será procesada por nuestro personal y sus datos serán utlizados en dicho proceso de acuerdo a la política institucional de ' + 
+          'tratamiento de la información personal. Para conocer más detalles respecto a la política de tratamiento de la información personal de la Universida del Valle, ' + 
+          'visite: https://www.univalle.edu.co/politica-de-tratamiento-de-la-informacion-personal. \nMuchas gracias por utilizar SigeTEC.' +
+          '\n\nEste es un mensaje autogenerado. Por favor no intente responder este mensaje.';
+        Promise.all([admin.database().ref('/technologies-detail/' + technology['technologyId']).once("value").then(detailsSnap => {
+          const data = detailsSnap.val()['answers'];
+          if (data && data['group-coresearcher']) {
+            data['group-coresearcher'].forEach(element => {
+              if (element['coresearcher-email']) {
+                allEmailsQuee.push(sendEmail(element['coresearcher-email'], dataTreatmenSubject, dataTreatmentMessage));
+              }
+            });
+          }
+          allEmailsQuee.push(sendEmail(technology['principal-researcher-email'], mainSubject, mainMessage));
+          Promise.all(allEmailsQuee);
+        })]);
       } else if (previousVer && previousVer.status == 'Registrada' && technology.status == 'En diligencia') {
         const subject = 'Notificación SigeTEC: Notificación de retorno de tecnología registrada.';
         const message = 'La tecnología titulada "' + technology.name + 
           '" ha sido devuelta a estado "En diligencia" en el sistema integrado de gestión estratégica' + 
-          ' de tegnologías (SigeTEC) de la Universidad del Valle, tras haber sido inspeccionada por el personal de la OTRI. \n \n' +
+          ' de tecnologías (SigeTEC) de la Universidad del Valle, tras haber sido inspeccionada por el personal de la OTRI. \n \n' +
           'Comentarios agregados por el personal de la OTRI: \n'+
           technology.statusComments[0].message + '\n\n' + 
           'Realice los cambios que considere necesarios en los formatos y registre nuevamente la tecnología en el sistema cuando así lo desee. \nMuchas gracias por utilizar SigeTEC.' +
