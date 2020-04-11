@@ -1015,4 +1015,9 @@ function($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu,
         }
     }
 
+    context.appendHTML = function (html, id) {
+        $( '#'+id ).replaceWith(html);
+        return true;
+    }
+
 }]);

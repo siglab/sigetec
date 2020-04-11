@@ -7,8 +7,8 @@
   <div class="row" style="margin-top: 15px" ng-cloak>
     <div class="col-md-9" style="display: flex;">
       <h5 ng-if="controller.answers['basic'][0].name" style="margin: auto; margin-left: 0;">
-        Título de tu tecnología:
-        <u>{{ controller.answers['basic'][0].name }}</u>
+        Título de tecnología: <br>
+        {{ controller.answers['basic'][0].name }}
       </h5>
     </div>
     <div class="col-md-3">
@@ -81,6 +81,13 @@
                         Cancelar
                     </md-button-->
         </div>
+      </div>
+      <div class="col-md-12 technology-form-message" ng-if="controller.technologyStatus == 'En diligencia'">
+        Bienvenido al formulario de registro de tecnologías de la Oficina de Transferencia de Resultados 
+        de Investigación (OTRI), miembro de la Vicerrectoría de Investigaciones de la Universidad del Valle. <br>
+        A continuación provea toda la información requerida por el formulario y adicione la información que usted considere pertinente para garantizar un óptimo 
+        desempeño de nuestro personal durante el proceso de transferencia de la tecnología. <br> 
+        <strong>Por favor tenga en cuenta que este formulario sólo podrá ser registrado en el sistema y enviado a nuestro personal por el investigador principal.</strong>
       </div>
       <!-- <div class="col-md-1">
                 <md-menu ng-show="userRole != 'researcher'">
@@ -343,7 +350,12 @@
                                   role="alert"
                                   ng-if="question.relatedText"
                                 >
-                                  {{ question.relatedText }}
+                                  <div ng-if="question.isHTML && controller.appendHTML(question.relatedText, question.name + groupKey + 'text')">
+                                    <div id="{{question.name + groupKey + 'text'}}"></div>
+                                  </div>
+                                  <div ng-if="!question.isHTML">
+                                    {{ question.relatedText }}
+                                  </div>
                                 </div>
                                 <md-input-container class="md-block">
                                   <md-checkbox
@@ -386,7 +398,12 @@
                                 role="alert"
                                 ng-if="question.relatedText"
                               >
-                                {{ question.relatedText }}
+                                <div ng-if="question.isHTML && controller.appendHTML(question.relatedText, question.name + groupKey + 'text')">
+                                  <div id="{{question.name + groupKey + 'text'}}"></div>
+                                </div>
+                                <div ng-if="!question.isHTML">
+                                  {{ question.relatedText }}
+                                </div>
                               </div>
                               <md-input-container class="md-block">
                                 <md-checkbox

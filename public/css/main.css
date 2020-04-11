@@ -497,3 +497,14 @@ md-input-container.md-icon-right>label:not(.md-no-float):not(.md-container-ignor
     color: #383838b8;
     margin: auto;
 }
+
+.technology-form-message {
+    font-size: 0.95em;
+    text-align: justify;
+    color: #2b2b2bd6;
+}
+
+.alert-info {
+    text-align: justify;
+    font-size: 0.95em;
+}

@@ -23,6 +23,9 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
       // Grab the current value of what was written to the Realtime Database.
       const previousVer = change.before.val();
       const technology = change.after.val();
+
+      console.log(technology);
+
       if (previousVer && previousVer.status == 'En diligencia' && technology.status == 'Registrada') {
         const subject = 'Notificación SIGETec: Notificación de registro de nueva tecnología.';
         const message = 'La tecnología titulada "' + technology.name + 
