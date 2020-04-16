@@ -39,7 +39,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
         const dataTreatmentMessage = 'Se le notifica que sus datos personales fueron registrados por ' + technology['principal-researcher-email']  + 
           ' como coinvestigador en la tecnología "' + technology.name + '"; identificada con el id ' + 
           technology['technologyId'] + ' en el sistema integrado de gestión estratégica' + 
-          ' de tecnologías (SigeTEC), de la Oficina de Trasferencia de Resultados de Investigación (OTRI), ' +
+          ' de tecnologías (SigeTEC), de la Oficina de Transferencia de Resultados de Investigación (OTRI), ' +
           'perteneciente a la Vicerrectoría de Investigaciones de la Universidad del Valle. \n\n' + 
           'Esta tecnología será procesada por nuestro personal y sus datos serán utlizados en dicho proceso de acuerdo a la política institucional de ' + 
           'tratamiento de la información personal. Para conocer más detalles respecto a la política de tratamiento de la información personal de la Universida del Valle, ' + 
