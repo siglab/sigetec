@@ -1,29 +1,3 @@
-<!-- <md-dialog aria-label="UserSelection">
-  <form ng-cloak>
-    <md-toolbar>
-      <div class="md-toolbar-tools">
-        <h2>Seleccionar</h2>
-      </div>
-    </md-toolbar>
-    <md-dialog-content>
-      <div class="md-dialog-content">
-          <div class="container-fluid">
-            <div class="row">Seleccione el usuario: </div>
-            <div class="row">
-                <select ng-model="selectedUser" class="form-control">
-                    <option ng-repeat="user in users" >{{user}}</option>
-                </select>
-            </div>
-        </div>
-      </div>
-    </md-dialog-content>
-    <md-dialog-actions layout="row">
-        <md-button ng-click="onClickShare()">Compartir</md-button>
-    </md-dialog-actions>
-    </form>
-</md-dialog> -->
-
-
 <md-dialog aria-label="Assign technology" style="min-width: 50%">
   <form ng-cloak name="assign">
     <md-toolbar style="color:#75797d">
@@ -38,21 +12,19 @@
     <md-dialog-content>
       <div class="md-dialog-content">
         <p style="color: #75797d">
-          Seleccione el la persona a quien desea asignar esta tecnología:
+          Seleccione el correo del personal de la OTRI a quien desea asignar esta tecnología:
         </p>
         <br>
         <md-input-container class="md-block" flex-gt-sm>
-            <label>Correo institucional de persona seleccionada para asignar esta tecnología: </label>
-            <md-select name="personal" 
-                ng-model="selectedUser"
-                ng-required="true">
-                <md-option ng-repeat="user in users" value="{{option}}">
-                    {{user}}
-                </md-option>
-            </md-select>
-            <div ng-messages="assign.personal.$error">
-              <div ng-message="required">Se requiere de este campo para continuar.</div>
-            </div>
+          <label>Correo institucional de persona seleccionada para asignar esta tecnología: </label>
+          <md-select name="personal" ng-model="selectedUser" ng-required="true">
+            <md-option ng-repeat="user in users" value="{{user}}">
+              {{user}}
+            </md-option>
+          </md-select>
+          <div ng-messages="assign.personal.$error">
+            <div ng-message="required">Se requiere de este campo para continuar.</div>
+          </div>
         </md-input-container>
       </div>
     </md-dialog-content>
