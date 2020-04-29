@@ -136,6 +136,9 @@ dashboardController.controller('DashboardController', [
       if ($rootScope.permissions.indexOf('showRegistered') >= 0) {
         context.showCoordinatorDashboard = true;
       }
+      if ($rootScope.permissions.indexOf('showAssigned') >= 0) {
+        context.showWorkerDashboard = true;
+      }
       // if(userRole == undefined){
       //     userRole = "researcher";
       //     context.showResearcherDashboard = true;
@@ -157,19 +160,21 @@ dashboardController.controller('DashboardController', [
       if (rolName == 'researcher') {
         technologiesReference = firebase.database().ref().child('technologies').orderByChild('createdBy').equalTo($rootScope.userEmail);
       } else {
-        technologiesReference = firebase.database().ref().child('technologies').orderByChild('createdAt');
+        // technologiesReference = firebase.database().ref().child('technologies').orderByChild('createdAt');
+        technologiesReference = firebase.database().ref('technologies').orderByChild('createdAt');
       }
-
-      //var technologiesReference = firebase.database().ref().child("technologies").orderByChild('createdAt');
       var technologies = $firebaseArray(technologiesReference);
-
       technologies.$loaded().then(function () {
         context.technologies = [];
+        context.myTechnologies = [];
+        context.myAssignedTechnologies = [];
+        context.registeredTechnologies = [];
         if (rolName == 'researcher') {
           angular.forEach(technologies, function (technology, key) {
             context.addTechnology(technology);
           });
         } else {
+          // Get user allowed technologies
           angular.forEach(technologies, function (technology, key) {
             if (
               $rootScope.allowedStatus.view.find(function (status) {
@@ -179,11 +184,14 @@ dashboardController.controller('DashboardController', [
               context.addTechnology(technology);
             }
           });
+
+          // Get user assigned technologies
           angular.forEach(technologies, function (technology, key) {
             if (technology.assignedTo == $rootScope.userEmail) {
               context.addTechnology(technology);
             }
           });
+
           var shareReference = firebase.database().ref().child('share');
           var share = $firebaseArray(shareReference);
           share.$loaded().then(function () {
@@ -248,6 +256,21 @@ dashboardController.controller('DashboardController', [
       }
       if (!found || context.technologies.length < 1) {
         newTechnology.createdAt = new Date(newTechnology.createdAt);
+        if (newTechnology.createdBy == $rootScope.userEmail) {
+          context.myTechnologies = [newTechnology, ...context.myTechnologies];
+        }
+        switch (newTechnology.status) {
+          case 'Asignada':
+            if (newTechnology.assignedTo == $rootScope.userEmail) {
+              context.myAssignedTechnologies = [newTechnology, ...context.myAssignedTechnologies];
+            }
+            break;
+          case 'Registrada':
+            context.registeredTechnologies = [newTechnology, ...context.registeredTechnologies];
+            break;
+          default:
+            break;
+        }
         context.technologies.push(newTechnology);
       }
     };

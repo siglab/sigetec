@@ -128,7 +128,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                             createdAt: +new Date(),
                           },
                         ]);
-                    } else if (change.before.val().status == 'En diligencia' && technology.status == 'Registrada') {
+                    } else if (change.before.val().status == 'Registrada' && technology.status == 'Asignada') {
                       subject = 'Notificación SigeTEC: Notificación de asignacion de nueva tecnología.';
                       message =
                         'Se le notifica que la tecnología titulada "' +
@@ -142,7 +142,7 @@ exports.statusChangeTrigger = functions.database.ref('/technologies/{technologyI
                         .ref('/bell-notifications/' + user.split('@')[0].split('.').join(''))
                         .push([
                           {
-                            type: 'new-technology',
+                            type: 'new-assigment',
                             read: false,
                             data: {
                               technologyName: technology.name,
