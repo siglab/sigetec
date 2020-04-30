@@ -8,12 +8,17 @@
       <md-card md-theme="{{ 'default' }}" md-theme-watch>
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline">Mis Tecnologias</span>
+            <span class="md-headline">Mis tecnologías recientes</span>
+            <p style="font-size: 0.8em; color: #8c8b8beb;">
+              Aquí encontrarás la cinco (5) tecnologías más recientes que has creado en SigeTEC. <br>
+              Para ver todas las tecnologías que has creado en el sistema ingresa a la opción
+              "Todas mis tecnologías" en la barra lateral de opciones de la aplicación.
+            </p>
           </md-card-title-text>
         </md-card-title>
         <md-card-content layout="row" layout-align="space-between">
           <md-list flex>
-            <md-list-item class="md-3-line" ng-repeat="technology in controller.myTechnologies | limitTo:10" ng-click="controller.editTechnology(technology)"
+            <md-list-item class="md-3-line" ng-repeat="technology in controller.myTechnologies | limitTo:5" ng-click="controller.editTechnology(technology)"
               ng-if="technology.createdBy == userEmail">
               <div style="border-left: solid 2pt #333; padding-left: 3pt; max-width: 900px; width: 100%;" class="md-list-item-text" layout="column">
                 <h3>{{technology.name | limitTo: 120}}</h3>
@@ -28,7 +33,7 @@
       <md-card md-theme="{{ 'default' }}" md-theme-watch ng-if="controller.showCoordinatorDashboard">
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline">Últimas Tecnologias Registradas</span>
+            <span class="md-headline">Últimas tecnologías registradas</span>
           </md-card-title-text>
         </md-card-title>
         <md-card-content layout="row" layout-align="space-between">
@@ -52,7 +57,7 @@
       <md-card md-theme="{{ 'default' }}" md-theme-watch ng-show="controller.showWorkerDashboard">
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline">Mis últimas tecnologias asignadas</span>
+            <span class="md-headline">Mis tecnologías recientemente asignadas</span>
           </md-card-title-text>
         </md-card-title>
         <md-card-content layout="row" layout-align="space-between">
@@ -71,7 +76,6 @@
       </md-card>
     </div>
   </md-content>
-
   <md-content class="md-padding" layout-xs="column" layout="row" ng-show="controller.showWorkerDashboard">
     <!-- <div flex-xs flex-gt-xs="60" layout="column" >
           <md-card md-theme="default" md-theme-watch>
@@ -106,12 +110,10 @@
             </md-card>
         </div> -->
   </md-content>
-
   <!-- No technologies message notification template -->
   <script type="text/ng-template" id="custom_template.html">
       <div class="ui-notification custom-template" style="width:80%; text-align: center;">
           <div class="message" ng-bind-html="message"></div>
       </div>
   </script>
-
 </div>

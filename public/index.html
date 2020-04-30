@@ -94,6 +94,7 @@
   <script src="js/controllers/ReferencesController.js"></script>
   <script src="js/controllers/FormatsController.js"></script>
   <script src="js/controllers/TechnologiesController.js"></script>
+  <script src="js/controllers/MyTechnologiesController.js"></script>
   <script src="js/controllers/AssignedTechnologiesController.js"></script>
   <script src="js/controllers/ReportController.js"></script>
   <script src="js/app.js"></script>
@@ -215,6 +216,38 @@
             </h1>
           </md-toolbar>
           <md-content layout-margin>
+            <md-list-item class="md-2-line" ng-click="controller.showDashboard()">
+              <div class="md-list-item-text" layout="column">
+                <h3>Dashboard</h3>
+                <p>Panel principal</p>
+              </div>
+            </md-list-item>
+            <md-list-item class="md-2-line" ng-click="controller.showMyTechnologies()">
+              <div class="md-list-item-text" layout="column">
+                <h3>Todas mis tecnologías</h3>
+                <p>Listado de mis tecnologías registradas</p>
+              </div>
+            </md-list-item>
+            <md-list-item
+              ng-if="userRoles.indexOf('admin') >= 0 || userRoles.indexOf('coordinator') >= 0 || userRoles.indexOf('otri-member') >= 0 || userRoles.indexOf('registrator') >= 0"
+              class="md-2-line" ng-click="controller.showTechnologies()">
+              <div class="md-list-item-text" layout="column">
+                <h3>Todas las tecnologias</h3>
+                <p>Listado de tecnologias registradas</p>
+              </div>
+            </md-list-item>
+            <md-list-item ng-if="userRoles.indexOf('otri-member') >= 0" class="md-2-line" ng-click="controller.showAssgignedTechnologies()">
+              <div class="md-list-item-text" layout="column">
+                <h3>Tecnologías asignadas</h3>
+                <p>Listado de tecnologias asignadas a tu cuenta</p>
+              </div>
+            </md-list-item>
+            <!-- <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showReports()">
+              <div class="md-list-item-text" layout="column">
+                <h3>Informes</h3>
+                <p>Listado de informes</p>
+              </div>
+            </md-list-item> -->
             <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showRoles()">
               <div class="md-list-item-text" layout="column">
                 <h3>Roles</h3>
@@ -231,32 +264,6 @@
               <div class="md-list-item-text" layout="column">
                 <h3>Valores de referencia</h3>
                 <p>Administracion de listados de valores</p>
-              </div>
-            </md-list-item>
-            <md-list-item
-              ng-if="userRoles.indexOf('admin') >= 0 || userRoles.indexOf('coordinator') >= 0 || userRoles.indexOf('otri-member') >= 0 || userRoles.indexOf('registrator') >= 0"
-              class="md-2-line" ng-click="controller.showTechnologies()">
-              <div class="md-list-item-text" layout="column">
-                <h3>Todas las tecnologias</h3>
-                <p>Listado de tecnologias</p>
-              </div>
-            </md-list-item>
-            <md-list-item ng-if="userRoles.indexOf('otri-member') >= 0" class="md-2-line" ng-click="controller.showAssgignedTechnologies()">
-              <div class="md-list-item-text" layout="column">
-                <h3>Tecnologías asignadas</h3>
-                <p>Listado de tecnologias asignadas a tu cuenta</p>
-              </div>
-            </md-list-item>
-            <!-- <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showReports()">
-              <div class="md-list-item-text" layout="column">
-                <h3>Informes</h3>
-                <p>Listado de informes</p>
-              </div>
-            </md-list-item> -->
-            <md-list-item class="md-2-line" ng-click="controller.showDashboard()">
-              <div class="md-list-item-text" layout="column">
-                <h3>Dashboard</h3>
-                <p>Panel principal</p>
               </div>
             </md-list-item>
             <md-list-item class="md-2-line" ng-click="controller.closeSession()">

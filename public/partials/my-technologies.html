@@ -1,25 +1,21 @@
-<div ng-controller="TechnologiesController as controller" class="container-fluid" style="min-height: 85vh">
+<div ng-controller="MyTechnologiesController as controller" class="container-fluid" style="min-height: 85vh">
   <h2 style="font-weight: 300; font-family: Roboto; padding-top: 15px; padding-right: 15px;">
-    Tecnologias registradas en SigeTEC
+    Mis tecnologías en SigeTEC
   </h2>
   <div ng-show="controller.noTechnologies" class="alert alert-info">
-    <p>No hay tecnologias registradas en el sistema.</p>
+    <p>No tienes tecnologías creadas en el sistema.</p>
   </div>
-  <!-- <div ng-hide="infoMessage != ''" class="alert alert-info">
-    <p>{{infoMessage}}</p>
-  </div> -->
   <div ng-show="!controller.noTechnologies">
     <p style="text-align: justify; color: #000000a8; font-size: 0.9em;">
-      A continuación encontrarás todas las tecnologías, independientemente de su estado, que han sido registradas en el sistema por los investigadores principales. <br>
+      A continuación encontrarás el listado de todas las tecnologías, independientemente de su estado, que has creado en el sistema. <br>
       En esta tabla podrás realizar búsquedas por cualquiera de los valores que toman las columnas, así mismo por palabras que hayan sido incluídas en la descripción
       de la tecnología. <br>
       El listado de tecnologías se encuentra ordenado por defecto de la registrada más reciente a la más antigua. <br> Haz click en la tecnología de tu interés para que el
       sistema de lleve al formato de notificación de invención de la tecnología seleccionada.
     </p>
     <div class="row" style="height:100%; margin-bottom: 30px;">
-      <md-content style="width: 100%; border-radius: 10px; box-shadow: 0px 2px 10px #cbc7c7; margin-left: 10px; margin-right: 10px; font-size: 0.9em;">
+      <md-content style="width: 100%; border-radius: 10px; box-shadow: 0px 2px 10px #cbc7c7; margin-left: 10px; margin-right: 10px;">
         <div style="margin:2%">
-          <!-- <table datatable="ng" class="row-border hover" id="technologyTable"> -->
           <table class="row-border hover" id="technologyTable">
             <thead>
               <tr>
@@ -28,7 +24,6 @@
                 <th class="table-title" ng-show="false">Descripción</th>
                 <th class="table-title">Investigador principal</th>
                 <th class="table-title">Fecha de registro</th>
-                <th class="table-title">Personal OTRI asignado</th>
                 <th class="table-title">Tipo invención</th>
                 <th class="table-title">Tipo</th>
                 <th class="table-title">Estado</th>
@@ -41,7 +36,6 @@
                 <td style="text-align: center" ng-show="false">{{ (technology.description) || 'Sin descripción' }}</td>
                 <td style="text-align: center">{{ technology['principal-researcher-email'] }}</td>
                 <td style="text-align: center" data-sort="{{technology['registeredAt']}}">{{ controller.setTechnologyRegistrationDate(technology) }}</td>
-                <td style="text-align: center">{{ technology['assignedTo'] ? technology['assignedTo'] : 'Sin asignar' }}</td>
                 <td style="text-align: center">{{ technology['technology-type'].charAt(0).toUpperCase() + technology['technology-type'].slice(1)}}</td>
                 <td style="text-align: center">
                   <div style="vertical-align: top; text-align: center;">

@@ -14,6 +14,7 @@ var sigetecApp = angular.module('SigetecApp', [
   'FormatsController',
   'TechnologiesController',
   'AssignedTechnologiesController',
+  'MyTechnologiesController',
   'ReportController',
   'firebase',
   'datatables',
@@ -164,8 +165,19 @@ sigetecApp.config([
           ],
         },
       })
-      .when('/assignedTechnologies', {
+      .when('/assigned-technologies', {
         templateUrl: 'partials/assigned-technologies.html',
+        resolve: {
+          currentAuth: [
+            'Auth',
+            function (Auth) {
+              return Auth.$waitForSignIn();
+            },
+          ],
+        },
+      })
+      .when('/my-technologies', {
+        templateUrl: 'partials/my-technologies.html',
         resolve: {
           currentAuth: [
             'Auth',
