@@ -184,14 +184,12 @@ dashboardController.controller('DashboardController', [
               context.addTechnology(technology);
             }
           });
-
           // Get user assigned technologies
           angular.forEach(technologies, function (technology, key) {
             if (technology.assignedTo == $rootScope.userEmail) {
               context.addTechnology(technology);
             }
           });
-
           var shareReference = firebase.database().ref().child('share');
           var share = $firebaseArray(shareReference);
           share.$loaded().then(function () {
@@ -205,7 +203,6 @@ dashboardController.controller('DashboardController', [
               }
             });
           });
-
           var tecnologyList = {};
           angular.forEach(technologies, function (technology, key) {
             if (tecnologyList[technology.program] != undefined) {
@@ -214,12 +211,10 @@ dashboardController.controller('DashboardController', [
               tecnologyList[technology.program] = 1;
             }
           });
-
           var technologyArray = [];
           angular.forEach(tecnologyList, function (technologyCount, key) {
             technologyArray.push({ label: key, value: technologyCount });
           });
-
           context.chartData = [
             {
               key: 'Tecnologias',

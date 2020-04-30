@@ -94,6 +94,7 @@
   <script src="js/controllers/ReferencesController.js"></script>
   <script src="js/controllers/FormatsController.js"></script>
   <script src="js/controllers/TechnologiesController.js"></script>
+  <script src="js/controllers/AssignedTechnologiesController.js"></script>
   <script src="js/controllers/ReportController.js"></script>
   <script src="js/app.js"></script>
 </head>
@@ -185,10 +186,8 @@
                     class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                   <ul class="nav navbar-nav ml-auto" style="margin-right:5%;font-size:13px;">
-                    <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;"> <a class="nav-link" href="#" onclick="return false;"
-                        ng-show="!isLoggedin">Tecnologías registradas
-                        en
-                        SigeTEC</a>
+                    <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;">
+                      <a class="nav-link" href="#" onclick="return false;" ng-show="!isLoggedin">Tecnologías registradas en SigeTEC</a>
                     </li>
                     <li class="nav-item" role="presentation" id="navContact">
                       <a class="nav-link" href="#" onclick="return false;" ng-show="!isLoggedin">Contacto</a>
@@ -240,6 +239,12 @@
               <div class="md-list-item-text" layout="column">
                 <h3>Todas las tecnologias</h3>
                 <p>Listado de tecnologias</p>
+              </div>
+            </md-list-item>
+            <md-list-item ng-if="userRoles.indexOf('otri-member') >= 0" class="md-2-line" ng-click="controller.showAssgignedTechnologies()">
+              <div class="md-list-item-text" layout="column">
+                <h3>Tecnologías asignadas</h3>
+                <p>Listado de tecnologias asignadas a tu cuenta</p>
               </div>
             </md-list-item>
             <!-- <md-list-item ng-if="userRoles.indexOf('admin') >= 0" class="md-2-line" ng-click="controller.showReports()">

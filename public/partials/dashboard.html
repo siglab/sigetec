@@ -49,15 +49,10 @@
           </md-list>
         </md-card-content>
       </md-card>
-    </div>
-  </md-content>
-
-  <md-content class="md-padding" layout-xs="column" layout="row">
-    <div flex-xs flex-gt-xs="100" layout="column">
-      <md-card md-theme="{{ 'default' }}" md-theme-watch>
+      <md-card md-theme="{{ 'default' }}" md-theme-watch ng-show="controller.showWorkerDashboard">
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline" ng-show="controller.showWorkerDashboard">Mis últimas tecnologias asignadas</span>
+            <span class="md-headline">Mis últimas tecnologias asignadas</span>
           </md-card-title-text>
         </md-card-title>
         <md-card-content layout="row" layout-align="space-between">

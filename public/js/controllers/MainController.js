@@ -57,6 +57,12 @@ mainController.controller('MainController', [
       $location.path('technologies');
       context.toggleSidebar();
     };
+    context.showAssgignedTechnologies = function () {
+      context.patentsSelected = false;
+      context.technologiesSelected = false;
+      $location.path('assignedTechnologies');
+      context.toggleSidebar();
+    };
 
     context.showRoles = function () {
       $location.path('roles');

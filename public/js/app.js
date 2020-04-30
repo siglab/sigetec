@@ -1,10 +1,8 @@
 var apiRoutes = {};
-
 // Import variables if present (from api-points.js)
 if (window) {
   Object.assign(apiRoutes, window.__apiRoutes);
 }
-
 var sigetecApp = angular.module('SigetecApp', [
   'ngRoute',
   'MainController',
@@ -15,6 +13,7 @@ var sigetecApp = angular.module('SigetecApp', [
   'TechnologyFormController',
   'FormatsController',
   'TechnologiesController',
+  'AssignedTechnologiesController',
   'ReportController',
   'firebase',
   'datatables',
@@ -23,7 +22,6 @@ var sigetecApp = angular.module('SigetecApp', [
 
 // Register apiRoutes in AngularJS as constant
 sigetecApp.constant('__apiRoutes', apiRoutes);
-
 sigetecApp.run([
   '$rootScope',
   '$location',
@@ -166,6 +164,17 @@ sigetecApp.config([
           ],
         },
       })
+      .when('/assignedTechnologies', {
+        templateUrl: 'partials/assigned-technologies.html',
+        resolve: {
+          currentAuth: [
+            'Auth',
+            function (Auth) {
+              return Auth.$waitForSignIn();
+            },
+          ],
+        },
+      })
       .otherwise({
         redirectTo: '/home',
       });
@@ -178,14 +187,3 @@ sigetecApp.factory('Auth', [
     return $firebaseAuth();
   },
 ]);
-
-// function disableLogging($logProvider, __env){
-//   $logProvider.debugEnabled(__env.enableDebug);
-// }
-
-// // Inject dependencies
-// disableLogging.$inject = ['$logProvider', '__apiRoutes'];
-
-// sigetecApp.config(disableLogging);
-//
-//
