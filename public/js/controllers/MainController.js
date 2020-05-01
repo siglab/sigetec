@@ -28,14 +28,17 @@ mainController.controller('MainController', [
     context.notificationsUpdated = false;
     context.isLoggedin = false;
     $rootScope.isLoggedin = false;
-    context.userName = 'Ingresar';
+    // context.userName = 'Ingresar';
+    // context.userPhoto = 'img/icons/login.svg';
     //$mdSidenav('left').toggle();
+
     $rootScope.auth = $firebaseAuth();
 
-    var currentUser = firebase.auth().currentUser;
-    if (currentUser != null) {
-      context.userName = currentUser.displayName;
-    }
+    // var currentUser = firebase.auth().currentUser;
+    // console.log(355, currentUser);
+    // if (currentUser != null) {
+    //   context.userName = currentUser.displayName;
+    // }
 
     context.newPatent = function () {
       $location.path('form/form-patents/patents');
@@ -101,6 +104,11 @@ mainController.controller('MainController', [
       $mdSidenav('mainMenu').toggle();
     };
 
+    context.showProfile = function () {
+      $location.path('profile');
+      context.toggleSidebar();
+    };
+
     context.closeSession = function () {
       firebase
         .auth()
@@ -145,7 +153,6 @@ mainController.controller('MainController', [
           var notification = $firebaseObject(userNotificationsReference.child(element.notificationId));
           notification.$loaded().then(function (notificationItem) {
             notificationItem[0]['read'] = true;
-            console.log(notificationItem);
             notificationItem.$save();
           });
         });

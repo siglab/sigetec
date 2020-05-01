@@ -15,6 +15,7 @@ var sigetecApp = angular.module('SigetecApp', [
   'TechnologiesController',
   'AssignedTechnologiesController',
   'MyTechnologiesController',
+  'ProfileController',
   'ReportController',
   'firebase',
   'datatables',
@@ -42,11 +43,13 @@ sigetecApp.run([
         $rootScope.isLoggedin = true;
         $rootScope.userEmail = firebase.auth().currentUser.email;
         $rootScope.userName = firebase.auth().currentUser.displayName;
+        $rootScope.userPhoto = firebase.auth().currentUser.photoURL ? firebase.auth().currentUser.photoURL : 'img/icons/login.svg';
         if ($location.path() == '/home') {
           $location.path('/dashboard');
         }
       } else if ($rootScope.isLoggedin == undefined || !$rootScope.isLoggedin) {
         $rootScope.userName = 'Ingresar';
+        $rootScope.userPhoto = 'img/icons/login.svg';
         $location.path('/home');
       }
     });
@@ -178,6 +181,17 @@ sigetecApp.config([
       })
       .when('/my-technologies', {
         templateUrl: 'partials/my-technologies.html',
+        resolve: {
+          currentAuth: [
+            'Auth',
+            function (Auth) {
+              return Auth.$waitForSignIn();
+            },
+          ],
+        },
+      })
+      .when('/profile', {
+        templateUrl: 'partials/profile.html',
         resolve: {
           currentAuth: [
             'Auth',

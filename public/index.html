@@ -96,6 +96,7 @@
   <script src="js/controllers/TechnologiesController.js"></script>
   <script src="js/controllers/MyTechnologiesController.js"></script>
   <script src="js/controllers/AssignedTechnologiesController.js"></script>
+  <script src="js/controllers/ProfileController.js"></script>
   <script src="js/controllers/ReportController.js"></script>
   <script src="js/app.js"></script>
 </head>
@@ -142,9 +143,11 @@
             </div>
           </div>
         </div>
-        <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left; margin-right: 1%; background-color: #D51B23;">
-          {{userName}} <md-icon md-svg-icon="img/icons/login.svg"></md-icon>
+        <md-button aria-label="Ingresar" ng-click="controller.login()" style="text-align:left; margin-right: 5px; margin-right: 2px; background-color: #c00; border-radius: 20px;">
+          {{userName}}
+          <img ng-src="{{userPhoto}}" alt="User photo" class="user-topbar-image">
         </md-button>
+
       </div>
     </md-toolbar>
     <!-- UV Home Top navbar -->
@@ -264,6 +267,12 @@
               <div class="md-list-item-text" layout="column">
                 <h3>Valores de referencia</h3>
                 <p>Administracion de listados de valores</p>
+              </div>
+            </md-list-item>
+            <md-list-item class="md-2-line" ng-click="controller.showProfile()">
+              <div class="md-list-item-text" layout="column">
+                <h3>Perfil de usuario</h3>
+                <p>Información de tu perfil de usuario</p>
               </div>
             </md-list-item>
             <md-list-item class="md-2-line" ng-click="controller.closeSession()">
