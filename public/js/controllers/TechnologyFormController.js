@@ -286,17 +286,42 @@ technologyFormController.controller('TechnologyFormController', [
     };
 
     context.addAnswers = function (questionGroupName) {
-      var definedKeys = Object.keys(context.answers[questionGroupName][0]);
       var objToAdd = {};
-      for (var i = 0; i < definedKeys.length; i++) {
-        if (typeof context.answers[questionGroupName][0][definedKeys[i]] == 'object') {
-          if (context.answers[questionGroupName][0][definedKeys[i]][0] && typeof context.answers[questionGroupName][0][definedKeys[i]][0] == 'object') {
-            objToAdd[definedKeys[i]] = [{}];
-          } else {
-            objToAdd[definedKeys[i]] = [];
-          }
+      var selectedQuestionGroup = null;
+      for (let index = 0; index < context.formatObjects[context.currentNavItem]['questionGroups'].length; index++) {
+        if (context.formatObjects[context.currentNavItem]['questionGroups'][index]['name'] === questionGroupName) {
+          selectedQuestionGroup = context.formatObjects[context.currentNavItem]['questionGroups'][index];
+          break;
         }
       }
+      selectedQuestionGroup.questions.forEach((question) => {
+        if (question.type === 'tags') {
+          objToAdd[question.name] = [];
+        }
+        if (question.type === 'array') {
+          objToAdd[question.name] = [{}];
+        }
+        if (question.type === 'attachments') {
+          objToAdd[question.name] = [];
+        }
+      });
+      // console.log(788, context.formats, questionGroupName, context.currentNavItem);
+      // var definedKeys = Object.keys(context.answers[questionGroupName][0]);
+      // var objToAdd = {};
+      // for (var i = 0; i < definedKeys.length; i++) {
+      //   console.log(context.answers[questionGroupName][0][definedKeys[i]], typeof context.answers[questionGroupName][0][definedKeys[i]]);
+      //   if (typeof context.answers[questionGroupName][0][definedKeys[i]] == 'object') {
+      //     if (context.answers[questionGroupName][0][definedKeys[i]][0] && typeof context.answers[questionGroupName][0][definedKeys[i]][0] == 'object') {
+      //       if (context.answers[questionGroupName][0][definedKeys[i]][0]['ref']) {
+      //         objToAdd[definedKeys[i]] = [];
+      //       } else {
+      //         objToAdd[definedKeys[i]] = [{}];
+      //       }
+      //     } else if (context.answers[questionGroupName][0][definedKeys[i]][0] && Array.isArray(context.answers[questionGroupName][0][definedKeys[i]])) {
+      //       objToAdd[definedKeys[i]] = [];
+      //     }
+      //   }
+      // }
       context.answers[questionGroupName].push(objToAdd);
     };
 
@@ -317,7 +342,7 @@ technologyFormController.controller('TechnologyFormController', [
         context.fireNotification('error', 'Debe seleccionar un archivo o documento para adjuntar.');
       } else {
         context.fireNotification('info', 'Cargando archivo. Esto puede tardar un momento...');
-        var ref = 'documents/' + new Date().getTime();
+        var ref = 'documents/' + new Date().getTime() + '_' + document.getElementById(inputFieldName).files[0].name;
         var documentsReference = firebase.storage().ref().child(ref);
         var sFileName = $('input[name="' + inputFieldName + '"]').val();
         if (sFileName.length > 0) {
@@ -344,7 +369,8 @@ technologyFormController.controller('TechnologyFormController', [
                   uploadedAt: new Date().getTime(),
                 });
                 $scope.$digest();
-                console.log(context.answers, questionGroup, groupIndex, questionName);
+                // console.log(context.answers, questionGroup, groupIndex, questionName);
+                $('input[name="' + inputFieldName + '"]').val('');
                 context.save('Archivo cargado exitosamente');
               })
               .catch(function (error) {
@@ -354,6 +380,22 @@ technologyFormController.controller('TechnologyFormController', [
           }
         }
       }
+    };
+
+    context.removeAttachment = function (questionName, groupIndex, questionGroup, attachmentIndex) {
+      var documentReference = firebase.storage().ref().child(context.answers[questionGroup][groupIndex][questionName][attachmentIndex].ref);
+      context.fireNotification('info', 'Eliminando archivo adjunto...');
+      documentReference
+        .delete()
+        .then(function () {
+          context.answers[questionGroup][groupIndex][questionName].splice(attachmentIndex, 1);
+          $scope.$digest();
+          context.save('Archivo adjunto eliminado satisfactoriamente.');
+        })
+        .catch(function (error) {
+          context.fireNotification('error', 'No se pudo eliminar el archivo adjunto. Por favor inténtelo de nuevo.');
+          console.error('Delete failed:', error);
+        });
     };
 
     context.uploadFile = function () {

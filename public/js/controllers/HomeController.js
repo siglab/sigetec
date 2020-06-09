@@ -63,6 +63,16 @@ homeController.controller('HomeController', [
         // url: "https://afv.mobi/sigetec/sigetec_firebase_request.php"
         url: __apiRoutes.points.getTechnologies,
       });
+
+      // var request2 = $http({
+      //   method: 'GET',
+      //   url: 'https://afv.mobi/sigetec/sigetec_firebase_request.php',
+      // });
+
+      // request2.then(function (response) {
+      //   console.log(344, response);
+      // });
+
       request.then(function (response) {
         angular.forEach(response.data, function (technology) {
           context.technologiesArray.push(technology);

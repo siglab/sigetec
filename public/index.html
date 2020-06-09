@@ -239,7 +239,8 @@
                 <p>Listado de tecnologias registradas</p>
               </div>
             </md-list-item>
-            <md-list-item ng-if="userRoles.indexOf('otri-member') >= 0" class="md-2-line" ng-click="controller.showAssgignedTechnologies()">
+            <md-list-item ng-if="userRoles.indexOf('otri-member') >= 0" class="md-2-line" ng-click="controller.showAssgignedTechnologies()"
+              style="opacity: 0.3; pointer-events: none;">
               <div class="md-list-item-text" layout="column">
                 <h3>Tecnologías asignadas</h3>
                 <p>Listado de tecnologias asignadas a tu cuenta</p>
@@ -269,7 +270,7 @@
                 <p>Administracion de listados de valores</p>
               </div>
             </md-list-item>
-            <md-list-item class="md-2-line" ng-click="controller.showProfile()">
+            <md-list-item class="md-2-line" ng-click="controller.showProfile()" style="opacity: 0.3; pointer-events: none;">
               <div class="md-list-item-text" layout="column">
                 <h3>Perfil de usuario</h3>
                 <p>Información de tu perfil de usuario</p>
