@@ -85,6 +85,18 @@
   <!-- PDF Generator -->
   <script type="text/javascript" src="./js/lib/pdfmake.js"></script>
   <script type="text/javascript" src="./js/lib/vfs_fonts.js"></script>
+  <!-- Google charts -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+  <!-- Otras tablas -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-sanitize.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.5.0/angular-material-icons.min.js"></script>
+  <link rel="stylesheet" href="./css/md-data-table-style.css">
+  <script src="./js/lib/md-data-table-templates.js"></script>
+  <script src="./js/lib/md-data-table.js"></script>
+
+
   <!-- App Controllers -->
   <script src="js/controllers/MainController.js"></script>
   <script src="js/controllers/DashboardController.js"></script>
@@ -147,7 +159,6 @@
           {{userName}}
           <img ng-src="{{userPhoto}}" alt="User photo" class="user-topbar-image">
         </md-button>
-
       </div>
     </md-toolbar>
     <!-- UV Home Top navbar -->
@@ -295,7 +306,7 @@
     <!-- Footer -->
     <div class="footer" ng-cloak>
       <p class="text-center" style="padding:0;margin:0;">
-        Sistema Integrado de Gestión Estratégica de Tecnologías (SigeTEC) - v04.2020. &nbsp;
+        Sistema Integrado de Gestión Estratégica de Tecnologías (SigeTEC) - v06.2020. &nbsp;
         <a href="http://viceinvestigaciones.univalle.edu.co/index.php/quienes-somos-otri" target="_blank">
           Oficina de Transferencia de Resultados de Investigación (OTRI)
         </a>&nbsp;<br>

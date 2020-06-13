@@ -189,12 +189,7 @@ exports.getTechnologies = functions.https.onRequest((req, res) => {
         } else {
           var detailsPromises = [];
           for (var i = 0; i < uuids.length; i++) {
-            detailsPromises.push(
-              db.ref('/technologies-detail/' + registeredTechnologies[uuids[i]]['technologyId']).once('value')
-              // .then(function(snapshot) {
-              //     registeredTechnologies[uuids[i]]['details'] = snapshot.val();
-              // })
-            );
+            detailsPromises.push(db.ref('/technologies-detail/' + registeredTechnologies[uuids[i]]['technologyId']).once('value'));
           }
           return Promise.all(detailsPromises).then((snap) => {
             for (var k = 0; k < snap.length; k++) {

@@ -20,6 +20,10 @@ var sigetecApp = angular.module('SigetecApp', [
   'firebase',
   'datatables',
   'ngMaterialCollapsible',
+  'ngSanitize',
+  'ngMdIcons',
+  'ngMaterial',
+  'mdDataTable',
 ]);
 
 // Register apiRoutes in AngularJS as constant

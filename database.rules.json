@@ -1,5 +1,9 @@
 {
   "rules": {
+    "references": {
+      ".read": true,
+      ".write": "(auth != false)"
+    },
     ".read": "auth != null",
     ".write": "auth != null",
     "technologies": {
