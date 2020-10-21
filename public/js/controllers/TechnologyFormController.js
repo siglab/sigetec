@@ -1,45 +1,60 @@
-'use strict';
+"use strict";
 
-var technologyFormController = angular.module('TechnologyFormController', [
-  'ngMaterial',
-  'firebase',
-  'angularUUID2',
-  'angular-popover',
-  'ngMessages',
-  'ui-notification',
-  'ngMaterialCollapsible',
+var technologyFormController = angular.module("TechnologyFormController", [
+  "ngMaterial",
+  "firebase",
+  "angularUUID2",
+  "angular-popover",
+  "ngMessages",
+  "ui-notification",
+  "ngMaterialCollapsible",
 ]);
 technologyFormController.config([
-  '$mdIconProvider',
+  "$mdIconProvider",
   function ($mdIconProvider) {
-    $mdIconProvider.icon('md-close', 'img/icons/ic_close_24px.svg', 24);
+    $mdIconProvider.icon("md-close", "img/icons/ic_close_24px.svg", 24);
   },
 ]);
 
 technologyFormController.config(function (NotificationProvider) {
   NotificationProvider.setOptions({
     startTop: 80,
-    positionX: 'right',
-    positionY: 'bottom',
+    positionX: "right",
+    positionY: "bottom",
   });
 });
 
-technologyFormController.controller('TechnologyFormController', [
-  '$scope',
-  '$rootScope',
-  '$location',
-  '$firebase',
-  '$mdDialog',
-  '$mdToast',
-  '$mdMenu',
-  '$window',
-  '$firebaseObject',
-  '$firebaseArray',
-  '$firebaseAuth',
-  '$routeParams',
-  'uuid2',
-  'Notification',
-  function ($scope, $rootScope, $location, $firebase, $mdDialog, $mdToast, $mdMenu, $window, $firebaseObject, $firebaseArray, $firebaseAuth, $routeParams, uuid2, Notification) {
+technologyFormController.controller("TechnologyFormController", [
+  "$scope",
+  "$rootScope",
+  "$location",
+  "$firebase",
+  "$mdDialog",
+  "$mdToast",
+  "$mdMenu",
+  "$window",
+  "$firebaseObject",
+  "$firebaseArray",
+  "$firebaseAuth",
+  "$routeParams",
+  "uuid2",
+  "Notification",
+  function (
+    $scope,
+    $rootScope,
+    $location,
+    $firebase,
+    $mdDialog,
+    $mdToast,
+    $mdMenu,
+    $window,
+    $firebaseObject,
+    $firebaseArray,
+    $firebaseAuth,
+    $routeParams,
+    uuid2,
+    Notification
+  ) {
     var context = this;
     $scope.authObj = $rootScope.auth;
     context.allowedStatus = $rootScope.allowedStatus;
@@ -55,20 +70,21 @@ technologyFormController.controller('TechnologyFormController', [
     context.showAssign = false;
     context.showRegister = false;
     context.showCreate = false;
+    context.showReturnToCoordinator = false;
     context.showPDFGenerator = false;
     context.showRegistrationDate = false;
-    context.technologyStatus = 'En diligencia';
+    context.technologyStatus = "En diligencia";
     context.registrationDate = null;
     context.technologyStatusComments = [];
-    context.fileCategory = '';
+    context.fileCategory = "";
     context.pdfInfo = {
       formats: {},
     };
     if ($routeParams.technologyId) {
-      context.currentNavItem = 'FNI';
+      context.currentNavItem = "FNI";
       // context.showCreate = false;
     } else {
-      context.currentNavItem = 'Información Básica';
+      context.currentNavItem = "Información Básica";
     }
     // if($rootScope.permissions !== undefined){
     //     if($rootScope.permissions.find(function(permission){ return "return" === permission; })){
@@ -78,21 +94,27 @@ technologyFormController.controller('TechnologyFormController', [
     //         context.showAssign = true;
     //     }
     // }
-    if ($rootScope.userRole === 'researcher') {
+    if ($rootScope.userRole === "researcher") {
       context.isResearcher = true;
     } else {
       context.isResearcher = false;
     }
     var basicData = [
-      { questionGroup: 'basic', questionName: 'name' },
-      { questionGroup: 'basic', questionName: 'description' },
-      { questionGroup: 'basic', questionName: 'program' },
-      { questionGroup: 'group-principal-researcher', questionName: 'principal-researcher-email' },
-      { questionGroup: 'basic', questionName: 'technology-type' },
-      { questionGroup: 'patent-granted', questionName: 'granted-date' },
+      { questionGroup: "basic", questionName: "name" },
+      { questionGroup: "basic", questionName: "description" },
+      { questionGroup: "basic", questionName: "program" },
+      {
+        questionGroup: "group-principal-researcher",
+        questionName: "principal-researcher-email",
+      },
+      { questionGroup: "basic", questionName: "technology-type" },
+      { questionGroup: "patent-granted", questionName: "granted-date" },
     ];
-    var formatsReference = firebase.database().ref().child('formats/structure');
-    var referencesReference = firebase.database().ref().child('references/definition');
+    var formatsReference = firebase.database().ref().child("formats/structure");
+    var referencesReference = firebase
+      .database()
+      .ref()
+      .child("references/definition");
     var formats = $firebaseArray(formatsReference);
     var references = $firebaseObject(referencesReference);
     references.$loaded().then(function () {
@@ -102,7 +124,11 @@ technologyFormController.controller('TechnologyFormController', [
     formats.$loaded().then(function () {
       context.formats = formats;
       angular.forEach(formats, function (format) {
-        if (format.allowedRole != undefined && (format.allowedRole === 'all' || context.rolesChecker(format.allowedRole))) {
+        if (
+          format.allowedRole != undefined &&
+          (format.allowedRole === "all" ||
+            context.rolesChecker(format.allowedRole))
+        ) {
           format.readonly = false;
           format.showTab = true;
         } else {
@@ -114,32 +140,53 @@ technologyFormController.controller('TechnologyFormController', [
         angular.forEach(format.questionGroups, function (questionGroup) {
           context.answers[questionGroup.name] = [{}];
           angular.forEach(questionGroup.questions, function (question) {
-            if (question.type === 'tags') {
+            if (question.type === "tags") {
               context.answers[questionGroup.name][0][question.name] = [];
             }
-            if (question.type === 'array') {
+            if (question.type === "array") {
               context.answers[questionGroup.name][0][question.name] = [{}];
             }
-            if (question.type === 'attachments') {
+            if (question.type === "attachments") {
               context.answers[questionGroup.name][0][question.name] = [];
             }
           });
         });
         // Para generar el PDF
-        if (format['formName'] == 'basic' || format['formName'] == 'fni') {
+        if (format["formName"] == "basic" || format["formName"] == "fni") {
           context.pdfInfo.formats[format.name] = {};
-          context.pdfInfo.formats[format.name]['data'] = {};
+          context.pdfInfo.formats[format.name]["data"] = {};
           angular.forEach(format.questionGroups, function (questionGroup) {
-            context.pdfInfo.formats[format.name]['data'][questionGroup.name] = {};
-            context.pdfInfo.formats[format.name]['data'][questionGroup.name]['tag'] = questionGroup.tag;
-            context.pdfInfo.formats[format.name]['data'][questionGroup.name]['type'] = questionGroup.type;
-            context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'] = {};
-            context.pdfInfo.formats[format.name]['data'][questionGroup.name]['answers'] = {};
-            for (let index = 0; index < questionGroup.questions.length; index++) {
-              context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'][questionGroup.questions[index]['name']] = {};
-              context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'][questionGroup.questions[index]['name']]['tag'] = questionGroup.questions[index]['tag'];
-              context.pdfInfo.formats[format.name]['data'][questionGroup.name]['questions'][questionGroup.questions[index]['name']]['type'] =
-                questionGroup.questions[index]['type'];
+            context.pdfInfo.formats[format.name]["data"][
+              questionGroup.name
+            ] = {};
+            context.pdfInfo.formats[format.name]["data"][questionGroup.name][
+              "tag"
+            ] = questionGroup.tag;
+            context.pdfInfo.formats[format.name]["data"][questionGroup.name][
+              "type"
+            ] = questionGroup.type;
+            context.pdfInfo.formats[format.name]["data"][questionGroup.name][
+              "questions"
+            ] = {};
+            context.pdfInfo.formats[format.name]["data"][questionGroup.name][
+              "answers"
+            ] = {};
+            for (
+              let index = 0;
+              index < questionGroup.questions.length;
+              index++
+            ) {
+              context.pdfInfo.formats[format.name]["data"][questionGroup.name][
+                "questions"
+              ][questionGroup.questions[index]["name"]] = {};
+              context.pdfInfo.formats[format.name]["data"][questionGroup.name][
+                "questions"
+              ][questionGroup.questions[index]["name"]]["tag"] =
+                questionGroup.questions[index]["tag"];
+              context.pdfInfo.formats[format.name]["data"][questionGroup.name][
+                "questions"
+              ][questionGroup.questions[index]["name"]]["type"] =
+                questionGroup.questions[index]["type"];
             }
           });
         }
@@ -149,13 +196,17 @@ technologyFormController.controller('TechnologyFormController', [
         var technologyRequestedReference = firebase
           .database()
           .ref()
-          .child('technologies/' + $routeParams.technologyId);
+          .child("technologies/" + $routeParams.technologyId);
         var technologyRequested = $firebaseObject(technologyRequestedReference);
         technologyRequested.$loaded().then(function () {
           context.assignedTo = technologyRequested.assignedTo;
           context.technologyStatus = technologyRequested.status;
           angular.forEach(context.formats, function (format) {
-            if (format.allowedRole != undefined && (format.allowedRole === 'all' || context.rolesChecker(format.allowedRole))) {
+            if (
+              format.allowedRole != undefined &&
+              (format.allowedRole === "all" ||
+                context.rolesChecker(format.allowedRole))
+            ) {
               format.readonly = false;
               format.showTab = true;
             } else {
@@ -163,40 +214,61 @@ technologyFormController.controller('TechnologyFormController', [
               format.showTab = false;
             }
           });
-          if (technologyRequested.status != 'En diligencia') {
-            context.formatObjects['FNI'].readonly = true;
-            context.formatObjects['Información Básica'].readonly = true;
+          console.log(217, context.formatObjects);
+          if (technologyRequested.status != "En diligencia") {
+            context.formatObjects["FNI"].readonly = true;
+            context.formatObjects["Información Básica"].readonly = true;
+            context.formatObjects["Evaluación"].readonly = true;
+            context.formatObjects["Evaluación"].showtab = false;
             context.showRegister = false;
             context.showCreate = false;
           }
-          if (technologyRequested.status == 'Registrada') {
-            if ($rootScope.permissions.indexOf('showReturn') >= 0) {
+          if (technologyRequested.status == "Registrada") {
+            if ($rootScope.permissions.indexOf("showReturn") >= 0) {
               context.showReturn = true;
             }
-            if ($rootScope.permissions.indexOf('showAssign') >= 0) {
+            if ($rootScope.permissions.indexOf("showAssign") >= 0) {
               context.showAssign = true;
             }
+            context.formatObjects["Evaluación"].readonly = true;
           }
-          if (technologyRequested.status != 'En diligencia') {
-            if ($rootScope.permissions.indexOf('showPDFGenerator') >= 0) {
+          if (technologyRequested.status == "Asignada") {
+            if (
+              $rootScope.permissions.indexOf("showReturnToCoordinator") >= 0 &&
+              technologyRequested.assignedTo &&
+              technologyRequested.assignedTo == $rootScope.userEmail
+            ) {
+              context.showReturnToCoordinator = true;
+              context.formatObjects["Evaluación"].readonly = false;
+            } else {
+              context.formatObjects["Evaluación"].readonly = true;
+            }
+          }
+          if (technologyRequested.status != "En diligencia") {
+            if ($rootScope.permissions.indexOf("showPDFGenerator") >= 0) {
               context.showPDFGenerator = true;
             }
           }
-          if ($rootScope.permissions.indexOf('showRegistrationDate') >= 0) {
+          if ($rootScope.permissions.indexOf("showRegistrationDate") >= 0) {
             context.showRegistrationDate = true;
           }
           if (technologyRequested.registeredAt) {
-            context.registrationDate = new Date(technologyRequested.registeredAt);
+            context.registrationDate = new Date(
+              technologyRequested.registeredAt
+            );
           }
           if (technologyRequested.statusComments) {
-            context.technologyStatusComments = technologyRequested.statusComments;
+            context.technologyStatusComments =
+              technologyRequested.statusComments;
           }
           var detailRequestedReference = firebase
             .database()
             .ref()
-            .child('technologies-detail/' + technologyRequested.technologyId);
+            .child("technologies-detail/" + technologyRequested.technologyId);
           // Carga de detalles de la tecnología
-          var technologiesRequestedDetail = $firebaseObject(detailRequestedReference);
+          var technologiesRequestedDetail = $firebaseObject(
+            detailRequestedReference
+          );
           technologiesRequestedDetail.$loaded().then(function () {
             var answers = technologiesRequestedDetail.answers;
             angular.forEach(answers, function (answer, name) {
@@ -205,43 +277,78 @@ technologyFormController.controller('TechnologyFormController', [
               // var answersWithDate = {};
               angular.forEach(answer, function (group, gKey) {
                 angular.forEach(group, function (answer, aKey) {
-                  if (Object.prototype.toString.call(answer) === '[object Array]') {
-                    if (answer[0] && Object.prototype.toString.call(answer[0]) === '[object Object]') {
+                  if (
+                    Object.prototype.toString.call(answer) === "[object Array]"
+                  ) {
+                    if (
+                      answer[0] &&
+                      Object.prototype.toString.call(answer[0]) ===
+                        "[object Object]"
+                    ) {
                       if (!answersWithDate[gKey]) {
                         answersWithDate[gKey] = {};
                       }
                       angular.forEach(answer, function (answersGroup, agKey) {
-                        if (Object.prototype.toString.call(answers[name][gKey][aKey]) === '[object Array]' && !answersWithDate[gKey][aKey]) {
+                        if (
+                          Object.prototype.toString.call(
+                            answers[name][gKey][aKey]
+                          ) === "[object Array]" &&
+                          !answersWithDate[gKey][aKey]
+                        ) {
                           answersWithDate[gKey][aKey] = [];
-                        } else if (Object.prototype.toString.call(answers[name][gKey][aKey]) === '[object Object]' && !answersWithDate[gKey][aKey]) {
+                        } else if (
+                          Object.prototype.toString.call(
+                            answers[name][gKey][aKey]
+                          ) === "[object Object]" &&
+                          !answersWithDate[gKey][aKey]
+                        ) {
                           answersWithDate[gKey][aKey] = {};
                         }
                         answersWithDate[gKey][aKey][agKey] = {};
-                        angular.forEach(answersGroup, function (groupAnswer, gaKey) {
-                          var testDate = new RegExp('^\\d{13}$').test(groupAnswer);
+                        angular.forEach(answersGroup, function (
+                          groupAnswer,
+                          gaKey
+                        ) {
+                          var testDate = new RegExp("^\\d{13}$").test(
+                            groupAnswer
+                          );
                           if (testDate) {
-                            answersWithDate[gKey][aKey][agKey][gaKey] = new Date(groupAnswer);
+                            answersWithDate[gKey][aKey][agKey][
+                              gaKey
+                            ] = new Date(groupAnswer);
                           } else {
-                            answersWithDate[gKey][aKey][agKey][gaKey] = groupAnswer;
+                            answersWithDate[gKey][aKey][agKey][
+                              gaKey
+                            ] = groupAnswer;
                           }
                         });
                       });
-                    } else if (answer[0] && Object.prototype.toString.call(answer[0]) === '[object String]') {
+                    } else if (
+                      answer[0] &&
+                      Object.prototype.toString.call(answer[0]) ===
+                        "[object String]"
+                    ) {
                       answersWithDate[gKey][aKey] = answer;
                     }
                   } else {
                     if (!answersWithDate[gKey]) {
-                      if (Object.prototype.toString.call(answers[name][gKey]) === '[object Array]') {
+                      if (
+                        Object.prototype.toString.call(answers[name][gKey]) ===
+                        "[object Array]"
+                      ) {
                         answersWithDate[gKey] = [];
-                      } else if (Object.prototype.toString.call(answers[name][gKey]) === '[object Object]') {
+                      } else if (
+                        Object.prototype.toString.call(answers[name][gKey]) ===
+                        "[object Object]"
+                      ) {
                         answersWithDate[gKey] = {};
                       }
                     }
-                    var testDate = new RegExp('^\\d{13}$').test(answer);
+                    var testDate = new RegExp("^\\d{13}$").test(answer);
                     if (testDate) {
                       answersWithDate[gKey][aKey] = new Date(answer);
                     } else {
-                      if (typeof gKey == 'string') {
+                      if (typeof gKey == "string") {
                         answersWithDate[gKey] = {};
                       }
                       answersWithDate[gKey][aKey] = answer;
@@ -253,11 +360,11 @@ technologyFormController.controller('TechnologyFormController', [
             });
           });
         });
-        if ($rootScope.userRoles.indexOf('researcher') >= 0) {
+        if ($rootScope.userRoles.indexOf("researcher") >= 0) {
           context.showRegister = true;
         }
       } else {
-        context.formatObjects['FNI'].showTab = false;
+        context.formatObjects["FNI"].showTab = false;
         context.showCreate = true;
         // if($rootScope.userRole === "researcher"){
         //     context.showCreate = true;
@@ -267,8 +374,10 @@ technologyFormController.controller('TechnologyFormController', [
       var pdfInfoObjKeys = Object.keys(context.pdfInfo.formats);
       angular.forEach(context.answers, function (answer, key) {
         for (let index = 0; index < pdfInfoObjKeys.length; index++) {
-          if (context.pdfInfo.formats[pdfInfoObjKeys[index]]['data'][key]) {
-            context.pdfInfo.formats[pdfInfoObjKeys[index]]['data'][key]['answers'] = answer;
+          if (context.pdfInfo.formats[pdfInfoObjKeys[index]]["data"][key]) {
+            context.pdfInfo.formats[pdfInfoObjKeys[index]]["data"][key][
+              "answers"
+            ] = answer;
           }
         }
       });
@@ -277,7 +386,10 @@ technologyFormController.controller('TechnologyFormController', [
     context.rolesChecker = function (formatAllowedRoles) {
       var response = false;
       for (var i = 0; i < $rootScope.userRoles.length; i++) {
-        if (formatAllowedRoles.includes($rootScope.userRoles[i]) && context.technologyStatus != 'En diligencia') {
+        if (
+          formatAllowedRoles.includes($rootScope.userRoles[i]) &&
+          context.technologyStatus != "En diligencia"
+        ) {
           response = true;
           break;
         }
@@ -288,20 +400,32 @@ technologyFormController.controller('TechnologyFormController', [
     context.addAnswers = function (questionGroupName) {
       var objToAdd = {};
       var selectedQuestionGroup = null;
-      for (let index = 0; index < context.formatObjects[context.currentNavItem]['questionGroups'].length; index++) {
-        if (context.formatObjects[context.currentNavItem]['questionGroups'][index]['name'] === questionGroupName) {
-          selectedQuestionGroup = context.formatObjects[context.currentNavItem]['questionGroups'][index];
+      for (
+        let index = 0;
+        index <
+        context.formatObjects[context.currentNavItem]["questionGroups"].length;
+        index++
+      ) {
+        if (
+          context.formatObjects[context.currentNavItem]["questionGroups"][
+            index
+          ]["name"] === questionGroupName
+        ) {
+          selectedQuestionGroup =
+            context.formatObjects[context.currentNavItem]["questionGroups"][
+              index
+            ];
           break;
         }
       }
       selectedQuestionGroup.questions.forEach((question) => {
-        if (question.type === 'tags') {
+        if (question.type === "tags") {
           objToAdd[question.name] = [];
         }
-        if (question.type === 'array') {
+        if (question.type === "array") {
           objToAdd[question.name] = [{}];
         }
-        if (question.type === 'attachments') {
+        if (question.type === "attachments") {
           objToAdd[question.name] = [];
         }
       });
@@ -333,16 +457,42 @@ technologyFormController.controller('TechnologyFormController', [
       context.answers[questionGroupName][index][questionName].push({});
     };
 
-    context.removeArrayData = function (questionGroupName, questionName, index, position) {
-      context.answers[questionGroupName][index][questionName].splice(position, 1);
+    context.removeArrayData = function (
+      questionGroupName,
+      questionName,
+      index,
+      position
+    ) {
+      context.answers[questionGroupName][index][questionName].splice(
+        position,
+        1
+      );
     };
 
-    context.uploadAttachment = function (inputFieldName, questionName, groupIndex, questionGroup) {
-      if (!$('input[name="' + inputFieldName + '"]').val() || $('input[name="' + inputFieldName + '"]').val() == '') {
-        context.fireNotification('error', 'Debe seleccionar un archivo o documento para adjuntar.');
+    context.uploadAttachment = function (
+      inputFieldName,
+      questionName,
+      groupIndex,
+      questionGroup
+    ) {
+      if (
+        !$('input[name="' + inputFieldName + '"]').val() ||
+        $('input[name="' + inputFieldName + '"]').val() == ""
+      ) {
+        context.fireNotification(
+          "error",
+          "Debe seleccionar un archivo o documento para adjuntar."
+        );
       } else {
-        context.fireNotification('info', 'Cargando archivo. Esto puede tardar un momento...');
-        var ref = 'documents/' + new Date().getTime() + '_' + document.getElementById(inputFieldName).files[0].name;
+        context.fireNotification(
+          "info",
+          "Cargando archivo. Esto puede tardar un momento..."
+        );
+        var ref =
+          "documents/" +
+          new Date().getTime() +
+          "_" +
+          document.getElementById(inputFieldName).files[0].name;
         var documentsReference = firebase.storage().ref().child(ref);
         var sFileName = $('input[name="' + inputFieldName + '"]').val();
         if (sFileName.length > 0) {
@@ -356,9 +506,12 @@ technologyFormController.controller('TechnologyFormController', [
               .put(fileToLoad, metadata)
               .then(function (snapshot) {
                 var url = snapshot.metadata.downloadURLs[0];
-                if (!context.answers[questionGroup]) context.answers[questionGroup] = [];
-                if (!context.answers[questionGroup][groupIndex]) context.answers[questionGroup][groupIndex] = {};
-                if (!context.answers[questionGroup][groupIndex][questionName]) context.answers[questionGroup][groupIndex][questionName] = [];
+                if (!context.answers[questionGroup])
+                  context.answers[questionGroup] = [];
+                if (!context.answers[questionGroup][groupIndex])
+                  context.answers[questionGroup][groupIndex] = {};
+                if (!context.answers[questionGroup][groupIndex][questionName])
+                  context.answers[questionGroup][groupIndex][questionName] = [];
                 context.answers[questionGroup][groupIndex][questionName].push({
                   url: url,
                   name: fileToLoad.name,
@@ -370,41 +523,69 @@ technologyFormController.controller('TechnologyFormController', [
                 });
                 $scope.$digest();
                 // console.log(context.answers, questionGroup, groupIndex, questionName);
-                $('input[name="' + inputFieldName + '"]').val('');
-                context.save('Archivo cargado exitosamente');
+                $('input[name="' + inputFieldName + '"]').val("");
+                context.save("Archivo cargado exitosamente");
               })
               .catch(function (error) {
-                context.fireNotification('error', 'Ha ocurrido un error. Por favor intentelo de nuevo.');
-                console.error('Upload failed:', error);
+                context.fireNotification(
+                  "error",
+                  "Ha ocurrido un error. Por favor intentelo de nuevo."
+                );
+                console.error("Upload failed:", error);
               });
           }
         }
       }
     };
 
-    context.removeAttachment = function (questionName, groupIndex, questionGroup, attachmentIndex) {
-      var documentReference = firebase.storage().ref().child(context.answers[questionGroup][groupIndex][questionName][attachmentIndex].ref);
-      context.fireNotification('info', 'Eliminando archivo adjunto...');
+    context.removeAttachment = function (
+      questionName,
+      groupIndex,
+      questionGroup,
+      attachmentIndex
+    ) {
+      var documentReference = firebase
+        .storage()
+        .ref()
+        .child(
+          context.answers[questionGroup][groupIndex][questionName][
+            attachmentIndex
+          ].ref
+        );
+      context.fireNotification("info", "Eliminando archivo adjunto...");
       documentReference
         .delete()
         .then(function () {
-          context.answers[questionGroup][groupIndex][questionName].splice(attachmentIndex, 1);
+          context.answers[questionGroup][groupIndex][questionName].splice(
+            attachmentIndex,
+            1
+          );
           $scope.$digest();
-          context.save('Archivo adjunto eliminado satisfactoriamente.');
+          context.save("Archivo adjunto eliminado satisfactoriamente.");
         })
         .catch(function (error) {
-          context.fireNotification('error', 'No se pudo eliminar el archivo adjunto. Por favor inténtelo de nuevo.');
-          console.error('Delete failed:', error);
+          context.fireNotification(
+            "error",
+            "No se pudo eliminar el archivo adjunto. Por favor inténtelo de nuevo."
+          );
+          console.error("Delete failed:", error);
         });
     };
 
     context.uploadFile = function () {
-      context.fireNotification('info', 'Cargando archivo. Esto puede tardar un momento...');
-      var ref = 'documents/' + new Date().getTime() + '_' + document.getElementById('document').files[0].name;
+      context.fireNotification(
+        "info",
+        "Cargando archivo. Esto puede tardar un momento..."
+      );
+      var ref =
+        "documents/" +
+        new Date().getTime() +
+        "_" +
+        document.getElementById("document").files[0].name;
       var documentsReference = firebase.storage().ref().child(ref);
-      var sFileName = $('#document').val();
+      var sFileName = $("#document").val();
       if (sFileName.length > 0) {
-        var filesSelected = document.getElementById('document').files;
+        var filesSelected = document.getElementById("document").files;
         if (filesSelected.length > 0) {
           var fileToLoad = filesSelected[0];
           var metadata = {
@@ -422,11 +603,14 @@ technologyFormController.controller('TechnologyFormController', [
                 fileType: fileToLoad.type,
               });
               $scope.$digest();
-              context.save('Archivo cargado exitosamente');
+              context.save("Archivo cargado exitosamente");
             })
             .catch(function (error) {
-              context.fireNotification('error', 'Ha ocurrido un error. Por favor intentelo de nuevo.');
-              console.error('Upload failed:', error);
+              context.fireNotification(
+                "error",
+                "Ha ocurrido un error. Por favor intentelo de nuevo."
+              );
+              console.error("Upload failed:", error);
             });
         }
       }
@@ -435,7 +619,7 @@ technologyFormController.controller('TechnologyFormController', [
 
     context.deleteFile = function (document) {
       var documentsReference = firebase.storage().ref().child(document.ref);
-      context.fireNotification('info', 'Eliminando archivo adjunto...');
+      context.fireNotification("info", "Eliminando archivo adjunto...");
       documentsReference
         .delete()
         .then(function () {
@@ -445,11 +629,14 @@ technologyFormController.controller('TechnologyFormController', [
             }
           }
           $scope.$digest();
-          context.save('Archivo adjunto eliminado satisfactoriamente.');
+          context.save("Archivo adjunto eliminado satisfactoriamente.");
         })
         .catch(function (error) {
-          context.fireNotification('error', 'No se pudo eliminar el archivo adjunto. Por favor inténtelo de nuevo.');
-          console.error('Delete failed:', error);
+          context.fireNotification(
+            "error",
+            "No se pudo eliminar el archivo adjunto. Por favor inténtelo de nuevo."
+          );
+          console.error("Delete failed:", error);
         });
     };
 
@@ -457,7 +644,7 @@ technologyFormController.controller('TechnologyFormController', [
       $mdDialog
         .show({
           controller: ShareDialogController,
-          templateUrl: 'partials/user-list.html',
+          templateUrl: "partials/user-list.html",
           parent: angular.element(document.body),
           clickOutsideToClose: true,
           fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
@@ -483,8 +670,11 @@ technologyFormController.controller('TechnologyFormController', [
     }
 
     context.share = function (email) {
-      var shareRecord = { 'technology-id': $routeParams.technologyId, email: email };
-      var shareReference = firebase.database().ref().child('share');
+      var shareRecord = {
+        "technology-id": $routeParams.technologyId,
+        email: email,
+      };
+      var shareReference = firebase.database().ref().child("share");
       var sharedArray = $firebaseArray(shareReference);
       sharedArray.$add(shareRecord);
     };
@@ -498,7 +688,7 @@ technologyFormController.controller('TechnologyFormController', [
       $mdDialog
         .show({
           controller: AssignDialogController,
-          templateUrl: 'partials/user-list.html',
+          templateUrl: "partials/user-list.html",
           parent: angular.element(document.body),
           clickOutsideToClose: true,
           fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
@@ -525,25 +715,42 @@ technologyFormController.controller('TechnologyFormController', [
 
     context.assign = function (email) {
       context.assignedTo = email;
-      context.technologyStatus = 'Asignada';
-      context.save('La tecnología se asignó satisfactoriamente a ' + email + '.', '/dashboard');
+      context.technologyStatus = "Asignada";
+      context.save(
+        "La tecnología se asignó satisfactoriamente a " + email + ".",
+        "/dashboard"
+      );
     };
 
     context.register = function () {
       if (context.answers.basic[0].acceptance) {
         if (context.showRegistrationDate) {
-          context.technologyStatus = 'Registrada';
-          context.save('La tecnología se registró exitosamente.', '/dashboard');
+          context.technologyStatus = "Registrada";
+          context.save("La tecnología se registró exitosamente.", "/dashboard");
         } else {
-          if ($rootScope.userEmail == context.answers['group-principal-researcher'][0]['principal-researcher-email']) {
-            context.technologyStatus = 'Registrada';
-            context.save('La tecnología se registró exitosamente.', '/dashboard');
+          if (
+            $rootScope.userEmail ==
+            context.answers["group-principal-researcher"][0][
+              "principal-researcher-email"
+            ]
+          ) {
+            context.technologyStatus = "Registrada";
+            context.save(
+              "La tecnología se registró exitosamente.",
+              "/dashboard"
+            );
           } else {
-            context.fireNotification('error', 'Solo puede registrar la tecnologia el investigador principal.');
+            context.fireNotification(
+              "error",
+              "Solo puede registrar la tecnologia el investigador principal."
+            );
           }
         }
       } else {
-        context.fireNotification('error', 'Se deben aceptar los terminos y condiciones para poder continuar.');
+        context.fireNotification(
+          "error",
+          "Se deben aceptar los terminos y condiciones para poder continuar."
+        );
       }
     };
 
@@ -551,7 +758,7 @@ technologyFormController.controller('TechnologyFormController', [
       $mdDialog
         .show({
           controller: context.showReturnDialogController,
-          templateUrl: 'partials/return-technology-comments.html',
+          templateUrl: "partials/return-technology-comments.html",
           parent: angular.element(document.body),
           clickOutsideToClose: true,
           fullscreen: true, // Only for -xs, -sm breakpoints.
@@ -563,7 +770,8 @@ technologyFormController.controller('TechnologyFormController', [
     };
 
     context.showReturnDialogController = function ($scope, $mdDialog) {
-      $scope.commentsField = '';
+      $scope.technologyStatus = context.technologyStatus;
+      $scope.commentsField = "";
       $scope.hide = function () {
         $mdDialog.hide();
       };
@@ -571,7 +779,6 @@ technologyFormController.controller('TechnologyFormController', [
         $mdDialog.cancel();
       };
       $scope.send = function () {
-        context.technologyStatus = 'En diligencia';
         if (context.technologyStatusComments) {
           context.technologyStatusComments = [
             {
@@ -589,21 +796,33 @@ technologyFormController.controller('TechnologyFormController', [
             },
           ];
         }
-        context.save('La tecnología se retornó al investigador satisfactoriamente', 'dashboard');
-        $scope.comments = '';
+        if (context.technologyStatus == "Registrada") {
+          context.technologyStatus = "En diligencia";
+          context.save(
+            "La tecnología se retornó al investigador satisfactoriamente",
+            "dashboard"
+          );
+        } else {
+          context.technologyStatus = "Registrada";
+          context.save(
+            "La tecnología se retornó al coordinador satisfactoriamente",
+            "dashboard"
+          );
+        }
+        $scope.comments = "";
         $mdDialog.hide();
       };
     };
 
     context.save = function (message = null, url = null, checkValidity = true) {
       var today = new Date().getTime();
-      var technologyId = '';
+      var technologyId = "";
       if ($routeParams.technologyId) {
         try {
           var technologyReference = firebase
             .database()
             .ref()
-            .child('technologies/' + $routeParams.technologyId);
+            .child("technologies/" + $routeParams.technologyId);
           var technology = $firebaseObject(technologyReference);
           technology.$loaded().then(function () {
             // if (technology.status == 'Registrada' && $rootScope.userRoles.length) {
@@ -611,11 +830,17 @@ technologyFormController.controller('TechnologyFormController', [
             // }else{
             technology.updatedAt = today;
             technology.updatedBy = $rootScope.userEmail;
-            if (technology.status == 'Registrada' && context.technologyStatus == 'En diligencia' && technology.registeredAt) {
+            if (
+              technology.status == "Registrada" &&
+              context.technologyStatus == "En diligencia" &&
+              technology.registeredAt
+            ) {
               technology.registeredAt = null;
             }
             if (context.showRegistrationDate) {
-              technology.registeredAt = new Date(context.registrationDate).getTime();
+              technology.registeredAt = new Date(
+                context.registrationDate
+              ).getTime();
             } else {
               technology.registeredAt = today;
             }
@@ -632,36 +857,45 @@ technologyFormController.controller('TechnologyFormController', [
                   technologyId = $routeParams.technologyId;
                   context.saveDetail(technology.technologyId, checkValidity);
                   if (message == null || message == undefined) {
-                    context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                    context.fireNotification(
+                      "info",
+                      "Información guardada satisfactoriamente."
+                    );
                   } else {
-                    context.fireNotification('info', message);
-                    context.fileCategory = '';
-                    $('#document').val('');
-                    $('form[name="attachments"]').trigger('reset');
+                    context.fireNotification("info", message);
+                    context.fileCategory = "";
+                    $("#document").val("");
+                    $('form[name="attachments"]').trigger("reset");
                     $scope.attachments.$setUntouched();
                     $scope.attachments.$setPristine();
                   }
                   if (url == null || url == undefined) {
-                    $location.path('technology-form/' + technologyId);
+                    $location.path("technology-form/" + technologyId);
                   } else {
                     $location.path(url);
                   }
                 } catch (e) {
                   console.log(e);
                   context.fireNotification(
-                    'error',
-                    'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.'
+                    "error",
+                    "No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada."
                   );
                 }
               },
               function (error) {
-                context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                context.fireNotification(
+                  "error",
+                  "No se pudo guardar la información. Por favor inténta de nuevo."
+                );
               }
             );
             // }
           });
         } catch (e) {
-          context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
+          context.fireNotification(
+            "error",
+            "Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde."
+          );
           console.log(e);
         }
       } else {
@@ -673,7 +907,10 @@ technologyFormController.controller('TechnologyFormController', [
           technology.status = context.technologyStatus;
           // technology.status = 'En diligencia';
           context.setBasicData(technology, basicData);
-          var technologiesReference = firebase.database().ref().child('technologies');
+          var technologiesReference = firebase
+            .database()
+            .ref()
+            .child("technologies");
           var technologies = $firebaseArray(technologiesReference);
           technologies.$add(technology).then(
             function (reference) {
@@ -681,35 +918,44 @@ technologyFormController.controller('TechnologyFormController', [
                 technologyId = reference.path.o[1];
                 context.saveDetail(technology.technologyId, checkValidity);
                 if (message == null || message == undefined) {
-                  context.fireNotification('info', 'Información guardada satisfactoriamente.');
+                  context.fireNotification(
+                    "info",
+                    "Información guardada satisfactoriamente."
+                  );
                 } else {
-                  context.fireNotification('info', message);
-                  context.fileCategory = '';
-                  $('#document').val('');
+                  context.fireNotification("info", message);
+                  context.fileCategory = "";
+                  $("#document").val("");
                   $scope.attachments.$setUntouched();
                   $scope.attachments.$setPristine();
                 }
                 if (url == null || url == undefined) {
-                  $location.path('technology-form/' + technologyId);
+                  $location.path("technology-form/" + technologyId);
                 } else {
                   $location.path(url);
                 }
               } catch (e) {
                 console.log(e);
                 context.fireNotification(
-                  'error',
-                  'No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada.'
+                  "error",
+                  "No se pudo guardar la información. Uno de los formularios no es válido. Por favor verifique los campos requeridos o la información diligenciada."
                 );
               }
             },
             function (error) {
-              context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+              context.fireNotification(
+                "error",
+                "No se pudo guardar la información. Por favor inténta de nuevo."
+              );
               console.log(error);
             }
           );
         } catch (e) {
           console.log(e);
-          context.fireNotification('error', 'Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde.');
+          context.fireNotification(
+            "error",
+            "Ocurrió un error inesperado. Por favor inténtelo de nuevo más tarde."
+          );
         }
       }
     };
@@ -719,8 +965,11 @@ technologyFormController.controller('TechnologyFormController', [
         var technologiesDetailReference = firebase
           .database()
           .ref()
-          .child('technologies-detail/' + key);
-        var technologiesLogReference = firebase.database().ref().child('technologies-log');
+          .child("technologies-detail/" + key);
+        var technologiesLogReference = firebase
+          .database()
+          .ref()
+          .child("technologies-log");
         var technologiesDetail = $firebaseObject(technologiesDetailReference);
         var technologiesLog = $firebaseArray(technologiesLogReference);
         var technologyLog = {};
@@ -729,17 +978,36 @@ technologyFormController.controller('TechnologyFormController', [
         technologyLog.at = new Date().getTime();
         technologyLog.answers = angular.copy(context.answers);
         var validationError = false;
-        angular.forEach(technologiesDetail.answers, function (questionGroup, qgKey) {
+        angular.forEach(technologiesDetail.answers, function (
+          questionGroup,
+          qgKey
+        ) {
           angular.forEach(questionGroup, function (group, gKey) {
             angular.forEach(group, function (answer, aKey) {
-              if (Object.prototype.toString.call(answer) === '[object Date]') {
-                technologiesDetail.answers[qgKey][gKey][aKey] = answer.getTime();
-              } else if (Object.prototype.toString.call(answer) === '[object Array]') {
-                if (answer[0] && Object.prototype.toString.call(answer[0]) === '[object Object]') {
+              if (Object.prototype.toString.call(answer) === "[object Date]") {
+                technologiesDetail.answers[qgKey][gKey][
+                  aKey
+                ] = answer.getTime();
+              } else if (
+                Object.prototype.toString.call(answer) === "[object Array]"
+              ) {
+                if (
+                  answer[0] &&
+                  Object.prototype.toString.call(answer[0]) ===
+                    "[object Object]"
+                ) {
                   angular.forEach(answer, function (answersGroup, agKey) {
-                    angular.forEach(answersGroup, function (groupAnswer, gaKey) {
-                      if (Object.prototype.toString.call(groupAnswer) === '[object Date]') {
-                        technologiesDetail.answers[qgKey][gKey][aKey][agKey][gaKey] = groupAnswer.getTime();
+                    angular.forEach(answersGroup, function (
+                      groupAnswer,
+                      gaKey
+                    ) {
+                      if (
+                        Object.prototype.toString.call(groupAnswer) ===
+                        "[object Date]"
+                      ) {
+                        technologiesDetail.answers[qgKey][gKey][aKey][agKey][
+                          gaKey
+                        ] = groupAnswer.getTime();
                       }
                     });
                   });
@@ -759,7 +1027,10 @@ technologyFormController.controller('TechnologyFormController', [
           technologiesDetail.$save();
           technologiesLog.$add(technologyLog);
         } else {
-          context.fireNotification('error', 'Ocurrió un error en la validación de los campos. Por favor verifique la información del formulario.');
+          context.fireNotification(
+            "error",
+            "Ocurrió un error en la validación de los campos. Por favor verifique la información del formulario."
+          );
         }
       } catch (e) {
         throw e;
@@ -772,9 +1043,10 @@ technologyFormController.controller('TechnologyFormController', [
 
     context.setBasicData = function (technology, basicData) {
       angular.forEach(basicData, function (question, key) {
-        var answer = context.answers[question.questionGroup][0][question.questionName];
+        var answer =
+          context.answers[question.questionGroup][0][question.questionName];
         if (answer != undefined) {
-          if (Object.prototype.toString.call(answer) === '[object Date]') {
+          if (Object.prototype.toString.call(answer) === "[object Date]") {
             technology[question.questionName] = answer.getTime();
           } else {
             technology[question.questionName] = answer;
@@ -789,7 +1061,7 @@ technologyFormController.controller('TechnologyFormController', [
     };
 
     context.back = function () {
-      $location.path('/dashboard');
+      $location.path("/dashboard");
     };
 
     context.openMenu = function () {
@@ -804,14 +1076,20 @@ technologyFormController.controller('TechnologyFormController', [
             errorField.$setTouched();
           });
         });
-        context.fireNotification('error', 'El formulario no es válido. Por favor verifique los campos requeridos o la información diligenciada.');
+        context.fireNotification(
+          "error",
+          "El formulario no es válido. Por favor verifique los campos requeridos o la información diligenciada."
+        );
         return true;
       } else {
         return true;
       }
     };
 
-    context.prerequisitesChecker = function (questionGroup, prerequisiteQuestions) {
+    context.prerequisitesChecker = function (
+      questionGroup,
+      prerequisiteQuestions
+    ) {
       if (questionGroup) {
         // If it has a questionGroup (for those questions group that has prerequisites questions defined on its own group)
         if (!prerequisiteQuestions) {
@@ -819,7 +1097,14 @@ technologyFormController.controller('TechnologyFormController', [
         } else {
           var resolution = true;
           for (var i = 0; i < prerequisiteQuestions.length; i++) {
-            if (!(context.answers.prerequisites[questionGroup] && context.answers.prerequisites[questionGroup][prerequisiteQuestions[i].name] == prerequisiteQuestions[i].value)) {
+            if (
+              !(
+                context.answers.prerequisites[questionGroup] &&
+                context.answers.prerequisites[questionGroup][
+                  prerequisiteQuestions[i].name
+                ] == prerequisiteQuestions[i].value
+              )
+            ) {
               resolution = false;
               break;
             }
@@ -836,8 +1121,12 @@ technologyFormController.controller('TechnologyFormController', [
             if (
               !(
                 context.answers[prerequisiteQuestions[i].questionGroup] &&
-                context.answers[prerequisiteQuestions[i].questionGroup][0][prerequisiteQuestions[i].fieldName] &&
-                context.answers[prerequisiteQuestions[i].questionGroup][0][prerequisiteQuestions[i].fieldName] == prerequisiteQuestions[i].value
+                context.answers[prerequisiteQuestions[i].questionGroup][0][
+                  prerequisiteQuestions[i].fieldName
+                ] &&
+                context.answers[prerequisiteQuestions[i].questionGroup][0][
+                  prerequisiteQuestions[i].fieldName
+                ] == prerequisiteQuestions[i].value
               )
             ) {
               resolution = false;
@@ -851,22 +1140,22 @@ technologyFormController.controller('TechnologyFormController', [
 
     context.fireNotification = function (type, message) {
       switch (type) {
-        case 'success':
+        case "success":
           Notification.success({
             message: message,
             delay: 5000,
             replaceMessage: true,
-            positionX: 'right',
-            positionY: 'bottom',
+            positionX: "right",
+            positionY: "bottom",
           });
           break;
-        case 'error':
+        case "error":
           Notification.error({
             message: message,
             delay: 5000,
             replaceMessage: true,
-            positionX: 'right',
-            positionY: 'bottom',
+            positionX: "right",
+            positionY: "bottom",
           });
           break;
         default:
@@ -874,59 +1163,86 @@ technologyFormController.controller('TechnologyFormController', [
             message: message,
             delay: 5000,
             replaceMessage: true,
-            positionX: 'right',
-            positionY: 'bottom',
+            positionX: "right",
+            positionY: "bottom",
           });
       }
     };
 
-    context.newReminder = function (model, message, questionGroup, answerKey, questionName, position) {
+    context.newReminder = function (
+      model,
+      message,
+      questionGroup,
+      answerKey,
+      questionName,
+      position
+    ) {
       if (model) {
         try {
           if ($routeParams.technologyId) {
-            context.fireNotification('info', 'Creando recordatorio...');
+            context.fireNotification("info", "Creando recordatorio...");
             var reminderDate = new Date(model).getTime();
             var today = new Date().getTime();
-            var reminderId = '';
+            var reminderId = "";
             var reminder = {};
             reminder.createdAt = today;
             reminder.createdBy = $rootScope.userEmail;
-            reminder.status = 'pending';
+            reminder.status = "pending";
             reminder.reminderDate = reminderDate;
             reminder.relatedTechnology = $routeParams.technologyId;
             if (message) reminder.message = message;
-            var remindersReference = firebase.database().ref().child('reminders');
+            var remindersReference = firebase
+              .database()
+              .ref()
+              .child("reminders");
             var reminders = $firebaseArray(remindersReference);
             reminders.$add(reminder).then(
               function (reference) {
                 try {
                   reminderId = reference.path.o[1];
-                  context.answers[questionGroup][answerKey][questionName][position]['reminderId'] = reminderId;
-                  context.save('Recordatorio creado satisfactoriamente.');
+                  context.answers[questionGroup][answerKey][questionName][
+                    position
+                  ]["reminderId"] = reminderId;
+                  context.save("Recordatorio creado satisfactoriamente.");
                 } catch (e) {
                   console.log(e);
-                  context.fireNotification('error', 'No se pudo crear el recordatorio. Por favor inténta de nuevo.');
+                  context.fireNotification(
+                    "error",
+                    "No se pudo crear el recordatorio. Por favor inténta de nuevo."
+                  );
                 }
               },
               function (error) {
-                context.fireNotification('error', 'No se pudo guardar la información. Por favor inténta de nuevo.');
+                context.fireNotification(
+                  "error",
+                  "No se pudo guardar la información. Por favor inténta de nuevo."
+                );
                 console.log(error);
               }
             );
           } else {
-            context.fireNotification('error', 'Para crear un recordatorio debes haber guardado al menos una vez la información de tu tecnología.');
+            context.fireNotification(
+              "error",
+              "Para crear un recordatorio debes haber guardado al menos una vez la información de tu tecnología."
+            );
           }
         } catch (e) {
           console.log(e);
-          this.fireNotification('error', 'Ha ocurrido un error inesperado al crear el recordatorio. Por favor inténtalo de nuevo.');
+          this.fireNotification(
+            "error",
+            "Ha ocurrido un error inesperado al crear el recordatorio. Por favor inténtalo de nuevo."
+          );
         }
       } else {
-        this.fireNotification('error', 'El valor ingresado en la fecha es inválido. No es posible crear el recordatorio.');
+        this.fireNotification(
+          "error",
+          "El valor ingresado en la fecha es inválido. No es posible crear el recordatorio."
+        );
       }
     };
 
     context.removeOptionChecker = function (position, responseGroup) {
-      if (responseGroup['reminderId']) {
+      if (responseGroup["reminderId"]) {
         return false;
       } else {
         return true;
@@ -934,16 +1250,19 @@ technologyFormController.controller('TechnologyFormController', [
     };
 
     context.goToTop = function () {
-      $('html, body').animate({ scrollTop: $('#form-nav').position().top - 150 }, 'slow');
+      $("html, body").animate(
+        { scrollTop: $("#form-nav").position().top - 150 },
+        "slow"
+      );
     };
 
     context.generatePDF = function () {
-      var formatKeys = ['Información Básica', 'FNI'];
+      var formatKeys = ["Información Básica", "FNI"];
       var pdfContent = [];
       var questionsOrder = {};
-      var fileTitle = 'Technology File';
+      var fileTitle = "Technology File";
       angular.forEach(context.formats, function (format) {
-        if (format['formName'] == 'basic' || format['formName'] == 'fni') {
+        if (format["formName"] == "basic" || format["formName"] == "fni") {
           questionsOrder[format.name] = [];
           questionsOrder[format.name] = format.questionGroups;
         }
@@ -951,101 +1270,131 @@ technologyFormController.controller('TechnologyFormController', [
       angular.forEach(formatKeys, function (formatName) {
         pdfContent.push({
           text: formatName,
-          style: 'header',
+          style: "header",
         });
         angular.forEach(questionsOrder[formatName], function (questionGroup) {
-          if (context.pdfInfo['formats'][formatName]['data'][questionGroup.name]) {
+          if (
+            context.pdfInfo["formats"][formatName]["data"][questionGroup.name]
+          ) {
             pdfContent.push({
-              text: 'Sección: ' + questionGroup.tag + '',
-              style: 'section',
+              text: "Sección: " + questionGroup.tag + "",
+              style: "section",
             });
             var answersGroupAdded = false;
-            angular.forEach(context.pdfInfo['formats'][formatName]['data'][questionGroup.name]['answers'], function (answersGroup) {
-              angular.forEach(questionGroup.questions, function (question) {
-                var somethingAdded = false;
-                if (answersGroup[question.name]) {
-                  var realQuestion = question.tag;
-                  if (questionGroup.name == 'basic' && question.name == 'name') {
-                    fileTitle = 'Tecnología - ' + answersGroup[question.name].charAt(0).toUpperCase() + answersGroup[question.name].slice(1) + '.pdf';
-                  }
-                  if (realQuestion.indexOf('aquí') >= 0) {
-                    realQuestion = realQuestion.replace('aquí', '');
-                    realQuestion = realQuestion.charAt(0).toUpperCase() + realQuestion.slice(1);
-                  }
-                  if (realQuestion.indexOf(':') >= 0) {
-                    realQuestion = realQuestion.replace(':', '');
-                  }
-                  pdfContent.push({
-                    text: realQuestion + ': ',
-                    style: 'subheader',
-                  });
-                  if (typeof answersGroup[question.name] == 'string') {
-                    pdfContent.push({
-                      text: answersGroup[question.name].charAt(0).toUpperCase() + answersGroup[question.name].slice(1),
-                      style: ['quote', 'small'],
-                    });
-                    somethingAdded = true;
-                  } else if (typeof answersGroup[question.name] == 'boolean') {
-                    if (answersGroup[question.name]) {
-                      pdfContent.push({
-                        text: 'Si / Acepto / Check',
-                        style: ['quote', 'small'],
-                      });
-                    } else {
-                      pdfContent.push({
-                        text: 'No / No Acepto',
-                        style: ['quote', 'small'],
-                      });
+            angular.forEach(
+              context.pdfInfo["formats"][formatName]["data"][
+                questionGroup.name
+              ]["answers"],
+              function (answersGroup) {
+                angular.forEach(questionGroup.questions, function (question) {
+                  var somethingAdded = false;
+                  if (answersGroup[question.name]) {
+                    var realQuestion = question.tag;
+                    if (
+                      questionGroup.name == "basic" &&
+                      question.name == "name"
+                    ) {
+                      fileTitle =
+                        "Tecnología - " +
+                        answersGroup[question.name].charAt(0).toUpperCase() +
+                        answersGroup[question.name].slice(1) +
+                        ".pdf";
                     }
-                    somethingAdded = true;
-                  } else if (typeof answersGroup[question.name] == 'number') {
+                    if (realQuestion.indexOf("aquí") >= 0) {
+                      realQuestion = realQuestion.replace("aquí", "");
+                      realQuestion =
+                        realQuestion.charAt(0).toUpperCase() +
+                        realQuestion.slice(1);
+                    }
+                    if (realQuestion.indexOf(":") >= 0) {
+                      realQuestion = realQuestion.replace(":", "");
+                    }
                     pdfContent.push({
-                      text: answersGroup[question.name].toString(10),
-                      style: ['quote', 'small'],
+                      text: realQuestion + ": ",
+                      style: "subheader",
                     });
-                    somethingAdded = true;
-                  } else {
-                    angular.forEach(answersGroup[question.name], function (object) {
-                      if (Object.prototype.toString.call(object) == '[object String]') {
+                    if (typeof answersGroup[question.name] == "string") {
+                      pdfContent.push({
+                        text:
+                          answersGroup[question.name].charAt(0).toUpperCase() +
+                          answersGroup[question.name].slice(1),
+                        style: ["quote", "small"],
+                      });
+                      somethingAdded = true;
+                    } else if (
+                      typeof answersGroup[question.name] == "boolean"
+                    ) {
+                      if (answersGroup[question.name]) {
                         pdfContent.push({
-                          text: object.charAt(0).toUpperCase() + object.slice(1),
-                          style: ['quote', 'small'],
+                          text: "Si / Acepto / Check",
+                          style: ["quote", "small"],
                         });
-                        somethingAdded = true;
                       } else {
-                        angular.forEach(question.fields, function (field) {
-                          if (object[field.name]) {
-                            pdfContent.push({
-                              text: field.tag + ': ',
-                              style: 'arrayGroupSubheader',
-                            });
-                            if (typeof object[field.name] == 'string') {
-                              pdfContent.push({
-                                text: object[field.name].charAt(0).toUpperCase() + object[field.name].slice(1),
-                                style: ['arrayGroupSubQuote', 'small'],
-                              });
-                              somethingAdded = true;
-                            } else if (typeof object[field.name] == 'number') {
-                              pdfContent.push({
-                                text: object[field.name].toString(10),
-                                style: ['arrayGroupSubQuote', 'small'],
-                              });
-                              somethingAdded = true;
-                            }
-                          }
+                        pdfContent.push({
+                          text: "No / No Acepto",
+                          style: ["quote", "small"],
                         });
                       }
-                    });
+                      somethingAdded = true;
+                    } else if (typeof answersGroup[question.name] == "number") {
+                      pdfContent.push({
+                        text: answersGroup[question.name].toString(10),
+                        style: ["quote", "small"],
+                      });
+                      somethingAdded = true;
+                    } else {
+                      angular.forEach(answersGroup[question.name], function (
+                        object
+                      ) {
+                        if (
+                          Object.prototype.toString.call(object) ==
+                          "[object String]"
+                        ) {
+                          pdfContent.push({
+                            text:
+                              object.charAt(0).toUpperCase() + object.slice(1),
+                            style: ["quote", "small"],
+                          });
+                          somethingAdded = true;
+                        } else {
+                          angular.forEach(question.fields, function (field) {
+                            if (object[field.name]) {
+                              pdfContent.push({
+                                text: field.tag + ": ",
+                                style: "arrayGroupSubheader",
+                              });
+                              if (typeof object[field.name] == "string") {
+                                pdfContent.push({
+                                  text:
+                                    object[field.name].charAt(0).toUpperCase() +
+                                    object[field.name].slice(1),
+                                  style: ["arrayGroupSubQuote", "small"],
+                                });
+                                somethingAdded = true;
+                              } else if (
+                                typeof object[field.name] == "number"
+                              ) {
+                                pdfContent.push({
+                                  text: object[field.name].toString(10),
+                                  style: ["arrayGroupSubQuote", "small"],
+                                });
+                                somethingAdded = true;
+                              }
+                            }
+                          });
+                        }
+                      });
+                    }
+                    if (!somethingAdded) {
+                      pdfContent.pop();
+                    }
                   }
-                  if (!somethingAdded) {
-                    pdfContent.pop();
+                  if (somethingAdded) {
+                    answersGroupAdded = true;
                   }
-                }
-                if (somethingAdded) {
-                  answersGroupAdded = true;
-                }
-              });
-            });
+                });
+              }
+            );
             if (!answersGroupAdded) {
               pdfContent.pop();
             }
@@ -1073,7 +1422,7 @@ technologyFormController.controller('TechnologyFormController', [
           quote: {
             italics: true,
             margin: [5, 2, 0, 5],
-            alignment: 'justify',
+            alignment: "justify",
           },
           arrayGroupSubheader: {
             fontSize: 12,
@@ -1083,7 +1432,7 @@ technologyFormController.controller('TechnologyFormController', [
           arrayGroupSubQuote: {
             italics: true,
             margin: [15, 2, 0, 5],
-            alignment: 'justify',
+            alignment: "justify",
           },
           small: {
             fontSize: 10,
@@ -1094,16 +1443,17 @@ technologyFormController.controller('TechnologyFormController', [
     };
 
     context.messageToHTMLConverter = function (fieldId, message) {
-      if (!$('#' + fieldId + '_parsed_message').length) {
-        var messageObj = $('#' + fieldId);
-        var questionMessage = '<div id=' + fieldId + '_parsed_message>' + message + '</div>';
+      if (!$("#" + fieldId + "_parsed_message").length) {
+        var messageObj = $("#" + fieldId);
+        var questionMessage =
+          "<div id=" + fieldId + "_parsed_message>" + message + "</div>";
         var html = $.parseHTML(questionMessage);
         messageObj.append(html);
       }
     };
 
     context.appendHTML = function (html, id) {
-      $('#' + id).replaceWith(html);
+      $("#" + id).replaceWith(html);
       return true;
     };
   },

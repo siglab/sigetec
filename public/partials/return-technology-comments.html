@@ -1,36 +1,59 @@
 <md-dialog aria-label="Return technology comments" style="min-width: 50%">
   <form ng-cloak name="comments">
-    <md-toolbar style="color:#75797d">
+    <md-toolbar style="color: #75797d">
       <div class="md-toolbar-tools">
-        <h2>Retornar la tecnología al investigador</h2>
+        <h2 ng-if="technologyStatus == 'Registrada'">
+          Retornar la tecnología al investigador
+        </h2>
+        <h2 ng-if="technologyStatus == 'Asignada'">
+          Retornar la tecnología al coordinador
+        </h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
-          <img src="img/delete.png" style="width:100%; opacity: 0.5" />
+          <img src="img/delete.png" style="width: 100%; opacity: 0.5" />
         </md-button>
       </div>
     </md-toolbar>
     <md-dialog-content>
       <div class="md-dialog-content">
-        <p style="color: #75797d">
-          Adicione algunos comentarios y sugerencias para que el investigador conozca los motivos por el cual su tecnología fue devuelta.
+        <p style="color: #75797d" ng-if="technologyStatus == 'Registrada'">
+          Adicione algunos comentarios y sugerencias para que el investigador
+          conozca los motivos por el cual su tecnología fue devuelta.
         </p>
-        <br>
+        <p style="color: #75797d" ng-if="technologyStatus == 'Asignada'">
+          Adicione motivos, comentarios y/o sugerencias para que el coordinador
+          conozca los motivos por el que usted está retornando esta tecnología.
+        </p>
+        <br />
         <md-input-container class="md-block">
-            <label>Comentarios y sugerencias:</label>
-            <textarea name="commentsText"
-              rows="5" ng-model="commentsField" ng-required="true">
-            </textarea>
-            <div ng-messages="comments.commentsText.$error">
-                <div ng-message="required">Se requiere de este campo para continuar.</div>
+          <label>Comentarios y sugerencias:</label>
+          <textarea
+            name="commentsText"
+            rows="5"
+            ng-model="commentsField"
+            ng-required="true"
+          >
+          </textarea>
+          <div ng-messages="comments.commentsText.$error">
+            <div ng-message="required">
+              Se requiere de este campo para continuar.
             </div>
+          </div>
         </md-input-container>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-      <md-button ng-click="cancel()">
-        Cerrar
-      </md-button>
-      <md-button type="submit" ng-click="comments.$valid && send()" style="background-color: #D51B23; color: white; border-radius: 5px; font-weight: 700;">
+      <md-button ng-click="cancel()"> Cerrar </md-button>
+      <md-button
+        type="submit"
+        ng-click="comments.$valid && send()"
+        style="
+          background-color: #d51b23;
+          color: white;
+          border-radius: 5px;
+          font-weight: 700;
+        "
+      >
         Enviar
       </md-button>
     </md-dialog-actions>

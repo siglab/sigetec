@@ -13,13 +13,15 @@ a {
 .header {
   background-color: #fff;
   height: 50px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
 
 .message {
   /*max-width: 1050px;*/
   margin: 40px auto;
-  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 2px 1px -1px rgba(0, 0, 0, 0.12);
   border-radius: 10px;
   background: rgb(250, 250, 250);
   padding: 16px 24px;
@@ -257,7 +259,8 @@ md-checkbox {
 }
 
 .formgroup {
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 2px 1px -1px rgba(0, 0, 0, 0.12);
   border-radius: 10px;
 }
 
@@ -396,7 +399,8 @@ button {
   white-space: inherit;
 }
 
-md-input-container.md-icon-right > label:not(.md-no-float):not(.md-container-ignore) {
+md-input-container.md-icon-right
+  > label:not(.md-no-float):not(.md-container-ignore) {
   width: 100% !important;
 }
 
@@ -565,6 +569,7 @@ section#contactInfoSec div#bottomTopDiv div.container {
 .navbar-light .navbar-nav .nav-link {
   color: #757575;
   font-size: 0.92rem;
+  outline: none;
 }
 
 .actions {
@@ -610,6 +615,10 @@ md-content.technologies-data div.loading-container div.custom-loader i {
   color: #c00;
 }
 
-div#chart_div {
+div#pie_chart_div {
+  cursor: pointer;
+}
+
+div#regions_chart_div {
   cursor: pointer;
 }

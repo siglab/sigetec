@@ -1,36 +1,78 @@
-<md-dialog aria-label="Technology Details" style="min-width: 50%">
+<md-dialog aria-label="Technology Details"
+  style="min-width: 50%; max-width: 85%; width: auto; height: auto; max-height: 90%;">
   <form ng-cloak>
-    <md-toolbar style="color:#75797d">
+    <!-- <md-toolbar style="color:#75797d">
       <div class="md-toolbar-tools">
         <h2>Detalles de tecnología</h2>
         <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <img src="img/delete.png" style="width:100%; opacity: 0.5" />
-        </md-button>
+        
       </div>
-    </md-toolbar>
+    </md-toolbar> -->
     <md-dialog-content>
       <div class="md-dialog-content">
-        <span class="badge" style="background-color: #D51B23; font-size: 15px">Nombre de la tenología</span>
-        <h2 style="margin-left: 1%; margin-top:8px; color: #75797d">
-          {{selectedTechnology.name}}
-        </h2>
-        <span class="badge" style="background-color: #D51B23; font-size: 15px">Descripción</span>
-        <p style="margin-left: 1%; margin-top:8px; color: #75797d">
-          {{selectedTechnology.details.answers.basic[0].description || 'Sin descripción' }}
-        </p> 
-        <span class="badge" style="background-color: #D51B23; font-size: 15px">Tipo de invención</span>
-        <p style="margin-left: 1%; margin-top:8px; color: #75797d; text-transform: capitalize;">
-          {{selectedTechnology['technology-type']}}
-        </p>
-        <span class="badge" style="background-color: #D51B23; font-size: 15px">Nombre de investigador principal</span>        
-        <p style="margin-left: 1%; margin-top:8px; color: #75797d">
-          {{selectedTechnology.details.answers['group-principal-researcher'][0]['nombre-apellidos']}}
-        </p>
-        <span class="badge" style="background-color: #D51B23; font-size: 15px">Email investigador principal</span>
-        <p style="margin-left: 1%; margin-top:8px; color: #75797d">
-          {{selectedTechnology.details.answers['group-principal-researcher'][0]['principal-researcher-email']}}
-        </p>        
+        <!-- <span class="badge" style="background-color: #D51B23; font-size: 15px">Nombre de la tenología</span> -->
+        <div class="row">
+          <div class="col-md-12">
+            <h3 style="margin-left: 1%; margin-top:8px; color: #75797d">
+              {{selectedTechnology.name}}
+            </h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p style="margin-left: 1%; margin-top:8px; color: #75797d; text-align: justify;">
+              {{selectedTechnology.details.answers.basic[0].description || 'Sin descripción' }}
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-12">
+                <h4 style="margin-left: 10px; margin-top: 8px; color: #75797d;">Detalles específicos de la tecnología
+                </h4>
+              </div>
+              <div class="col-md-12">
+                <h5 style="margin-left: 10px; margin-top: 8px; color: #75797d; margin-bottom: 0;"> Tipo de invención
+                </h5>
+                <p style="color: #75797d; text-transform: capitalize; margin: 0 0 0 10px;">
+                  {{selectedTechnology['technology-type']}}
+                </p>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <h5 style="margin-left: 10px; margin-top: 8px; color: #75797d; margin-bottom: 0;"> Investigador
+                  principal
+                </h5>
+                <p style="color: #75797d; text-transform: capitalize; margin: 0 0 0 10px;">
+                  <span>{{selectedTechnology.details.answers['group-principal-researcher'][0]['nombre-apellidos']}}</span>
+                  <br>
+                  <span style="font-size: 0.85em">
+                    {{selectedTechnology.details.answers['group-principal-researcher'][0]['principal-researcher-email']}}
+                  </span>
+                </p>
+              </div>
+              <div class="col-md-12 col-sm-12" ng-if="selectedTechnology.details.answers['group-coresearcher']">
+                <h5 style="margin-left: 10px; margin-top: 8px; color: #75797d; margin-bottom: 0;"> Coinvestigador(es)
+                </h5>
+                <p style="color: #75797d; text-transform: capitalize; margin: 0 0 5px 10px;"
+                  ng-repeat="coresearcher in selectedTechnology.details.answers['group-coresearcher']">
+                  <span>{{coresearcher['nombre-apellidos']}}</span>
+                  <br>
+                  <span style="font-size: 0.85em">
+                    {{coresearcher['coresearcher-email']}}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" style="display: flex;">
+            <div class="row" style="text-align:center; margin: auto;">
+              <div class="col-md-12 col-sm-4" style="margin-top: 15px;">
+                <img src="../img/Logo Hecho en Univalle-02.png" alt="" style="height: 240px;">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
@@ -40,4 +82,3 @@
     </md-dialog-actions>
   </form>
 </md-dialog>
-
